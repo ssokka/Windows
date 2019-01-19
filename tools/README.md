@@ -7,6 +7,6 @@
 
 ## NirSoft
 - http://www.nirsoft.net
+- http://www.nirsoft.net/utils/nircmd.html
+- http://www.nirsoft.net/utils/nircmd.zip
     + nircmdc.exe
-	    - http://www.nirsoft.net/utils/nircmd.html
-        - http://www.nirsoft.net/utils/nircmd.zip
