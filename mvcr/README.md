@@ -5,10 +5,9 @@
 - [mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)
 
 ## 스크린샷
-div img { vertical-align: top; }
 <div>
-<img width="300" src="./screenshot-01.png">
-<img width="500" src="./screenshot-02.png">
+<img width="300" src="./screenshot-01.png" style="vertical-align: top;">
+<img width="500" src="./screenshot-02.png" style="vertical-align: top;">
 </div>
 
 ## 2019 14.20.27508.1
