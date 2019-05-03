@@ -6,8 +6,8 @@
 
 ## 스크린샷
 <div style="display: table-cell; vertical-align: middle;">
-<img width="300" src="./screenshot-01.png" style="vertical-align: top;">
-<img width="500" src="./screenshot-02.png" style="vertical-align: top;">
+<img height="350" src="./screenshot-01.png" style="vertical-align: top;">
+<img height="350" src="./screenshot-02.png" style="vertical-align: top;">
 </div>
 
 ## 2019 14.20.27508.1
