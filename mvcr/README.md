@@ -6,7 +6,7 @@
 
 ## 스크린샷
 <div>
-<img width="50%" src="./screenshot-01.png">
+<img width="25%" src="./screenshot-01.png">
 <img width="50%" src="./screenshot-02.png">
 </div>
 
