@@ -46,10 +46,10 @@
 - X64 = https://download.microsoft.com/download/5/d/8/5d8c65cb-c849-4025-8e95-c3966cafd8ae/vcredist_x64.exe
 
 ## 2005 SP1 8.0.61001
-<a href="https://www.microsoft.com/ko-kr/download/details.aspx?id=26347" target="_blank">https://www.microsoft.com/ko-kr/download/details.aspx?id=26347</a>
-- X86
-   + https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x86.exe
-   + HKEY_CLASSES_ROOT\Installer\Products\c1c4f01781cc94c4c8fb1542c0981a2a
-- X64
-   + https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x64.exe
-   + HKEY_CLASSES_ROOT\Installer\Products\1af2a8da7e60d0b429d7e6453b3d0182
+https://www.microsoft.com/ko-kr/download/details.aspx?id=26347
+X86
+ + https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x86.exe
+ + HKEY_CLASSES_ROOT\Installer\Products\c1c4f01781cc94c4c8fb1542c0981a2a
+X64
+ + https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x64.exe
+ + HKEY_CLASSES_ROOT\Installer\Products\1af2a8da7e60d0b429d7e6453b3d0182
