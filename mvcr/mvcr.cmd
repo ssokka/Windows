@@ -2,6 +2,7 @@
 setlocal enabledelayedexpansion
 
 set _title=Microsoft Visual C++ 재배포 가능 패키지 설치
+set _reboot=0
 
 echo.
 echo  ### %_title% 시작 ###
@@ -37,17 +38,17 @@ set _opt=/quiet /norestart
 set _url=http://download.microsoft.com/download/f/8/d/f8d970bd-4218-49b9-b515-e6f1669d228b/vcredist_
 call :install
 
-set _ver=2015
-set _sp=SP3
-set _opt=/quiet /norestart
-set _url=https://download.microsoft.com/download/6/a/a/6aa4edff-645b-48c5-81cc-ed5963aead48/vc_redist.
-call :install
+rem set _ver=2015
+rem set _sp=sp3
+rem set _opt=/quiet /norestart
+rem set _url=https://download.microsoft.com/download/6/a/a/6aa4edff-645b-48c5-81cc-ed5963aead48/vc_redist.
+rem call :install
 
-set _ver=2017
-set _sp=
-set _opt=/quiet /norestart
-set _url=https://aka.ms/vs/15/release/vc_redist.
-call :install
+rem set _ver=2017
+rem set _sp=
+rem set _opt=/quiet /norestart
+rem set _url=https://aka.ms/vs/15/release/vc_redist.
+rem call :install
 
 set _ver=2019
 set _sp=
