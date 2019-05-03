@@ -1,7 +1,12 @@
 # Microsoft Visual C++ 재배포 가능 패키지
 2019.05.03
 
-## [다운로드 install-mvcr.cmd](https://raw.githubusercontent.com/ssokka/windows/master/Microsoft%20Visual%20C%2B%2B%20%EC%9E%AC%EB%B0%B0%ED%8F%AC%20%EA%B0%80%EB%8A%A5%20%ED%8C%A8%ED%82%A4%EC%A7%80/install-mvcr.cmd)
+## Download
+- [mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)
+
+## ScreenShot
+![001](./001.png)
+![002](./002.png)
 
 ## 2019 14.20.27508.1
 - URL = https://visualstudio.microsoft.com/ko/downloads/
