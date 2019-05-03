@@ -1,7 +1,7 @@
 # Microsoft Visual C++ 재배포 가능 패키지
 2019.05.03
 
-## 2019 
+## 2019 14.20.27508.1
 - URL = https://visualstudio.microsoft.com/ko/downloads/
 - X86 = https://aka.ms/vs/16/release/vc_redist.x86.exe
 - X64 = https://aka.ms/vs/16/release/vc_redist.x64.exe
