@@ -6,8 +6,8 @@
 
 ## 스크린샷
 <div>
-<img width="25%" src="./screenshot-01.png">
-<img width="50%" src="./screenshot-02.png">
+<img width="350" src="./screenshot-01.png">
+<img width="350" src="./screenshot-02.png">
 </div>
 
 ## 2019 14.20.27508.1
