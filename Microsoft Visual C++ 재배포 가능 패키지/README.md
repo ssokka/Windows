@@ -7,7 +7,7 @@
 - X64 = https://aka.ms/vs/16/release/vc_redist.x64.exe
 
 ## 2017 14.16.27027.1
-- URL = https://visualstudio.microsoft.com/ko/downloads/
+- URL = https://support.microsoft.com/ko-kr/help/2977003/the-latest-supported-visual-c-downloads
 - X86 = https://aka.ms/vs/15/release/vc_redist.x86.exe
 - X64 = https://aka.ms/vs/15/release/vc_redist.x64.exe
 
