@@ -5,7 +5,7 @@
 - [mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)
 
 ## 스크린샷
-<div style="vertical-align:middle;">
+<div style="display: table; vertical-align: middle;">
 <img width="300" src="./screenshot-01.png">
 <img width="500" src="./screenshot-02.png">
 </div>
