@@ -1,4 +1,7 @@
 ![Microsoft Visual C++ 재배포 가능 패키지](./icon.png) 
+<div>
+<img height="100" src="./icon.png">
+</div>
 # Microsoft Visual C++ 재배포 가능 패키지 자동 설치
 2019.05.04
 - 설치하려면 인터넷에 연결되어 있어야 합니다.
@@ -21,8 +24,8 @@
 
 ## 스크린샷
 <div>
-<img height="320" src="./screenshot-01.png">
-<img height="320" src="./screenshot-02.png">
+<img height="315" src="./screenshot-01.png">
+<img height="315" src="./screenshot-02.png">
 </div>
 
 ## 버전 정보
