@@ -1,4 +1,4 @@
-<h1><img src="./icon.ico" height="30">&nbsp;Microsoft Visual C++ 재배포 가능 패키지 자동 설치</h1>
+<h1><img src="./icon.ico" height="25"> Microsoft Visual C++ 재배포 가능 패키지 자동 설치</h1>
 
 2019.05.04
 - 설치하려면 인터넷에 연결되어 있어야 합니다.
@@ -15,14 +15,14 @@
 ## 참고
 다운로드한 파일을 실행할 때 `Windows의 PC 보호` 창이 나타날 경우 `추가 정보` - `실행`을 차례대로 클릭하세요.
 <div>
-  <img src="./wds-01.png" height="300">
-  <img src="./wds-02.png" height="300">
+  <img src="./wds-01.png" height="295">
+  <img src="./wds-02.png" height="295">
 </div>
 
 ## 스크린샷
 <div>
-  <img src="./screenshot-01.png" height="300">
-  <img src="./screenshot-02.png" height="300">
+  <img src="./screenshot-01.png" height="295">
+  <img src="./screenshot-02.png" height="295">
 </div>
 
 ## 버전 정보
