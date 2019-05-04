@@ -2,7 +2,6 @@
 setlocal enabledelayedexpansion
 
 set _title=Microsoft Visual C++ 재배포 가능 패키지 설치
-set _reboot=0
 
 echo.
 echo  ### %_title% 시작 ###
@@ -58,8 +57,14 @@ call :install
 
 echo  ### %_title% 완료 ###
 echo.
-pause
-
+if defined _check (
+	echo 설치를 완료하려면 컴퓨터를 다시 시작해야 합니다.
+	set /p _restart=지금 컴퓨터를 다시 시작하시겠습니까? (Y/N) > 
+	if %_restart% euq y shutdown /r /t 0 /f
+) else (
+	echo 아무키나 누르십시오.
+	pause >nul
+)
 goto :eof
 
 :install
@@ -82,6 +87,7 @@ for /l %%i in (1,1,2) do (
 	if exist "!_exe!" (
 		echo      + !_name! 설치
 		"!_exe!" %_opt%
+		if %errorlevel% equ 3010 set _check=1
 	) else (
 		echo      ! !_name! 오류
 	)
