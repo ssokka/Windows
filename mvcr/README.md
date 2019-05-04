@@ -10,7 +10,7 @@
 - 각 버전의 상세 버전은 최신입니다. 아래 [버전 정보](#버전-정보)를 참고하세요.
 
 ## 다운로드
-### [mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)
+**[mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)**
 
 ## 참고
 `Windows의 PC 보호` 창이 나타날 경우 `추가 정보` - `실행`을 차례대로 클릭하세요.
