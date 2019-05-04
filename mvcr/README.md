@@ -53,6 +53,6 @@
 - X64 = https://download.microsoft.com/download/5/d/8/5d8c65cb-c849-4025-8e95-c3966cafd8ae/vcredist_x64.exe
 
 ### 2005 SP1 8.0.61001
-URL = https://www.microsoft.com/ko-kr/download/details.aspx?id=26347
-X86 = https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x86.exe
-X64 = https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x64.exe
+- URL = https://www.microsoft.com/ko-kr/download/details.aspx?id=26347
+- X86 = https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x86.exe
+- X64 = https://download.microsoft.com/download/1/e/4/1e4d029e-1d34-4ca8-b269-2cfeb91bd066/vcredist_x64.exe
