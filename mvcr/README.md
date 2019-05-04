@@ -15,8 +15,8 @@
 ## 참고
 다운로드한 파일을 실행할 때 `Windows의 PC 보호` 창이 나타날 경우 `추가 정보` - `실행`을 차례대로 클릭하세요.
 <div>
-<img height="325" src="./wds-01.png">
-<img height="325" src="./wds-02.png">
+<img width="400" src="./wds-01.png">
+<img width="400" src="./wds-02.png">
 </div>
 
 ## 스크린샷
