@@ -21,8 +21,8 @@
 
 ## 스크린샷
 <div>
-<img height="325" src="./screenshot-01.png">
-<img height="325" src="./screenshot-02.png">
+<img height="320" src="./screenshot-01.png">
+<img height="320" src="./screenshot-02.png">
 </div>
 
 ## 버전 정보
