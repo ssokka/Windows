@@ -1,5 +1,6 @@
-![]("./icon.png" | width=100)
 # Microsoft Visual C++ 재배포 가능 패키지 자동 설치
+
+### <img width="50" src="./icon.png">
 2019.05.04
 - 설치하려면 인터넷에 연결되어 있어야 합니다.
 - 2005/2008/2010/2012/2013/2019 버전이 설치됩니다.
@@ -10,7 +11,7 @@
 - 각 버전의 상세 버전은 최신입니다. 아래 [버전 정보](#버전-정보)를 참고하세요.
 
 ## 다운로드
-**[mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)**
+### [mvcr.exe](https://raw.githubusercontent.com/ssokka/windows/master/mvcr/mvcr.exe)
 
 ## 참고
 다운로드한 파일을 실행할 때 `Windows의 PC 보호` 창이 나타날 경우 `추가 정보` - `실행`을 차례대로 클릭하세요.
@@ -21,8 +22,8 @@
 
 ## 스크린샷
 <div>
-<img height="310" src="./screenshot-01.png">
-<img height="310" src="./screenshot-02.png">
+  <img height="310" src="./screenshot-01.png">
+  <img height="310" src="./screenshot-02.png">
 </div>
 
 ## 버전 정보
