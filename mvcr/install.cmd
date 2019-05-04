@@ -84,7 +84,7 @@ for /l %%i in (1,1,2) do (
 		set _exe=%temp%\MVCR-%_ver%-!_bit!.exe
 	)
 	echo     + !_name! 다운로드
-	powershell -command "(new-object System.Net.WebClient).DownloadFile(\"%_url%!_bit!.exe\", \"!_exe!\")"
+	powershell.exe -command "(New-Object System.Net.WebClient).DownloadFile(\"%_url%!_bit!.exe\",\"!_exe!\")"
 	if exist "!_exe!" (
 		echo     + !_name! 설치
 		"!_exe!" %_opt%
