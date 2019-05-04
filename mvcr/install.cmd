@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 set _title=Microsoft Visual C++ 재배포 가능 패키지 설치
 
 echo.
-echo  ### %_title% 시작 ###
+echo ### %_title% 시작 ###
 echo.
 
 set _ver=2005
@@ -55,12 +55,13 @@ set _opt=/quiet /norestart
 set _url=https://aka.ms/vs/16/release/VC_redist.
 call :install
 
-echo  ### %_title% 완료 ###
+echo ### %_title% 완료 ###
 echo.
-if defined _check (
+if defined _restart (
 	echo 설치를 완료하려면 컴퓨터를 다시 시작해야 합니다.
-	set /p _restart=지금 컴퓨터를 다시 시작하시겠습니까? (Y/N) > 
-	if %_restart% euq y shutdown /r /t 0 /f
+	echo.
+	set /p _restart=지금 컴퓨터를 다시 시작하시겠습니까? [Y/N] ^> 
+	if "!_restart!" equ "y" shutdown /r /t 0 /f
 ) else (
 	echo 아무키나 누르십시오.
 	pause >nul
@@ -82,14 +83,14 @@ for /l %%i in (1,1,2) do (
 		set _name=%_ver% !_bit!
 		set _exe=%temp%\MVCR-%_ver%-!_bit!.exe
 	)
-	echo      + !_name! 다운로드
+	echo     + !_name! 다운로드
 	powershell -command "(new-object System.Net.WebClient).DownloadFile(\"%_url%!_bit!.exe\", \"!_exe!\")"
 	if exist "!_exe!" (
-		echo      + !_name! 설치
+		echo     + !_name! 설치
 		"!_exe!" %_opt%
-		if %errorlevel% equ 3010 set _check=1
+		if %errorlevel% equ 3010 set _restart=1
 	) else (
-		echo      ! !_name! 오류
+		echo     ! !_name! 오류
 	)
 	echo.
 )
