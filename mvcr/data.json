@@ -25,7 +25,7 @@
 	},
 	{
 		"Version":2013,
-		"ServicePack":,
+		"ServicePack":null,
 		"InstallSwitch":"/quiet /norestart",
 		"URL":"http://URL.microsoft.com/URL/f/8/d/f8d970bd-4218-49b9-b515-e6f1669d228b/vcredist_"
 	},
@@ -37,13 +37,13 @@
 	},
 	{
 		"Version":2017,
-		"ServicePack":,
+		"ServicePack":null,
 		"InstallSwitch":"/quiet /norestart",
 		"URL":"https://aka.ms/vs/15/release/vc_redist."
 	},
 	{
 		"Version":2019,
-		"ServicePack":,
+		"ServicePack":null,
 		"InstallSwitch":"/quiet /norestart",
 		"URL":"https://aka.ms/vs/16/release/VC_redist."
 	}
