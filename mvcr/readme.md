@@ -1,4 +1,4 @@
-<h1><img src="./images/icon.ico" height="25"> Microsoft Visual C++ 재배포 가능 패키지 자동 설치</h1>
+<h1><img src="./images/icon.ico" height="25"> Microsoft Visual C++ 재배포 가능 패키지</h1>
 
 2019.05.04
 - 설치하려면 인터넷에 연결되어 있어야 합니다.

@@ -1,4 +1,4 @@
-{"data":[
+[
 	{
 		"Version":"2005",
 		"ServicePack":"sp1",
@@ -47,4 +47,4 @@
 		"InstallSwitch":"/quiet /norestart",
 		"Download":"https://aka.ms/vs/16/release/VC_redist."
 	}
-]}
+]
