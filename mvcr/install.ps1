@@ -1,9 +1,9 @@
 #Requires -RunAsAdministrator
 # powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ssokka/windows/master/mvcr/install.ps1'))"
 
-$title = 'Microsoft Visual C++ Àç¹èÆ÷ °¡´É ÆĞÅ°Áö ¼³Ä¡'
+$title = 'Microsoft Visual C++ ì¬ë°°í¬ ê°€ëŠ¥ íŒ¨í‚¤ì§€ ì„¤ì¹˜'
 
-Write-Host "`r`n### $title ½ÃÀÛ ###`r`n" -ForegroundColor Blue
+Write-Host "`r`n### $title ì‹œì‘ ###`r`n" -ForegroundColor Blue
 
 if ([IntPtr]::Size -eq 8) {
 	$bit = 64
@@ -33,30 +33,30 @@ foreach ($item in $data) {
 		$name = "{0}{1} {2}" -f $item.Version, $ServicePackName, $OSArch
 		$file = "{0}\mvcr-{1}{2}-{3}.exe" -f $env:TEMP, $item.Version, $ServicePackFile, $OSArch
 		$url = "{0}{1}.exe" -f $item.URL, $OSArch
-		Write-Host -NoNewline "    + $name ´Ù¿î·Îµå"
+		Write-Host -NoNewline "    + $name ë‹¤ìš´ë¡œë“œ"
 		(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		if (Test-Path -Path "$file") {
-			Write-Host -NoNewline " ¿Ï·á"
+			Write-Host -NoNewline " ì™„ë£Œ"
 		} else {
-			Write-Host " ½ÇÆĞ !"
+			Write-Host " ì‹¤íŒ¨ !"
 			continue
 		}
-		Write-Host -NoNewline " ¼³Ä¡"
+		Write-Host -NoNewline " ì„¤ì¹˜"
 		<# Start-Process -FilePath "$file" -ArgumentList $item.CommandLineOptions -Verb RunAs -Wait #>
 		Start-Process -FilePath "$file" -ArgumentList $item.CommandLineOptions -Wait
 		if ($LastExitCode -eq 3010) { $restart = $true }
-		if (($LastExitCode -ne 0) -and ($LastExitCode -ne 3010)) { Write-Host " ½ÇÆĞ !" }
+		if (($LastExitCode -ne 0) -and ($LastExitCode -ne 3010)) { Write-Host " ì‹¤íŒ¨ !" }
 	}
 	""
 }
 
-Write-Host "### $title ¿Ï·á ###`r`n"
+Write-Host "### $title ì™„ë£Œ ###`r`n"
 
 if ($restart) {
-	Write-Host -NoNewline -ForegroundColor Redt "¼³Ä¡¸¦ ¿Ï·áÇÏ·Á¸é ÄÄÇ»ÅÍ¸¦ ´Ù½Ã ½ÃÀÛÇØ¾ß ÇÕ´Ï´Ù.`r`nÁö±İ ÄÄÇ»ÅÍ¸¦ ´Ù½Ã ½ÃÀÛÇÏ½Ã°Ú½À´Ï±î? [Y/N]"
+	Write-Host -NoNewline -ForegroundColor Redt "ì„¤ì¹˜ë¥¼ ì™„ë£Œí•˜ë ¤ë©´ ì»´í“¨í„°ë¥¼ ë‹¤ì‹œ ì‹œì‘í•´ì•¼ í•©ë‹ˆë‹¤.`r`nì§€ê¸ˆ ì»´í“¨í„°ë¥¼ ë‹¤ì‹œ ì‹œì‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ? [Y/N]"
 	$input = Read-Host
 	if ($input -eq "y") { Restart-Computer -Force }
 } else {
-	Write-Host -NoNewline "¾Æ¹«Å°³ª ´©¸£½Ê½Ã¿À."
+	Write-Host -NoNewline "ì•„ë¬´í‚¤ë‚˜ ëˆ„ë¥´ì‹­ì‹œì˜¤."
 	Read-Host
 }
