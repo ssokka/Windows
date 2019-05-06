@@ -1,8 +1,8 @@
 [
 	{
 		"Product":2019,
-		"Version":"14.20.27508.1",
 		"ServicePack":null,
+		"Version":"14.20.27508.1",
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
 		"URL":"https://visualstudio.microsoft.com/ko/downloads/",
@@ -11,8 +11,8 @@
 	},
 	{
 		"Product":2017,
-		"Version":"14.16.27027.1",
 		"ServicePack":null,
+		"Version":"14.16.27027.1",
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
 		"URL":"https://support.microsoft.com/ko-kr/help/2977003/the-latest-supported-visual-c-downloads",
@@ -21,8 +21,8 @@
 	},
 	{
 		"Product":2015,
-		"Version":"14.0.24215.1",
 		"ServicePack":3,
+		"Version":"14.0.24215.1",
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
 		"URL":"https://www.microsoft.com/ko-kr/download/details.aspx?id=53840",
@@ -31,8 +31,8 @@
 	},
 	{
 		"Product":2013,
-		"Version":"12.0.40660.0",
 		"ServicePack":null,
+		"Version":"12.0.40660.0",
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
 		"URL":"https://support.microsoft.com/ko-kr/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package",
@@ -41,8 +41,8 @@
 	},
 	{
 		"Product":2012,
-		"Version":"11.0.61030.0",
 		"ServicePack":4,
+		"Version":"11.0.61030.0",
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
 		"URL":"https://www.microsoft.com/ko-kr/download/details.aspx?id=30679",
@@ -51,8 +51,8 @@
 	},
 	{
 		"Product":2010,
-		"Version":"10.0.40219",
 		"ServicePack":1,
+		"Version":"10.0.40219",
 		"CommandLineOptions":"/q /norestart",
 		"LogOption":"/log",
 		"URL":"https://www.microsoft.com/ko-kr/download/details.aspx?id=26999",
@@ -61,8 +61,8 @@
 	},
 	{
 		"Product":2008,
-		"Version":"9.0.30729.6161",
 		"ServicePack":1,
+		"Version":"9.0.30729.6161",
 		"CommandLineOptions":"/q",
 		"LogOption":"/l",
 		"URL":"https://www.microsoft.com/ko-kr/download/details.aspx?id=26368",
@@ -71,8 +71,8 @@
 	},
 	{
 		"Product":2005,
-		"Version":"8.0.61001",
 		"ServicePack":1,
+		"Version":"8.0.61001",
 		"CommandLineOptions":"/q",
 		"LogOption":null,
 		"URL":"https://www.microsoft.com/ko-kr/download/details.aspx?id=26347",
