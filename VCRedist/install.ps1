@@ -30,18 +30,18 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		if ($item.Product -eq 2005) { $log = '' }
 		$CLO = '{0} {1}' -f $item.CommandLineOptions, $log
 		$url = if ($OSArch -eq 86) { $item.x86 } else { $item.x64 }
-		$string = "`r   $name | 다운로드 중..."
-		Write-Host $string -NoNewline
+		Write-Host "`r   $name | 다운로드 중..." -NoNewline
 		(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		if (-not (Test-Path -Path "$file")) {
-			Write-Host "`r" + $string.replace('*', ' ') -NoNewline
+			Write-Host "`r" -NoNewline
+			for ($i=1; $i -le 120; $i++) { Write-Host " " -NoNewline }
 			Write-Host "`r   $name | 다운로드 실패" -ForegroundColor Red
 			continue osarch
 		}
-		$string = "`r   $name | 설치 중..."
-		Write-Host $string -NoNewline
+		Write-Host $"`r   $name | 설치 중..." -NoNewline
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
-		Write-Host "`r" + $string.replace('*', ' ') -NoNewline
+		Write-Host "`r" -NoNewline
+		for ($i=1; $i -le 120; $i++) { Write-Host " " -NoNewline }
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
 			Write-Host "`r   $name | 설치 완료"
