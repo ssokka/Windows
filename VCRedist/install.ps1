@@ -18,7 +18,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 	:osarch foreach ($OSArch in $OSArchs) {
 		if ($OSBit -eq 32 -and $OSArch -eq 64) { continue data }
 		if ([string]::IsNullOrWhitespace($item.ServicePack)) {
-			$ServicePackName = ''
+			$ServicePackName = '	'
 			$ServicePackFile = ''
 		} else {
 			$ServicePackName = ' SP{0}' -f $item.ServicePack
