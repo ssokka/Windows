@@ -13,10 +13,10 @@ $restart = $null
 $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/master/VCRedist/install.json'
 [array]::Reverse($data)
 
-foreach ($item in $data) {
+:data foreach ($item in $data) {
 	if ($item.Product -gt 2013 -and $item.Product -lt $data[-1].Product) { continue }
-	foreach ($OSArch in $OSArchs) {
-		if ($OSBit -eq 32 -and $OSArch -eq 64) { continue }
+	:osarch foreach ($OSArch in $OSArchs) {
+		if ($OSBit -eq 32 -and $OSArch -eq 64) { continue data }
 		if ([string]::IsNullOrWhitespace($item.ServicePack)) {
 			$ServicePackName = ''
 			$ServicePackFile = ''
@@ -48,7 +48,7 @@ foreach ($item in $data) {
 			Write-Host "완료"
 		}
 	}
-	if ($OSBit -eq 64) { Write-Host "`r`n" }
+	Write-Host "`r`n"
 }
 
 Write-Host " # $title 완료 #`r`n" -ForegroundColor Yellow 
