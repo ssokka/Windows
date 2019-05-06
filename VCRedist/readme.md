@@ -7,8 +7,7 @@
 - Windows 32비트 환경은 x86만 설치됩니다.
 - Windows 64비트 환경은 x86과 x64가 설치됩니다.
 - 경우에 따라 설치를 완료하려면 컴퓨터를 다시 시작해야 합니다.
-- 각 제품은 최신 버전입니다.
-- 상세 정보는 아래 [정보](#정보)를 참고하세요.
+- 각 제품은 최신 버전입니다. 아래 [정보](#정보)를 참고하세요.
 
 ## 다운로드
 ### [VCRedist.exe](https://raw.githubusercontent.com/ssokka/Windows/master/VCRedist/VCRedist.exe)

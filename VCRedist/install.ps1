@@ -51,7 +51,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		} else {
 			Write-Host "¿Ï·á"
 		}
-		if ($OSBit -eq 64) { Write-Host "" }
+		if ($OSArch -eq 64) { Write-Host "" }
 	}
 }
 
