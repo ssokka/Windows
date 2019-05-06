@@ -31,7 +31,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		$CLO = '{0} {1}' -f $item.CommandLineOptions, $log
 		$url = if ($OSArchs -eq 86) { $item.x86 } else { $item.x64 }
 		Write-Host "   $name" -NoNewline
-		Write-Host " | 다운로드 " -NoNewline
+		Write-Host "	| 다운로드 " -NoNewline
 		(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		if (Test-Path -Path "$file") {
 			Write-Host "완료" -NoNewline
