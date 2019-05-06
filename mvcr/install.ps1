@@ -43,7 +43,8 @@ foreach ($item in $data) {
 		}
 		Write-Host -NoNewline " 설치"
 		<# Start-Process -FilePath "$file" -ArgumentList $item.CommandLineOptions -Verb RunAs -Wait #>
-		Start-Process -FilePath "$file" -ArgumentList $item.CommandLineOptions -Wait
+		<# Start-Process -FilePath "$file" -ArgumentList $item.CommandLineOptions -Wait #>
+		"$file" $item.CommandLineOptions
 		if ($LastExitCode -eq 3010) { $restart = $true }
 		if (($LastExitCode -ne 0) -and ($LastExitCode -ne 3010)) { Write-Host " 실패 !" }
 	}
