@@ -14,11 +14,11 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 [array]::Reverse($data)
 
 :data foreach ($item in $data) {
-	if ($item.Product -gt 2013 -and $item.Product -lt $data[-1].Product) { continue }
+	if ($item.Product -gt 2013 -and $item.Product -lt $data[-1].Product) { continue data }
 	:osarch foreach ($OSArch in $OSArchs) {
 		if ($OSBit -eq 32 -and $OSArch -eq 64) {
-			Write-Host "`r`n"
-			continue data
+			Write-Host ""
+			break osarch
 		}
 		if ([string]::IsNullOrWhitespace($item.ServicePack)) {
 			$ServicePackName = '	'
@@ -40,7 +40,8 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 			Write-Host "완료" -NoNewline
 		} else {
 			Write-Host "실패 !" -ForegroundColor Red
-			continue
+			if ($OSBit -eq 32 -or $OSArch -eq 64) { Write-Host "" }
+			continue osarch
 		}
 		Write-Host " | 설치 " -NoNewline
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
@@ -50,8 +51,8 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		} else {
 			Write-Host "완료"
 		}
+		if ($OSBit -eq 32 -or $OSArch -eq 64) { Write-Host "" }
 	}
-	Write-Host "`r`n"
 }
 
 Write-Host " # $title 완료 #`r`n" -ForegroundColor Yellow 
