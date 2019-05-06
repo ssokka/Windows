@@ -32,7 +32,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		$log = '{0} "{1}"' -f $item.LogOption, $file -replace '\.exe', '.log'
 		if ($item.Product -eq 2005) { $log = '' }
 		$CLO = '{0} {1}' -f $item.CommandLineOptions, $log
-		$url = if ($OSArchs -eq 86) { $item.x86 } else { $item.x64 }
+		$url = if ($OSArch -eq 86) { $item.x86 } else { $item.x64 }
 		Write-Host "   $name" -NoNewline
 		Write-Host "	| 다운로드 " -NoNewline
 		(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
@@ -51,7 +51,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		} else {
 			Write-Host "완료"
 		}
-		if ($OSBit -eq 32 -or $OSArch -eq 64) { Write-Host "" }
+		if ($OSBit -eq 64) { Write-Host "" }
 	}
 }
 
