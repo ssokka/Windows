@@ -1,7 +1,7 @@
-# UTF-8 / CRLF
+# ANSI / CP949 / CRLF
 
-$title = 'Microsoft Visual C++ ì¬ë°°í¬ ê°€ëŠ¥ íŒ¨í‚¤ì§€ ì„¤ì¹˜'
-Write-Host "`r`n### $title ì‹œì‘ ###`r`n"
+$title = 'Microsoft Visual C++ Àç¹èÆ÷ °¡´É ÆĞÅ°Áö ¼³Ä¡'
+Write-Host "`r`n### $title ½ÃÀÛ ###`r`n"
 
 $OSBit = if ([IntPtr]::Size -eq 4) {32} else {64}
 $OSArchs = 86, 64
@@ -21,35 +21,35 @@ foreach ($item in $data) {
 			$ServicePackName = ' SP{0}' -f $item.ServicePack
 			$ServicePackFile = '-{0}' -f $ServicePackName -replace ' ', ''
 		}
-		$name = 'Microsoft Visual C++ {0}{1} x{2} ì¬ë°°í¬ ê°€ëŠ¥ íŒ¨í‚¤ì§€' -f $item.Product, $ServicePackName, $OSArch
+		$name = 'Microsoft Visual C++ {0}{1} x{2} Àç¹èÆ÷ °¡´É ÆĞÅ°Áö' -f $item.Product, $ServicePackName, $OSArch
 		$file = '{0}\VCRedist-{1}{2}-x{3}.exe' -f $env:TEMP, $item.Product, $ServicePackFile, $OSArch
 		$log = '{0} "{1}"' -f $item.LogOption, $file -replace '\.exe', '.log'
 		if ($item.Product -eq 2005) {$log = ''}
 		$CLO = '{0} {1}' -f $item.CommandLineOptions, $log
 		$url = if ($OSArchs -eq 86) {$item.x86} else {$item.x64}
-		Write-Host "    + $name ë‹¤ìš´ë¡œë“œ" -NoNewline
+		Write-Host "    + $name ´Ù¿î·Îµå" -NoNewline
 		(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		if (Test-Path -Path "$file") {
-			Write-Host " ì™„ë£Œ" -NoNewline
+			Write-Host " ¿Ï·á" -NoNewline
 		} else {
-			Write-Host " ì‹¤íŒ¨ !" -ForegroundColor Red
+			Write-Host " ½ÇÆĞ !" -ForegroundColor Red
 			continue
 		}
-		Write-Host " ì„¤ì¹˜" -NoNewline
+		Write-Host " ¼³Ä¡" -NoNewline
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
 		if ($process.ExitCode -eq 3010) {$restart = $true}
-		if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {Write-Host " ì‹¤íŒ¨ !" -ForegroundColor Red}
+		if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {Write-Host " ½ÇÆĞ !" -ForegroundColor Red}
 	}
 	Write-Host "`r`n" 
 }
 
-Write-Host "### $title ì™„ë£Œ ###`r`n"
+Write-Host "### $title ¿Ï·á ###`r`n"
 
 if ($restart) {
-	Write-Host "ì„¤ì¹˜ë¥¼ ì™„ë£Œí•˜ë ¤ë©´ ì»´í“¨í„°ë¥¼ ë‹¤ì‹œ ì‹œì‘í•´ì•¼ í•©ë‹ˆë‹¤.`r`nì§€ê¸ˆ ì»´í“¨í„°ë¥¼ ë‹¤ì‹œ ì‹œì‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ? [Y/N]" -NoNewline -ForegroundColor Red
+	Write-Host "¼³Ä¡¸¦ ¿Ï·áÇÏ·Á¸é ÄÄÇ»ÅÍ¸¦ ´Ù½Ã ½ÃÀÛÇØ¾ß ÇÕ´Ï´Ù.`r`nÁö±İ ÄÄÇ»ÅÍ¸¦ ´Ù½Ã ½ÃÀÛÇÏ½Ã°Ú½À´Ï±î? [Y/N]" -NoNewline -ForegroundColor Red
 	$input = Read-Host
 	if ($input -eq "y") {Restart-Computer -Force}
 } else {
-	Write-Host "ì•„ë¬´í‚¤ë‚˜ ëˆ„ë¥´ì‹­ì‹œì˜¤." -NoNewline
+	Write-Host "¾Æ¹«Å°³ª ´©¸£½Ê½Ã¿À." -NoNewline
 	Read-Host
 }
