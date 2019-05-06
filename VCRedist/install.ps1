@@ -32,9 +32,9 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 		$url = if ($OSArch -eq 86) { $item.x86 } else { $item.x64 }
 		Write-Host "`r   $name | 다운로드 중..." -NoNewline
 		(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
+		Write-Host "`r" -NoNewline
+		for ($i=1; $i -le 120; $i++) { Write-Host " " -NoNewline }
 		if (-not (Test-Path -Path "$file")) {
-			Write-Host "`r" -NoNewline
-			for ($i=1; $i -le 120; $i++) { Write-Host " " -NoNewline }
 			Write-Host "`r   $name | 다운로드 실패" -ForegroundColor Red
 			continue osarch
 		}
