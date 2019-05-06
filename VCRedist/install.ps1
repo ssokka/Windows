@@ -48,7 +48,7 @@ foreach ($item in $data) {
 			Write-Host "완료"
 		}
 	}
-	if ($OSArch -eq 64) { Write-Host "`r`n" }
+	if ($OSBit -eq 64) { Write-Host "`r`n" }
 }
 
 Write-Host " # $title 완료 #`r`n" -ForegroundColor Yellow 
