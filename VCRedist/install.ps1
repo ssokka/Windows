@@ -41,11 +41,11 @@ foreach ($item in $data) {
 		if ($process.ExitCode -eq 3010) {$restart = $true}
 		if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
 			Write-Host " 실패 !" -ForegroundColor Red
-		else {
+		} else {
 			Write-Host " 완료"
 		}
 	}
-	Write-Host "`r`n" 
+	Write-Host "`r`n"
 }
 
 Write-Host " # $title 완료 #`r`n" -ForegroundColor Blue
