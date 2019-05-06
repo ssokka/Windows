@@ -17,7 +17,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 	if ($item.Product -gt 2013 -and $item.Product -lt $data[-1].Product) { continue }
 	:osarch foreach ($OSArch in $OSArchs) {
 		if ($OSBit -eq 32 -and $OSArch -eq 64) {
-			Write-Host ""
+			Write-Host "`r`n"
 			continue data
 		}
 		if ([string]::IsNullOrWhitespace($item.ServicePack)) {
@@ -51,7 +51,7 @@ $data = Invoke-RestMethod 'https://raw.githubusercontent.com/ssokka/Windows/mast
 			Write-Host "완료"
 		}
 	}
-	Write-Host ""
+	Write-Host "`r`n"
 }
 
 Write-Host " # $title 완료 #`r`n" -ForegroundColor Yellow 
