@@ -11,7 +11,7 @@
 - 상세 정보는 아래 [정보](#정보)를 참고하세요.
 
 ## 다운로드
-### [MicrosoftVisualC++Redistributable.exe](https://raw.githubusercontent.com/ssokka/windows/master/MicrosoftVisualC++Redistributable/MicrosoftVisualC++Redistributable.exe)
+### [vcredist.exe](https://raw.githubusercontent.com/ssokka/windows/master/vcredist/vcredist.exe)
 
 ## 참고
 다운로드한 파일을 실행할 때 `Windows의 PC 보호` 창이 나타날 경우 `추가 정보` - `실행`을 차례대로 클릭하세요.
