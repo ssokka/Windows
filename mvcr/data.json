@@ -1,7 +1,7 @@
 [
 	{
 		"Product":2019,
-		"Version":14.20.27508.1,
+		"Version":"14.20.27508.1",
 		"ServicePack":null,
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
@@ -11,7 +11,7 @@
 	},
 	{
 		"Product":2017,
-		"Version":14.16.27027.1,
+		"Version":"14.16.27027.1",
 		"ServicePack":null,
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
@@ -21,7 +21,7 @@
 	},
 	{
 		"Product":2015,
-		"Version":14.0.24215.1,
+		"Version":"14.0.24215.1",
 		"ServicePack":3,
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
@@ -31,7 +31,7 @@
 	},
 	{
 		"Product":2013,
-		"Version":12.0.40660.0,
+		"Version":"12.0.40660.0",
 		"ServicePack":null,
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
@@ -41,7 +41,7 @@
 	},
 	{
 		"Product":2012,
-		"Version":11.0.61030.0,
+		"Version":"11.0.61030.0",
 		"ServicePack":4,
 		"CommandLineOptions":"/quiet /norestart",
 		"LogOption":"/log",
@@ -51,7 +51,7 @@
 	},
 	{
 		"Product":2010,
-		"Version":10.0.40219,
+		"Version":"10.0.40219",
 		"ServicePack":1,
 		"CommandLineOptions":"/q /norestart",
 		"LogOption":"/log",
@@ -61,7 +61,7 @@
 	},
 	{
 		"Product":2008,
-		"Version":9.0.30729.6161,
+		"Version":"9.0.30729.6161",
 		"ServicePack":1,
 		"CommandLineOptions":"/q",
 		"LogOption":"/l",
@@ -71,7 +71,7 @@
 	},
 	{
 		"Product":2005,
-		"Version":8.0.61001,
+		"Version":"8.0.61001",
 		"ServicePack":1,
 		"CommandLineOptions":"/q",
 		"LogOption":null,
