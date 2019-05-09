@@ -11,7 +11,8 @@ Write-Host -ForegroundColor Yellow "`r`n`r`n # $title 시작 #`r`n"
 
 function Clear-Host-CurrentLine {
 	Write-Host "`r" -NoNewline;
-	0..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
+	1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
+	Write-Host "`r" -NoNewline;
 }
 
 $OSArchs = 86, 64
@@ -47,7 +48,7 @@ try {
 		$url = if ($OSArch -eq 86) { $item.x86 } else { $item.x64 }
 		$ErrorStatus = $false
 		$status = "   $name | 다운로드"
-		Write-Host "`r$status 중..." -NoNewline
+		Write-Host "$status 중..." -NoNewline
 		try {
 			(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		} catch [System.Net.WebException],[System.IO.IOException] {
@@ -63,7 +64,7 @@ try {
 		}
 		if ($ErrorStatus) {
 			Clear-Host-CurrentLine
-			Write-Host -ForegroundColor Red "`r$status 실패 | $ErrorMessage | $url"
+			Write-Host -ForegroundColor Red "$status 실패 | $ErrorMessage | $url"
 			continue osarch
 		}
 		Clear-Host-CurrentLine
@@ -74,9 +75,9 @@ try {
 		Clear-Host-CurrentLine
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
-			Write-Host "`r$status 완료"
+			Write-Host "$status 완료"
 		} else {
-			Write-Host -ForegroundColor Red "`r$status 실패"
+			Write-Host -ForegroundColor Red "$status 실패"
 		}
 	}
 }
