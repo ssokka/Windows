@@ -1,13 +1,13 @@
 # Windows | ANSI | CP949 | EUC-KR | CRLF
 # PS2EXE	https://gallery.technet.microsoft.com/scriptcenter/PS2EXE-GUI-Convert-9b4b0493
-# PS2EXE.cmd	ps2exe.cmd "VCRedist" "Microsoft Visual C++ Àç¹èÆ÷ °¡´É ÆĞÅ°Áö ¼³Ä¡"
+# PS2EXE.cmd	ps2exe.cmd "VCRedist" "Microsoft Visual C++ ì¬ë°°í¬ ê°€ëŠ¥ íŒ¨í‚¤ì§€ ì„¤ì¹˜"
 # [ADM] PS	powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -F .\install.ps1
 
 $OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
 
-$title = 'Microsoft Visual C++ Àç¹èÆ÷ °¡´É ÆĞÅ°Áö {0}ºñÆ® ¼³Ä¡' -f $OSBit
+$title = 'Microsoft Visual C++ ì¬ë°°í¬ ê°€ëŠ¥ íŒ¨í‚¤ì§€ {0}ë¹„íŠ¸ ì„¤ì¹˜' -f $OSBit
 $host.UI.RawUI.WindowTitle = $title
-Write-Host -ForegroundColor Yellow "`r`n`r`n # $title ½ÃÀÛ #`r`n"
+Write-Host -ForegroundColor Yellow "`r`n`r`n # $title ì‹œì‘ #`r`n"
 
 $OSArchs = 86, 64
 $restart = $null
@@ -18,7 +18,7 @@ try {
 } catch {
 	Write-Host -ForegroundColor Red ""$_.Exception.Message
 	Write-Host -ForegroundColor Red " `$json = $json"
-	Write-Host -ForegroundColor Red "`r`n ¿À·ù°¡ ¹ß»ıÇÏ¿© ¼³Ä¡¸¦ Á¾·áÇÕ´Ï´Ù.`r`n"
+	Write-Host -ForegroundColor Red "`r`n ì˜¤ë¥˜ê°€ ë°œìƒí•˜ì—¬ ì„¤ì¹˜ë¥¼ ì¢…ë£Œí•©ë‹ˆë‹¤.`r`n"
 	Exit
 }
 [array]::Reverse($data)
@@ -41,8 +41,8 @@ try {
 		$CLO = '{0} {1}' -f $item.CommandLineOptions, $log
 		$url = if ($OSArch -eq 86) { $item.x86 } else { $item.x64 }
 		$ErrorStatus = $false
-		$status = "   $name | ´Ù¿î·Îµå"
-		Write-Host "`r$status Áß..." -NoNewline
+		$status = "   $name | ë‹¤ìš´ë¡œë“œ"
+		Write-Host "`r$status ì¤‘..." -NoNewline
 		try {
 			(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		} catch [System.Net.WebException],[System.IO.IOException] {
@@ -50,40 +50,40 @@ try {
 			$ErrorMessage = $_.Exception.Message
 		} catch {
 			$ErrorStatus = $true
-			$ErrorMessage = "¾Ë ¼ö ¾ø´Â ¿À·ù°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù."
+			$ErrorMessage = "ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜ê°€ ë°œìƒí•˜ì˜€ìŠµë‹ˆë‹¤."
 		}
 		if (-not(Test-Path -Path "$file")) {
 			$ErrorStatus = $true
-			$ErrorMessage = "$file ÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù."
+			$ErrorMessage = "$file ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤."
 		}
 		if ($ErrorStatus) {
 			Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
-			Write-Host -ForegroundColor Red "`r$status ½ÇÆĞ | $ErrorMessage | $url"
+			Write-Host -ForegroundColor Red "`r$status ì‹¤íŒ¨ | $ErrorMessage | $url"
 			continue osarch
 		}
 		Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
-		$status = "   $name | ¼³Ä¡"
-		Write-Host "`r$status Áß..." -NoNewline
+		$status = "   $name | ì„¤ì¹˜"
+		Write-Host "`r$status ì¤‘..." -NoNewline
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
 		Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
-			Write-Host "`r$status ¿Ï·á"
+			Write-Host "`r$status ì™„ë£Œ"
 		} else {
-			Write-Host -ForegroundColor Red "`r$status ½ÇÆĞ"
+			Write-Host -ForegroundColor Red "`r$status ì‹¤íŒ¨"
 		}
 	}
 }
 
-Write-Host -ForegroundColor Yellow "`r`n # $title Á¾·á #`r`n"
+Write-Host -ForegroundColor Yellow "`r`n # $title ì¢…ë£Œ #`r`n"
 
 if ($restart) {
-	Write-Host " ¼³Ä¡¸¦ ¿Ï·áÇÏ·Á¸é ÄÄÇ»ÅÍ¸¦ ´Ù½Ã ½ÃÀÛÇØ¾ß ÇÕ´Ï´Ù."
-	Write-Host -ForegroundColor Red " Áö±İ ÄÄÇ»ÅÍ¸¦ ´Ù½Ã ½ÃÀÛÇÏ½Ã°Ú½À´Ï±î? [Y/N] " -NoNewline
+	Write-Host " ì„¤ì¹˜ë¥¼ ì™„ë£Œí•˜ë ¤ë©´ ì»´í“¨í„°ë¥¼ ë‹¤ì‹œ ì‹œì‘í•´ì•¼ í•©ë‹ˆë‹¤."
+	Write-Host -ForegroundColor Red " ì§€ê¸ˆ ì»´í“¨í„°ë¥¼ ë‹¤ì‹œ ì‹œì‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ? [Y/N] " -NoNewline
 	$input = Read-Host
 	if ($input -eq "y") { Restart-Computer -Force }
 } else {
-	Write-Host " ¾Æ¹«Å°³ª ´©¸£½Ê½Ã¿À." -NoNewline
+	Write-Host " ì•„ë¬´í‚¤ë‚˜ ëˆ„ë¥´ì‹­ì‹œì˜¤." -NoNewline
 	Read-Host
 }
 
