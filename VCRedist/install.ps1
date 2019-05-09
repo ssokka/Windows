@@ -11,7 +11,7 @@ Write-Host -ForegroundColor Yellow "`r`n`r`n # $title Ω√¿€ #`r`n"
 
 function Clear-Host-CurrentLine {
 	Write-Host "`r" -NoNewline;
-	1..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
+	1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 	Write-Host "`r" -NoNewline;
 }
 
