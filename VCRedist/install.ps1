@@ -6,8 +6,13 @@
 $OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
 
 $title = 'Microsoft Visual C++ 재배포 가능 패키지 {0}비트 설치' -f $OSBit
-$host.UI.RawUI.WindowTitle = $title
+$Host.UI.RawUI.WindowTitle = $title
 Write-Host -ForegroundColor Yellow "`r`n`r`n # $title 시작 #`r`n"
+
+function Clear-Host-CurrentLine {
+	Write-Host "`r" -NoNewline;
+	0..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
+}
 
 $OSArchs = 86, 64
 $restart = $null
@@ -57,16 +62,16 @@ try {
 			$ErrorMessage = "$file 이 존재하지 않습니다."
 		}
 		if ($ErrorStatus) {
-			Clear-HostCurrentLine
+			Clear-Host-CurrentLine
 			Write-Host -ForegroundColor Red "`r$status 실패 | $ErrorMessage | $url"
 			continue osarch
 		}
-		Clear-HostCurrentLine
+		Clear-Host-CurrentLine
 		$status = "   $name | 설치"
 		Write-Host "`r$status 중..." -NoNewline
 		# $process try/cache 처리 필요
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
-		Clear-HostCurrentLine
+		Clear-Host-CurrentLine
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
 			Write-Host "`r$status 완료"
@@ -86,9 +91,4 @@ if ($restart) {
 } else {
 	Write-Host " 아무키나 누르십시오." -NoNewline
 	Read-Host
-}
-
-function Clear-HostCurrentLine {
-	Write-Host "`r" -NoNewline;
-	0..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 }
