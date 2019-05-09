@@ -57,15 +57,15 @@ try {
 			$ErrorMessage = "$file 이 존재하지 않습니다."
 		}
 		if ($ErrorStatus) {
-			Write-Host "`r" -NoNewline; 1..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
+			Write-Host "`r" -NoNewline; 0..($Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 			Write-Host -ForegroundColor Red "`r$status 실패 | $ErrorMessage | $url"
 			continue osarch
 		}
-		Write-Host "`r" -NoNewline; 1..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
+		Write-Host "`r" -NoNewline; 0..($Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		$status = "   $name | 설치"
 		Write-Host "`r$status 중..." -NoNewline
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
-		Write-Host "`r" -NoNewline; 1..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
+		Write-Host "`r" -NoNewline; 0..($Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
 			Write-Host "`r$status 완료"
