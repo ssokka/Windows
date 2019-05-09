@@ -69,7 +69,7 @@ try {
 		}
 		Clear-Host-CurrentLine
 		$status = "   $name | 설치"
-		Write-Host "`r$status 중..." -NoNewline
+		Write-Host "$status 중..." -NoNewline
 		# $process try/cache 처리 필요
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
 		Clear-Host-CurrentLine
