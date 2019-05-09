@@ -1,7 +1,7 @@
 # Windows | ANSI | CP949 | EUC-KR | CRLF
-# PS			powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -F .\install.ps1
 # PS2EXE		https://gallery.technet.microsoft.com/scriptcenter/PS2EXE-GUI-Convert-9b4b0493
 # PS2EXE.cmd	ps2exe.cmd "VCRedist" "Microsoft Visual C++ 재배포 가능 패키지 설치"
+# [ADM] PS		powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -F .\install.ps1
 
 $OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
 
@@ -43,7 +43,6 @@ try {
 		$ErrorStatus = $false
 		$status = "   $name | 다운로드"
 		Write-Host "`r$status 중..." -NoNewline
-		$CursorX = $host.UI.RawUI.CursorPosition.X + 1
 		try {
 			(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		} catch [System.Net.WebException],[System.IO.IOException] {
@@ -53,20 +52,20 @@ try {
 			$ErrorStatus = $true
 			$ErrorMessage = "알 수 없는 오류가 발생하였습니다."
 		}
-		if (-not (Test-Path -Path "$file")) {
+		if (-not(Test-Path -Path "$file")) {
 			$ErrorStatus = $true
 			$ErrorMessage = "$file 이 존재하지 않습니다."
 		}
 		if ($ErrorStatus) {
-			Write-Host "`r" -NoNewline; 1..$CursorX + 1 | ForEach-Object { Write-Host " " -NoNewline }
+			Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 			Write-Host -ForegroundColor Red "`r$status 실패 | $ErrorMessage | $url"
 			continue osarch
 		}
+		Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		$status = "   $name | 설치"
 		Write-Host "`r$status 중..." -NoNewline
-		$CursorX = $host.UI.RawUI.CursorPosition.X + 1
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
-		Write-Host "`r" -NoNewline; 1..$CursorX + 1 | ForEach-Object { Write-Host " " -NoNewline }
+		Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
 			Write-Host "`r$status 완료"
@@ -80,7 +79,7 @@ Write-Host -ForegroundColor Yellow "`r`n # $title 종료 #`r`n"
 
 if ($restart) {
 	Write-Host " 설치를 완료하려면 컴퓨터를 다시 시작해야 합니다."
-	Write-Host " 지금 컴퓨터를 다시 시작하시겠습니까? [Y/N] " -NoNewline -ForegroundColor Red
+	Write-Host -ForegroundColor Red " 지금 컴퓨터를 다시 시작하시겠습니까? [Y/N] " -NoNewline
 	$input = Read-Host
 	if ($input -eq "y") { Restart-Computer -Force }
 } else {
