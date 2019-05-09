@@ -42,7 +42,7 @@ try {
 		$url = if ($OSArch -eq 86) { $item.x86 } else { $item.x64 }
 		$ErrorStatus = $false
 		$status = "   $name | 다운로드"
-		Write-Host "`r$status 중..." -NoNewline
+		Write-Host -NoNewline "`r{0} 중..." -f $status
 		try {
 			(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		} catch [System.Net.WebException],[System.IO.IOException] {
@@ -63,14 +63,14 @@ try {
 		}
 		Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		$status = "   $name | 설치"
-		Write-Host "`r$status 중..." -NoNewline
+		Write-Host -NoNewline "`r{0} 중..." -f $status
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
 		Write-Host "`r" -NoNewline; 1..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
-			Write-Host "`r$status 완료"
+			Write-Host "`r{0} 완료" -f $status
 		} else {
-			Write-Host -ForegroundColor Red "`r$status 실패"
+			Write-Host -ForegroundColor Red "`r{0} 실패" -f $status
 		}
 	}
 }
