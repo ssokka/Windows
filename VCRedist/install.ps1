@@ -1,7 +1,7 @@
 # Windows | ANSI | CP949 | EUC-KR | CRLF
-# PS2EXE		https://gallery.technet.microsoft.com/scriptcenter/PS2EXE-GUI-Convert-9b4b0493
+# PS2EXE	https://gallery.technet.microsoft.com/scriptcenter/PS2EXE-GUI-Convert-9b4b0493
 # PS2EXE.cmd	ps2exe.cmd "VCRedist" "Microsoft Visual C++ 재배포 가능 패키지 설치"
-# [ADM] PS		powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -F .\install.ps1
+# [ADM] PS	powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -F .\install.ps1
 
 $OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
 
