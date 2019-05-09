@@ -1,7 +1,7 @@
 # Windows | ANSI | CP949 | EUC-KR | CRLF
 # PS			powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -F .\install.ps1
 # PS2EXE		https://gallery.technet.microsoft.com/scriptcenter/PS2EXE-GUI-Convert-9b4b0493
-# PS2EXE.cmd	ps2exe.cmd VCRedist "Microsoft Visual C++ 재배포 가능 패키지 설치"
+# PS2EXE.cmd	ps2exe.cmd "VCRedist" "Microsoft Visual C++ 재배포 가능 패키지 설치"
 
 $OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
 
@@ -43,6 +43,7 @@ try {
 		$ErrorStatus = $false
 		$status = "   $name | 다운로드"
 		Write-Host "`r$status 중..." -NoNewline
+		$CursorX = $host.UI.RawUI.CursorPosition.X + 1
 		try {
 			(New-Object System.Net.WebClient).DownloadFile("$url", "$file")
 		} catch [System.Net.WebException],[System.IO.IOException] {
@@ -57,18 +58,18 @@ try {
 			$ErrorMessage = "$file 이 존재하지 않습니다."
 		}
 		if ($ErrorStatus) {
-			Write-Host "`r" -NoNewline; 1..($status.Length + 2) | ForEach-Object { Write-Host " " -NoNewline }
+			Write-Host "`r" -NoNewline; 1..$CursorX + 1 | ForEach-Object { Write-Host " " -NoNewline }
 			Write-Host -ForegroundColor Red "`r$status 실패 | $ErrorMessage | $url"
 			continue osarch
 		}
 		$status = "   $name | 설치"
 		Write-Host "`r$status 중..." -NoNewline
-		Start-Sleep -Seconds 3
+		$CursorX = $host.UI.RawUI.CursorPosition.X + 1
 		$process = Start-Process -FilePath "$file" -ArgumentList $CLO -PassThru -Verb RunAs -Wait
-		Write-Host "`r" -NoNewline; 1..($status.Length + 2) | ForEach-Object { Write-Host " " -NoNewline }
+		Write-Host "`r" -NoNewline; 1..$CursorX + 1 | ForEach-Object { Write-Host " " -NoNewline }
 		if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
 			if ($process.ExitCode -eq 3010) { $restart = $true }
-			Write-Host "`r   $name | 설치 완료"
+			Write-Host "`r$status 완료"
 		} else {
 			Write-Host -ForegroundColor Red "`r$status 실패"
 		}
