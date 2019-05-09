@@ -24,12 +24,12 @@
 
 ## 스크린샷
 <div>
-  <img src="./images/screenshot-32bit-01.png" width="350">
-  <img src="./images/screenshot-32bit-02.png" width="350">
+  <img src="./images/screenshot-32bit-01.png" width="375" align="top">
+  <img src="./images/screenshot-32bit-02.png" width="375" align="top">
 </div>
 <div>
-  <img src="./images/screenshot-64bit-01.png" width="350">
-  <img src="./images/screenshot-64bit-02.png" width="350">
+  <img src="./images/screenshot-64bit-01.png" width="375" align="top">
+  <img src="./images/screenshot-64bit-02.png" width="375" align="top">
 </div>
 
 ## 정보
