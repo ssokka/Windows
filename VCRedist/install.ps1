@@ -89,5 +89,6 @@ if ($restart) {
 }
 
 function Clear-HostCurrentLine {
-	Write-Host "`r" -NoNewline; 0..($Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
+	Write-Host "`r" -NoNewline;
+	0..$Host.UI.RawUI.BufferSize.Width | ForEach-Object { Write-Host " " -NoNewline }
 }
