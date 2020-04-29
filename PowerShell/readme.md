@@ -1,10 +1,10 @@
 # PowerShell Script
 
 ## 사용 환경
-- Windows 명령 프롬프트 : <kbd>Win</kbd>+<kbd>R</kbd> > `cmd`
+- Windows 명령 프롬프트 : <kbd>Win</kbd> + <kbd>R</kbd> - **`cmd`**
 
 ## 참고
-## [powershell.exe Command Line Swich Shortcuts](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_pwsh?view=powershell-7)
+### [Command Line Swich Shortcuts](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_pwsh?view=powershell-7)
 - -Command : -c
 - -ExecutionPolicy : -ep
 - -File : -f
@@ -29,7 +29,7 @@ if exist "%_ps1%" %_ps% -f "%_ps1%" -yes -nopause
 ```
 
 # administrator-active.ps1
-`powershell.exe -nop -ep bypass -f administrator-active.ps1 {-Yes|-No} [-NoPause]`
+**`powershell.exe -nop -ep bypass -f administrator-active.ps1 {-Yes|-No} [-NoPause]`**
 ```
 -Yes : Administrator 계정 활성화
 -No : Administrator 계정 비활성화 및 암호 초기화
