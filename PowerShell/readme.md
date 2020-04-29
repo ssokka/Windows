@@ -12,7 +12,7 @@
 
 ## 다운로드 및 실행 방법
 ### 기본
-```{.line-numbers}
+```javascript {.line-numbers}
 set _ps1=file.ps1
 set _ps=powershell.exe -nop -ep bypass
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell
