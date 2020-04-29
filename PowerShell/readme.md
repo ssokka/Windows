@@ -1,7 +1,7 @@
 # PowerShell Script
 
 ## 사용 환경
-- Windows 명령 프롬프트
+- Windows 명령 프롬프트 : <kbd>Win</kbd>+<kbd>R</kbd> > `cmd`
 
 ## 참고
 ## [powershell.exe Command Line Swich Shortcuts](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_pwsh?view=powershell-7)
@@ -11,7 +11,7 @@
 - -NoProfile : -nop
 
 ## 다운로드 및 실행 방법
-기본
+### 기본
 ```
 set _ps1=file.ps1
 set _ps=powershell.exe -nop -ep bypass
@@ -19,7 +19,7 @@ set _url=https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell
 %_ps% -c "& {[Net.WebClient]::new().DownloadFile('%_url%/%_ps1%', '%_ps1%')}"
 if exist "%_ps1%" %_ps% -f "%_ps1%"
 ```
-예시
+### 예시
 ```
 set _ps1=administrator-active.ps1
 set _ps=powershell.exe -nop -ep bypass
