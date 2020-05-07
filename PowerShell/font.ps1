@@ -11,7 +11,7 @@ Param (
 
 # download functions.psm1
 # [Net.WebClient]::new().DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/functions.psm1", 'functions.psm1')
-df 'https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/functions.psm1' 'functions.psm1'
+df 'https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/functions.psm1' 'functions.psm1' -n
 
 # import functions
 Import-Module ([IO.Path]::Combine($PSScriptRoot, 'functions.psm1'))
