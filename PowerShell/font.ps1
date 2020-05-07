@@ -2,13 +2,15 @@
 Param (
     [ValidateScript({@('.ttc','.ttf') -contains [IO.Path]::GetExtension($_)})]
     [string] $file = 'D2Coding.ttc',
-    [string] $url = "https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/$file",
-    # https://drive.google.com/uc?export=download&id=YourFile'sID
-    # https://drive.google.com/uc?export=download&id=1b09yXfVeepAC5GVYmKl3fltCLro3JBjS
-    # [string] $url = 'https://drive.google.com/uc?export=download&id=1b09yXfVeepAC5GVYmKl3fltCLro3JBjS',
+    [string] $url = "https://raw.githubusercontent.com/ssokka/Fonts/master/$file",
+    # https://drive.google.com/uc?export=download&id=fileid
+    # [string] $url = 'https://drive.google.com/uc?export=download&id=fileid',
     [switch] $debug,
     [switch] $verbose
 )
+
+# download functions.psm1
+[Net.WebClient]::new().DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/functions.psm1", 'functions.psm1')
 
 # import functions
 Import-Module ([IO.Path]::Combine($PSScriptRoot, 'functions.psm1'))
