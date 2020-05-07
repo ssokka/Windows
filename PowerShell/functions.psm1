@@ -153,6 +153,7 @@ function DownloadFile {
         [string] $u, # uri
         [Parameter(Mandatory=$true)]
         [string] $o, # out
+        [switch] $n, # no display
         [switch] $p, # proxy
         [switch] $r = $true
     )
@@ -210,7 +211,7 @@ function DownloadFile {
             $f = 'White'
             wh -n
         }
-        wh ' 다운로드 ' $f
+        if (!$n -and !$debug) { wh ' 다운로드 ' $f }
         $StartTime = Get-Date
         if ($p) {
             try {
@@ -248,7 +249,7 @@ function DownloadFile {
             $fs.Write($bf, 0, $rf)
             $rf = $rs.Read($bf,0,$bf.length)
             $rc = $rc + $rf
-            wh ('{0}/{1} {2}%' -f ((cbs $rc -n), (cbs $cl), ('{0:N0}' -f ($rc/$cl*100)))) $f -l
+            if (!$n -and !$debug) { wh ('{0}/{1} {2}%' -f ((cbs $rc -n), (cbs $cl), ('{0:N0}' -f ($rc/$cl*100)))) $f -l }
         }
         $response.Close()
         $rs.Dispose()
@@ -256,7 +257,7 @@ function DownloadFile {
         $fs.Close()
         $fi.CreationTime = $fi.LastWriteTime = $LastModified
         $TaskTime = (Get-Date).Subtract($StartTime).Seconds
-        wh " $TaskTime(s)" $f
+        if (!$n -and !$debug) { wh " $TaskTime(s)" $f }
         $FileInfo = FileInfo $o
         if ($r) {
             return $true
@@ -265,7 +266,7 @@ function DownloadFile {
         }
     }
     catch {
-        wh "실패" DarkRed -n
+        if (!$n -and !$debug) { wh " 실패" DarkRed -n }
         Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
         Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
         if ($r) {
@@ -274,71 +275,4 @@ function DownloadFile {
             return
         }
     }
-}
-
-# function OLD-DownloadFile {
-#     [CmdletBinding()]
-#     [Alias("download","df,""dl")]
-#     param (
-#         [Parameter(Mandatory=$true,Position=0)]
-#         [string] $url,
-#         [Parameter(Mandatory=$true,Position=1)]
-#         [string] $file,
-#         [Parameter(Position=2)]
-#         [switch] $nl,
-#         [switch] $ret
-#     )
-#     try {
-#         wh ($space + "다운로드") DarkYellow
-#         $cLen = [Net.WebRequest]::Create($url).GetResponse().Headers.GetValues("Content-Length")[0]
-#     }
-#     catch {
-#         $eMsg = $_.Exception.Message
-#     }
-#     if (!$eMsg -and ($null -eq $cLen -or $cLen -ne (fi $file).Length)) {
-#         try {
-#             # [Net.WebClient]::new().DownloadFile($url, $file)
-#             $client = New-Object WebClient;
-#             $client.Timeout = 1800000
-#             $client.DownloadFile($url, $file)
-#         }
-#         catch {
-#             $eMsg = $_.Exception.Message
-#         }
-#     }
-#     $info = fi $file
-#     if (!$eMsg) {
-#         if (!$info.Exist) {
-#             $eMsg = "파일이 존재하지 않습니다."
-#         }
-#         if ($info.Length -eq 0 -or $info.Length -ne $cLen) {
-#             "`n" + $info.Length.GetType()
-#             $cLen.GetType()
-#             $eMsg = "파일이 손상되었습니다."
-#         }
-#     }
-#     if ($eMsg) {
-#         $eMsg = $space + "실패`n" + $space + "! " + $eMsg + "`n"
-#         $eMsg += $space + "! `$url = $url" + $(if ($cLen) { " [$cLen]" }) + "`n"
-#         $eMsg += $space + "! `$file = $file" + $(if ($info.Length) { " [$info.Length]" })
-#         wh ($eMsg) DarkRed -nl
-#         if ($ret) {
-#             return $false
-#         }
-#     }
-#     if ($nl) {
-#         wh -nl
-#     }
-#     if ($ret) {
-#         return $true
-#     }
-# }
-
-function ClearCurrentLine {
-    [CmdletBinding()]
-    [Alias("ccl")]
-    param ()
-	Write-Host "`r" -NoNewline;
-	1..($Host.UI.RawUI.BufferSize.Width - 1) | ForEach-Object { Write-Host " " -NoNewline }
-	Write-Host "`r" -NoNewline;
 }
