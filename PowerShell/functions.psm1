@@ -187,6 +187,7 @@ function DownloadFile {
             $GithubApi.LastCommitDate = Get-Date ($GithubApi.json | ConvertFrom-Json).commit.author.date
             wd "GithubApi" $GithubApi
             $LastModified = $GithubApi.LastCommitDate
+            $p = $true
         }
         $FileInfo = FileInfo $o
         $Download = [PSCustomObject]@{
