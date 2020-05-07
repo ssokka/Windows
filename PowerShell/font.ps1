@@ -2,7 +2,7 @@
 Param (
     [ValidateScript({@('.ttc','.ttf') -contains [IO.Path]::GetExtension($_)})]
     [string] $file = 'D2Coding.ttc',
-    [string] $url = "https://github.com/ssokka/Windows/tree/master/PowerShell/$file?raw=true",
+    [string] $url = "https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/$file",
     # https://drive.google.com/uc?export=download&id=YourFile'sID
     # https://drive.google.com/uc?export=download&id=1b09yXfVeepAC5GVYmKl3fltCLro3JBjS
     # [string] $url = 'https://drive.google.com/uc?export=download&id=1b09yXfVeepAC5GVYmKl3fltCLro3JBjS',
