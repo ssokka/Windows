@@ -119,8 +119,7 @@ function Exit {
     )
     wh -n
     if ($pause) {
-        wh '* 스크립트를 종료합니다. 아무 키나 누르십시오.'
-        [void][Console]::ReadKey($true)
+        wh '* 스크립트를 종료합니다. 아무 키나 누르십시오.'; [void][Console]::ReadKey($true)
     }
     wh -n
     exit $c
