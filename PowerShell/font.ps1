@@ -12,15 +12,15 @@ Param (
     [switch] $verbose
 )
 
-# set title
-wt "$file 글꼴"
-
 # download functions.psm1
 [Net.WebClient]::new().DownloadFile('https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/functions.psm1', 'functions.psm1')
 
 # import functions.psm1
 Import-Module ([IO.Path]::Combine($PSScriptRoot, 'functions.psm1'))
 Get-Command -Module functions | Out-Null
+
+# set title
+wt "$file 글꼴"
 
 # set directory
 $tff = [IO.Path]::Combine(${env:TEMP},$file)
