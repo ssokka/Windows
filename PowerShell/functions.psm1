@@ -1,3 +1,5 @@
+# windows euc-kr crlf
+
 $Global:ConsolePadding = 1
 $Global:CursorLeft = 1
 $Global:LastCursorLeft = 0
@@ -192,7 +194,7 @@ function DownloadFile {
             $p = $true
         }
         $FileInfo = FileInfo $o
-        $Download = [PSCustomObject]@{
+        $DownloadInfo = [PSCustomObject]@{
             FileInfoExists = $FileInfo.Exists
             ResponseContentLength = $ResponseContentLength
             FileInfoLength = $FileInfo.Length
@@ -200,8 +202,8 @@ function DownloadFile {
             FileInfoLastWriteTime = $FileInfo.LastWriteTime
             Task = if ($FileInfo.Exists -and $ResponseContentLength -eq $FileInfo.Length -and $LastModified -eq $FileInfo.LastWriteTime) { $false } else { $true }
         }
-        wd "Download" $Download
-        if (!$Download.Task) {
+        wd "DownloadInfo" $DownloadInfo
+        if (!$DownloadInfo.Task) {
             if ($r) {
                 return $true
             } else {

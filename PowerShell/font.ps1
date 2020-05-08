@@ -1,3 +1,5 @@
+# windows euc-kr crlf
+
 # set parameters
 Param (
     [ValidateScript({@('.ttc','.ttf') -contains [IO.Path]::GetExtension($_)})]
@@ -12,17 +14,17 @@ Param (
 # download functions.psm1
 [Net.WebClient]::new().DownloadFile('https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/functions.psm1', 'functions.psm1')
 
-# import functions
+# import functions.psm1
 Import-Module ([IO.Path]::Combine($PSScriptRoot, 'functions.psm1'))
 Get-Command -Module functions | Out-Null
 
 # set directory
 $tff = [IO.Path]::Combine(${env:TEMP},$file)
-$sff = [IO.Path]::Combine(${env:SystemRoot},"Fonts",$file)
-$uff = [IO.Path]::Combine(${env:LOCALAPPDATA},"Microsoft","Windows","Fonts",$file)
+$sff = [IO.Path]::Combine(${env:SystemRoot},'Fonts',$file)
+$uff = [IO.Path]::Combine(${env:LOCALAPPDATA},'Microsoft','Windows','Fonts',$file)
 
 # set registry
-$frk = "Microsoft\Windows NT\CurrentVersion\Fonts"
+$frk = 'Microsoft\Windows NT\CurrentVersion\Fonts'
 $srk = "HKLM:\SOFTWARE\$frk"
 $urk = "HKCU:\Software\$frk"
 
