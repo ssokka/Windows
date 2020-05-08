@@ -24,7 +24,7 @@ function WindowPosition {
     [DllImport("user32.dll")]
     public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int W, int H); '
     [Console.Window]::MoveWindow([Console.Window]::GetConsoleWindow(), $WindowX, $WindowY, $WindowWidth, $WindowHeight);
-    # [console]::BufferWidth = $Host.UI.RawUI.BufferSize.Width
+    [console]::BufferWidth = [Math]::Min($Host.UI.RawUI.WindowSize.Width, $Host.UI.RawUI.BufferSize.Width)
     [console]::BufferHeight = 9999
 }
 
