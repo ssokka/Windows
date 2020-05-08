@@ -52,6 +52,9 @@ function WriteHost {
         $c = $Global:LastCursorLeft
     }
     if ($o) {
+        if ([Console]::get_CursorLeft() -eq 0) {
+            $c = $Global:ConsolePadding
+        }
         [Console]::CursorLeft = $c
         Write-Host $o -NoNewline -ForegroundColor $f
         if (!$l -and $debug) {
@@ -80,7 +83,7 @@ function WriteTitle {
     $t = "# $t"
     $Host.UI.RawUI.WindowTitle = $t
     Write-Host
-    wh $t DarkGreen $Global:ConsolePadding
+    wh $t DarkGreen
 }
 
 function BeautifulLine {
