@@ -245,14 +245,14 @@ function DownloadFile {
         $ResponseStream = $response.GetResponseStream()
         $buffer = [byte[]]::new(4KB)
         $ReadBuffer = $ResponseStream.Read($buffer,0,$buffer.length)
-        $recieve = $ReadBuffer
+        $receive = $ReadBuffer
         $FileInfo = [System.IO.FileInfo] $o
         $FileStream = $FileInfo.OpenWrite()
         while ($ReadBuffer -gt 0) {
             $FileStream.Write($buffer, 0, $ReadBuffer)
             $ReadBuffer = $ResponseStream.Read($buffer, 0, $buffer.length)
-            $recieve = $recieve + $ReadBuffer
-            wh ('{0}/{1} {2}%' -f ((cbs $recieve -n), (cbs $ResponseContentLength), ('{0:N0}' -f ($recieve/$ResponseContentLength*100)))) $f -l
+            $receive = $receive + $ReadBuffer
+            wh ('{0}/{1} {2}%' -f ((cbs $receive -n), (cbs $ResponseContentLength), ('{0:N0}' -f ($receive/$ResponseContentLength*100)))) $f -l
         }
         $response.Close()
         $ResponseStream.Dispose()
