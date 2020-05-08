@@ -13,14 +13,14 @@ function WindowPosition {
         [int] $h = 402 # height (25), 30 (472)
     )
     Add-Type -AssemblyName System.Windows.Forms
-    $WorkingArea = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
-    $x = ($WorkingArea.Width - $w) / 2
-    $y = ($WorkingArea.Height - $h) / 2
+    $area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
+    $x = ($area.Width - $w) / 2
+    $y = ($area.Height - $h) / 2
     Add-Type -Name Window -Namespace Console -MemberDefinition '
-    [DllImport("Kernel32.dll")] 
+    [DllImport("Kernel32.dll")]
     public static extern IntPtr GetConsoleWindow();
     [DllImport("user32.dll")]
-    public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int W, int H); '
+    public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int W, int H);'
     [Console.Window]::MoveWindow([Console.Window]::GetConsoleWindow(), $x, $y, $w, $h);
     [console]::BufferWidth = [Math]::Min($Host.UI.RawUI.WindowSize.Width, $Host.UI.RawUI.BufferSize.Width)
     [console]::BufferHeight = 9999
