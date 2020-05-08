@@ -273,7 +273,7 @@ function DownloadFile {
         }
     }
     catch {
-        wh " 실패" DarkRed -n
+        wh ' 실패' DarkRed -n
         Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
         Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
         if ($r) {
