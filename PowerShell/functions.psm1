@@ -165,6 +165,7 @@ function DownloadFile {
         wd 'Request' $request
         $response = $request.GetResponse()
         wd 'Response' $response
+        $ResponseContentLength = $response.ContentLength
         $LastModified = $response.LastModified
         $headers = [PSObject]::new()
         $response.Headers.AllKeys | ForEach-Object {
@@ -193,10 +194,11 @@ function DownloadFile {
         $FileInfo = FileInfo $o
         $Download = [PSCustomObject]@{
             FileInfoExists = $FileInfo.Exists
-            ResponseContentLength = $response.ContentLength
+            ResponseContentLength = $ResponseContentLength
+            FileInfoLength = $FileInfo.Length
             LastModified = $LastModified
             FileInfoLastWriteTime = $FileInfo.LastWriteTime
-            Task = if ($FileInfo.Exists -and $response.ContentLength -eq $FileInfo.Length -and $LastModified -eq $FileInfo.LastWriteTime) { $false } else { $true }
+            Task = if ($FileInfo.Exists -and $ResponseContentLength -eq $FileInfo.Length -and $LastModified -eq $FileInfo.LastWriteTime) { $false } else { $true }
         }
         wd "Download" $Download
         if (!$Download.Task) {
@@ -211,7 +213,7 @@ function DownloadFile {
             $f = 'White'
             wh -n
         }
-        wh ' 다운로드 ' $f
+        wh ' 다운로드' $f
         # $StartTime = Get-Date
         if ($p) {
             try {
@@ -252,7 +254,7 @@ function DownloadFile {
             $FileStream.Write($buffer, 0, $ReadBuffer)
             $ReadBuffer = $ResponseStream.Read($buffer, 0, $buffer.length)
             $receive = $receive + $ReadBuffer
-            wh ('{0}/{1} {2}%' -f ((cbs $receive -n), (cbs $ResponseContentLength), ('{0:N0}' -f ($receive/$ResponseContentLength*100)))) $f -l
+            wh (' {0}/{1} {2}%' -f ((cbs $receive -n), (cbs $response.ContentLength), ('{0:N0}' -f ($receive/$response.ContentLength*100)))) $f -l
         }
         $response.Close()
         $ResponseStream.Dispose()
