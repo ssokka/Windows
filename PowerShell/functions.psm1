@@ -153,11 +153,11 @@ function DownloadFile {
         [string] $u, # uri
         [Parameter(Mandatory=$true)]
         [string] $o, # out
-        [switch] $n, # no display
         [switch] $p, # proxy
         [switch] $r = $true
     )
     try {
+        $StartTime = Get-Date
         # [Microsoft.PowerShell.Commands.PSUserAgent]::Chrome
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12,Tls13'
         $request = [Net.WebRequest]::Create($u)
@@ -211,8 +211,8 @@ function DownloadFile {
             $f = 'White'
             wh -n
         }
-        if (!$n -and !$debug) { wh ' 다운로드 ' $f }
-        $StartTime = Get-Date
+        wh ' 다운로드 ' $f
+        # $StartTime = Get-Date
         if ($p) {
             try {
                 $ProxySite = 'https://www.proxysite.com/'
@@ -228,6 +228,7 @@ function DownloadFile {
                     Add-Member -InputObject $ProxyHeaders -NotePropertyName $_ -NotePropertyValue $ProxyResponse.Headers.GetValues($_)[0]
                 }
                 wd 'ProxyHeaders' $ProxyHeaders
+                $response.Close()
                 $response = $ProxyResponse
             }
             catch {
@@ -237,27 +238,29 @@ function DownloadFile {
                 }
             }
             wd 'Response' $response
+            if ($debug) {
+                wh -n
+            }
         }
-        $fi = [System.IO.FileInfo] $o
-        $fs = $fi.OpenWrite()
-        $cl = $response.ContentLength
-        $rs = $response.GetResponseStream()
-        $bf = [byte[]]::new(4KB)
-        $rf = $rs.Read($bf,0,$bf.length)
-        $rc = $rf
-        while ($rf -gt 0) {
-            $fs.Write($bf, 0, $rf)
-            $rf = $rs.Read($bf,0,$bf.length)
-            $rc = $rc + $rf
-            if (!$n -and !$debug) { wh ('{0}/{1} {2}%' -f ((cbs $rc -n), (cbs $cl), ('{0:N0}' -f ($rc/$cl*100)))) $f -l }
+        $ResponseStream = $response.GetResponseStream()
+        $buffer = [byte[]]::new(4KB)
+        $ReadBuffer = $ResponseStream.Read($buffer,0,$buffer.length)
+        $recieve = $ReadBuffer
+        $FileInfo = [System.IO.FileInfo] $o
+        $FileStream = $FileInfo.OpenWrite()
+        while ($ReadBuffer -gt 0) {
+            $FileStream.Write($buffer, 0, $ReadBuffer)
+            $ReadBuffer = $ResponseStream.Read($buffer, 0, $buffer.length)
+            $recieve = $recieve + $ReadBuffer
+            wh ('{0}/{1} {2}%' -f ((cbs $recieve -n), (cbs $ResponseContentLength), ('{0:N0}' -f ($recieve/$ResponseContentLength*100)))) $f -l
         }
         $response.Close()
-        $rs.Dispose()
-        $fs.Dispose()
-        $fs.Close()
-        $fi.CreationTime = $fi.LastWriteTime = $LastModified
+        $ResponseStream.Dispose()
+        $FileStream.Dispose()
+        $FileStream.Close()
+        $FileInfo.CreationTime = $FileInfo.LastWriteTime = $LastModified
         $TaskTime = (Get-Date).Subtract($StartTime).Seconds
-        if (!$n -and !$debug) { wh " $TaskTime(s)" $f }
+        wh (' {0}s' -f $TaskTime) $f
         $FileInfo = FileInfo $o
         if ($r) {
             return $true
@@ -266,7 +269,7 @@ function DownloadFile {
         }
     }
     catch {
-        if (!$n -and !$debug) { wh " 실패" DarkRed -n }
+        wh " 실패" DarkRed -n
         Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
         Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
         if ($r) {
