@@ -6,8 +6,32 @@ $Global:LastCursorLeft = 0
 # https://www.whatismybrowser.com/guides/the-latest-user-agent/chrome
 $Global:UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'
 
-$host.PrivateData.DebugForegroundColor = 'DarkYellow'
-$host.PrivateData.ErrorForegroundColor = 'DarkRed'
+function WindowPosition {
+    [Alias('wp')]
+    param(
+        [int] $w = 638, # width (100)
+        [int] $h = 402 # height (25)
+    )
+    Add-Type -AssemblyName System.Windows.Forms
+    $WindowWidth = $w # 120 (758)
+    $WindowHeight = $h # 30 (472)
+    $WorkingArea = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
+    $WindowX = ($WorkingArea.Width - $WindowWidth) / 2
+    $Windowy = ($WorkingArea.Height - $WindowHeight) / 2
+    Add-Type -Name Window -Namespace Console -MemberDefinition '
+    [DllImport("Kernel32.dll")] 
+    public static extern IntPtr GetConsoleWindow();
+    [DllImport("user32.dll")]
+    public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int W, int H); '
+    [Console.Window]::MoveWindow([Console.Window]::GetConsoleWindow(), $WindowX, $WindowY, $WindowWidth, $WindowHeight);
+    # [console]::BufferWidth = $Host.UI.RawUI.BufferSize.Width
+    [console]::BufferHeight = 9999
+}
+
+wp
+
+$Host.PrivateData.DebugForegroundColor = 'DarkYellow'
+$Host.PrivateData.ErrorForegroundColor = 'DarkRed'
 
 if ($debug) {
     $DebugPreference = 'Continue'
@@ -86,6 +110,19 @@ function WriteDebug {
         Write-Host
         Write-Debug ("# {0}`n{1}" -f ($t, (bl $o -s:$s)))
     }
+}
+
+function Exit {
+    [Alias('e')]
+    param(
+        [int] $c # exit code
+    )
+    wh "`n"
+    if ($pause) {
+        wh '* 스크립트를 종료합니다. 아무 키나 누르십시오.' -n
+        [void][Console]::ReadKey($true)
+    }
+    exit $c
 }
 
 function FileInfo {
@@ -167,7 +204,6 @@ function DownloadFile {
         wd 'Request' $request
         $response = $request.GetResponse()
         wd 'Response' $response
-        $ResponseContentLength = $response.ContentLength
         $LastModified = $response.LastModified
         $headers = [PSObject]::new()
         $response.Headers.AllKeys | ForEach-Object {
@@ -196,11 +232,11 @@ function DownloadFile {
         $FileInfo = FileInfo $o
         $DownloadInfo = [PSCustomObject]@{
             FileInfoExists = $FileInfo.Exists
-            ResponseContentLength = $ResponseContentLength
+            ResponseContentLength = $response.ContentLength
             FileInfoLength = $FileInfo.Length
             LastModified = $LastModified
             FileInfoLastWriteTime = $FileInfo.LastWriteTime
-            Task = if ($FileInfo.Exists -and $ResponseContentLength -eq $FileInfo.Length -and $LastModified -eq $FileInfo.LastWriteTime) { $false } else { $true }
+            Task = if ($FileInfo.Exists -and $response.ContentLength -eq $FileInfo.Length -and $LastModified -eq $FileInfo.LastWriteTime) { $false } else { $true }
         }
         wd "DownloadInfo" $DownloadInfo
         if (!$DownloadInfo.Task) {
@@ -216,7 +252,6 @@ function DownloadFile {
             wh -n
         }
         wh ' 다운로드' $f
-        # $StartTime = Get-Date
         if ($p) {
             try {
                 $ProxySite = 'https://www.proxysite.com/'

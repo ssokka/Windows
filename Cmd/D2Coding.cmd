@@ -1,4 +1,5 @@
 @echo off
+:: windows utf-8 crlf
 setlocal
 pushd %temp%
 
