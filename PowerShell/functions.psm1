@@ -5,6 +5,8 @@ $Global:CursorLeft = 1
 $Global:LastCursorLeft = 0
 # https://www.whatismybrowser.com/guides/the-latest-user-agent/chrome
 $Global:UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'
+$Global:OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
+$Global:ProgramFiles = if ($Global:OSBit -eq 64) { ${env:ProgramFiles} } else { ${env:ProgramFiles(x86)} }
 
 function WindowPosition {
     [Alias('wp')]
@@ -118,8 +120,8 @@ function Exit {
     param(
         [int] $c # exit code
     )
-    wh -n
     if ($pause) {
+        wh -n
         wh '* 스크립트를 종료합니다. 아무 키나 누르십시오.'; [void][Console]::ReadKey($true)
     }
     wh -n
@@ -145,19 +147,19 @@ function Sudo {
         [Parameter(Mandatory=$true)]
         [string] $a, # arguments
         [ValidateSet('nm','hd','mn','mx')]
-        [string] $w = 'hd', # window style
-        [switch] $n =$true # no wait
+        [string] $s = 'hd', # window style
+        [switch] $w = $true # wait
     )
     if ($e -like 'powershell*') {
         $a = '-nop -ep bybass -c "& { ' + $a + ' }"'
     }
-    switch ($w) {
+    switch ($s) {
         nm { $WindowStyle = 'Normal'; break }
         hd { $WindowStyle = 'Hidden'; break }
         mn { $WindowStyle = 'Minimized'; break }
         mx { $WindowStyle = 'Maximized'; break }
     }
-    Start-Process $e $a -Verb RunAs -WindowStyle $WindowStyle -Wait:$n
+    Start-Process $e $a -Verb RunAs -WindowStyle $WindowStyle -Wait:$w
 }
 
 function ConvertByteSize {
