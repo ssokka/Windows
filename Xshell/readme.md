@@ -1,4 +1,4 @@
-<img src="logo.png" height="25" style="vertical-align:top"> [**Xshell**](https://www.netsarang.com/xshell/)
+<img src="logo.png" height="30" style="vertical-align:top"> [**Xshell**](https://www.netsarang.com/xshell/)
 ===
 
 ## [다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
@@ -11,15 +11,15 @@
 
 `xshell.exe` : 설치 파일
 
-생성
+### 생성
 * 설치 `xshell.exe -r -f1"%temp%\install.iss"`
 * 삭제 `xshell.exe -r -f1"%temp%\uninstall.iss"`
 
-적용
+### 적용
 * 설치 `xshell.exe -s -f1"%temp%\install.iss"`
 * 삭제 `xshell.exe -s -f1"%temp%\uninstall.iss"`
 
--f1 옵션
+### -f1 옵션
 * 전체 경로를 명시해야 적용된다.
 * 네트워크 드라이브 경로가 포함된 경우 적용되지 않는다.
 
