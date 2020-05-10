@@ -23,7 +23,7 @@
 * 전체 경로를 명시해야 적용된다.
 * 네트워크 드라이브 경로가 포함된 경우 적용되지 않는다.
 
-## <table><tr><td vlign="center"><img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" height="25"> Xshell.ps1</td></tr></table>
+## <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" height="25" style="vertical-align:bottom"> Xshell.ps1
 
 자동 설치 및 설정 스크립트
 
