@@ -12,12 +12,12 @@
 `xshell.exe` : 설치 파일
 
 생성
-* 설치 : `xshell.exe -r -f1"%temp%\install.iss"`
-* 삭제 : `xshell.exe -r -f1"%temp%\uninstall.iss"`
+* 설치 `xshell.exe -r -f1"%temp%\install.iss"`
+* 삭제 `xshell.exe -r -f1"%temp%\uninstall.iss"`
 
 적용
-* 설치 : `xshell.exe -s -f1"%temp%\install.iss"`
-* 삭제 : `xshell.exe -s -f1"%temp%\uninstall.iss"`
+* 설치 `xshell.exe -s -f1"%temp%\install.iss"`
+* 삭제 `xshell.exe -s -f1"%temp%\uninstall.iss"`
 
 -f1 옵션
 * 전체 경로를 명시해야 적용된다.
@@ -44,27 +44,27 @@
 
 ### 기본 설정 내용
 
-#### `D2Coding 글꼴 설치`
+#### D2Coding 글꼴 설치
 ```
 powershell.exe -nop -ep bypass -f font.ps1
 ```
 
-#### `실험 기능 창 닫기`
+#### 실험 기능 창 닫기
 ```
 reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Common\6" /v "ExpFeaturesPopup" /t REG_DWORD /d "1" /f >nul 2>&1
 ```
 
-#### `메뉴 - 보기 - 도구 모음 - [ ] 주소 표시줄`
+#### 메뉴 - 보기 - 도구 모음 - [ ] 주소 표시줄
 ```
 reg.exe add HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "AddressBar" /t REG_DWORD /d "0" /f >nul 2>&1
 ```
 
-#### `메뉴 - 보기 - 도구 모음 - [ ] 연결 표시`
+#### 메뉴 - 보기 - 도구 모음 - [ ] 연결 표시
 ```
 reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "LinksBar" /t REG_DWORD /d "0" /f >nul 2>&1
 ```
 
-#### `메뉴 - 도구 - 웹에서 검색 - 검색 엔진 관리 - 추가 - 네이버, 다음`
+#### 메뉴 - 도구 - 웹에서 검색 - 검색 엔진 관리 - 추가 - 네이버, 다음
 설정 파일 경로 `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Xshell.ini`
 ```ini
 [SearchEngineList]
@@ -84,7 +84,7 @@ SearchEngine3.Query=https://www.bing.com/search?q=%s
 SearchEngine3.PercentEncoding=1
 ```
 
-#### `세션 등록 정보`
+#### 세션 등록 정보
 
 세션 폴더 경로 `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions`  
 기본 세션 파일 경로 `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions\default`
