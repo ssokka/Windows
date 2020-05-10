@@ -71,17 +71,17 @@ reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "L
 Count=4
 DefaultSearchEngine=0
 SearchEngine0.Name=구글
-SearchEngine0.Query=https://www.google.co.kr/search?q=%s
 SearchEngine0.PercentEncoding=1
+SearchEngine0.Query=https://www.google.co.kr/search?q=%s
 SearchEngine1.Name=네이버
-SearchEngine1.Query=https://search.naver.com/search.naver?query=%s
 SearchEngine1.PercentEncoding=1
+SearchEngine1.Query=https://search.naver.com/search.naver?query=%s
 SearchEngine2.Name=다음
-SearchEngine2.Query=https://search.daum.net/search?q=%s
 SearchEngine2.PercentEncoding=1
+SearchEngine2.Query=https://search.daum.net/search?q=%s
 SearchEngine3.Name=Bing
-SearchEngine3.Query=https://www.bing.com/search?q=%s
 SearchEngine3.PercentEncoding=1
+SearchEngine3.Query=https://www.bing.com/search?q=%s
 ```
 
 #### 세션 등록 정보
@@ -138,7 +138,7 @@ QuickCommand=Default Quick Command Set
 사용자 지정 키 매핑 파일 경로 `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm`  
 * 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.
 * 파일 수정 후 아래 방법을 적용하면 해당 버그를 해결할 수 있다.
-* `메뉴 - 도구 - 키 매핑 - Alt + 0 - 편집 - 확인 - 확인`
+* **`메뉴 - 도구 - 키 매핑 - Alt + 0 - 편집 - 확인 - 확인`**
 
 ## 수동 설정
 
