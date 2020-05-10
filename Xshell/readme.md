@@ -136,8 +136,8 @@ QuickCommand=Default Quick Command Set
 ## 사용자 지정 키 매핑
 
 사용자 지정 키 매핑 파일 경로 `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm`  
-* 파일을 직접 수정하여 사용할 경우 버그가 있다.
-* 파일 수정 후 아래 방법을 적용하면 버그를 해결할 수 있다.
+* 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.
+* 파일 수정 후 아래 방법을 적용하면 해당 버그를 해결할 수 있다.
 * `메뉴 - 도구 - 키 매핑 - Alt + 0 - 편집 - 확인 - 확인`
 
 ## 수동 설정
