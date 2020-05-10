@@ -1,4 +1,4 @@
-<img src="logo.png" height="30" style="vertical-align:top"> [**Xshell**](https://www.netsarang.com/xshell/)
+<img src="logo.png" height="30" style="vertical-align:bottom"> [**Xshell**](https://www.netsarang.com/xshell/)
 ===
 
 ## [다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
@@ -23,7 +23,7 @@
 * 전체 경로를 명시해야 적용된다.
 * 네트워크 드라이브 경로가 포함된 경우 적용되지 않는다.
 
-## <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" height="30" style="vertical-align:top"> Xshell.ps1
+## <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" height="25" style="vertical-align:bottom"> Xshell.ps1
 
 자동 설치 및 설정 스크립트
 
@@ -51,17 +51,17 @@ powershell.exe -nop -ep bypass -f font.ps1
 
 #### 실험 기능 창 닫기
 ```
-reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Common\6" /v "ExpFeaturesPopup" /t REG_DWORD /d "1" /f >nul 2>&1
+reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Common\6" /v "ExpFeaturesPopup" /t REG_DWORD /d "1"
 ```
 
 #### 메뉴 - 보기 - 도구 모음 - [ ] 주소 표시줄
 ```
-reg.exe add HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "AddressBar" /t REG_DWORD /d "0" /f >nul 2>&1
+reg.exe add HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "AddressBar" /t REG_DWORD /d "0"
 ```
 
 #### 메뉴 - 보기 - 도구 모음 - [ ] 연결 표시
 ```
-reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "LinksBar" /t REG_DWORD /d "0" /f >nul 2>&1
+reg.exe add "HKEY_CURRENT_USER\Software\NetSarang\Xshell\6\Layout\current" /v "LinksBar" /t REG_DWORD /d "0"
 ```
 
 #### 메뉴 - 도구 - 웹에서 검색 - 검색 엔진 관리 - 추가 - 네이버, 다음
