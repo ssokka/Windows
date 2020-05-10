@@ -147,3 +147,10 @@ QuickCommand=Default Quick Command Set
 ## 수동 설정
 
 #### 세선 관리 창 자동 숨김
+
+## 사용자 데이터 폴더
+
+#### 레지스트리
+* 경로 `HKEY_CURRENT_USER\Software\NetSarang\Common\6\UserData`
+* 이름 `UserDataPath`
+* 종류 `REG_SZ`
