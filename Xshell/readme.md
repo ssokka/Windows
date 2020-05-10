@@ -9,7 +9,7 @@
 
 ## 무인 응답 파일
 
-`xshell.exe` : 설치 파일
+여기서 `xshell.exe` 파일은 설치 파일이다.
 
 ### 생성
 * 설치 `xshell.exe -r -f1"%temp%\install.iss"`
