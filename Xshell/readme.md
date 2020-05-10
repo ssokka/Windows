@@ -1,7 +1,7 @@
 [**Xshell**](https://www.netsarang.com/xshell/)
 ===
 
-![logo](logo.png){:width="100"}
+<img src="logo.png" width=100>
 
 ## [다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
 30일 평가판  
@@ -27,7 +27,7 @@
 
 ## Xshell.ps1
 
-![powershell](https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png){:width="100"}
+<img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
 
 자동 설치 및 설정 스크립트
 
