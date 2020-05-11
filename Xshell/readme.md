@@ -4,8 +4,7 @@
 <img src="logo.png" width=100>
 
 ## [다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
-30일 평가판  
-기능 제한 없음
+**! 30일 평가판이며 기능 제한은 없다.**
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
 
@@ -15,14 +14,14 @@
 
 ### 생성
 ```
-설치 : xshell.exe -r -f1"%temp%\install.iss"
-삭제 : xshell.exe -r -f1"%temp%\uninstall.iss"
+* 설치 : xshell.exe -r -f1"%temp%\install.iss"
+* 삭제 : xshell.exe -r -f1"%temp%\uninstall.iss"
 ```
 
 ### 적용
 ```
-설치 : xshell.exe -s -f1"%temp%\install.iss"
-삭제 : xshell.exe -s -f1"%temp%\uninstall.iss"
+* 설치 : xshell.exe -s -f1"%temp%\install.iss"
+* 삭제 : xshell.exe -s -f1"%temp%\uninstall.iss"
 ```
 
 ### -f1 옵션
@@ -69,9 +68,9 @@
 
 ### 세션 설정
 ```
-파일 경로 : %USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions
+* 파일 경로 : %USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions
 ```
-<span style="color: red">! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.</span>  
+**! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.**  
 **D2Coding**은 글꼴이 설치되어 있는 경우에만 적용된다.
 ```
 > 연결
@@ -95,11 +94,11 @@
     [v] 로그 파일에 기록
 ```
 
-### 사용자 지정 키 매핑
+## 사용자 지정 키 매핑
 ```
-파일 경로 : %USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm
+* 파일 경로 : %USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm
 ```
-파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.  
+**! 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.**  
 파일 수정 후 아래 방법을 적용하면 해당 버그를 해결할 수 있다.
 ```
 * 메뉴 > 도구 > 키 매핑 > Alt + 0 > 편집 > 확인 > 확인
