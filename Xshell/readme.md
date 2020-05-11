@@ -11,11 +11,11 @@
 
 ## 무인 응답 파일
 
-여기서 `xshell.exe` 파일은 설치 파일이다.
+여기서 <kbd>xshell.exe</kbd> 파일은 설치 파일이다.
 
 ### 생성
-* 설치 `xshell.exe -r -f1"%temp%\install.iss"`
-* 삭제 `xshell.exe -r -f1"%temp%\uninstall.iss"`
+* 설치 <kbd>xshell.exe -r -f1"%temp%\install.iss</kbd>
+* 삭제 <kbd>xshell.exe -r -f1"%temp%\uninstall.iss</kbd>
 
 ### 적용
 * 설치 `xshell.exe -s -f1"%temp%\install.iss"`
