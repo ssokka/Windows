@@ -123,7 +123,7 @@ function WriteDebug {
     )
     if ($Global:d) {
         Write-Host
-        Write-Debug "# $t`n(bl $o -s:$s)"
+        Write-Debug "# $t`n$(bl $o -s:$s)"
     }
 }
 
@@ -136,14 +136,14 @@ function Exit {
     if ($c -and $c -gt 0) {
         wh "! 오류가 발생했습니다." -n
     }
-    if ($Global:r) {
-        Remove-Item $temp -Recurse -Force | Out-Null
-    }
     if ($Global:p) {
         wh -n
         wh "* 스크립트를 종료합니다. 아무 키나 누르십시오."; [void][Console]::ReadKey($true)
     }
     wh -n
+    if ($Global:r) {
+        Remove-Item $temp -Recurse -Force | Out-Null
+    }
     exit $c
 }
 
@@ -170,7 +170,7 @@ function Sudo {
         [switch] $w = $true # wait
     )
     if ($e -like "powershell*") {
-        $a = "-nop -ep bybass -c '& { $a }'"
+        $a = "-nop -ep bybass -c '& { " + $a + " }'"
     }
     switch ($s) {
         nm { $WindowStyle = "Normal"; break }
