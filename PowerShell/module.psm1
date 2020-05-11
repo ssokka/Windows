@@ -163,7 +163,6 @@ function StartProcess {
         [Parameter(Mandatory=$true)]
         [ValidateScript({@(".bat",".cmd",".exe","msi") -contains [IO.Path]::GetExtension($_)})]
         [string] $f, # filepath
-        [Parameter(Mandatory=$true)]
         [string] $a, # argumentlist
         [string] $v = "Open", # verb
         [ValidateSet("nm","hd","mn","mx")]

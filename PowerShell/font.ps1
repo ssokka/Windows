@@ -59,16 +59,18 @@ $frk = "Microsoft\Windows NT\CurrentVersion\Fonts"
 $srk = "HKLM:\SOFTWARE\$frk"
 $urk = "HKCU:\Software\$frk"
 
+$f = "DarkYellow"
+
 # check system font file
 if (Test-Path $sff) {
-    wh " 설치" DarkGreen -n
+    wh " 설치" $f -n
     e 0
 }
 
 # check user font file
 if (!(Test-Path $uff)) {
     df $url $tff -e
-    $i = wh " 설치" DarkGreen -r
+    $i = wh " 설치" $f -r
     (New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($tff)
     if (!(Test-Path $uff)) {
         wh " 실패" DarkRed -n
@@ -79,7 +81,7 @@ if (!(Test-Path $uff)) {
 }
 
 if (!$i) {
-    wh " 설치" DarkGreen
+    wh " 설치" $f
 }
 
 # check user registry font name
