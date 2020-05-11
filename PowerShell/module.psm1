@@ -139,8 +139,8 @@ function Exit {
     if ($Global:p) {
         wh -n
         wh "* 스크립트를 종료합니다. 아무 키나 누르십시오."; [void][Console]::ReadKey($true)
+        wh -n
     }
-    wh -n
     if ($Global:r) {
         Remove-Item $temp -Recurse -Force | Out-Null
     }
