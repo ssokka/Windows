@@ -11,11 +11,11 @@
 
 ## 무인 응답 파일
 
-여기서 <kbd>xshell.exe</kbd> 파일은 설치 파일이다.
+여기서 <kbd>`xshell.exe`</kbd> 파일은 설치 파일이다.
 
 ### 생성
-* 설치 <kbd>xshell.exe -r -f1"%temp%\install.iss</kbd>
-* 삭제 <kbd>xshell.exe -r -f1"%temp%\uninstall.iss</kbd>
+* 설치 <kbd>`xshell.exe -r -f1"%temp%\install.iss"`</kbd>
+* 삭제 <kbd>`xshell.exe -r -f1"%temp%\uninstall.iss"`</kbd>
 
 ### 적용
 * 설치 `xshell.exe -s -f1"%temp%\install.iss"`
@@ -49,10 +49,10 @@
 ```
 
 ### 기본 설정
-#### [Xshell.reg](Xshell.reg)
-* 실험 기능 창 닫기
-* 메뉴 > 보기 > 도구 모음 > [ ] 주소 표시줄
-* 메뉴 > 보기 > 도구 모음 > [ ] 연결 표시
+* [Xshell.reg](Xshell.reg)  
+  실험 기능 창 닫기  
+  메뉴 > 보기 > 도구 모음 > [ ] 주소 표시줄  
+메뉴 > 보기 > 도구 모음 > [ ] 연결 표시
 #### [Xshell.ini](Xshell.ini)
 * 메뉴 > 도구 > 웹에서 검색 > 검색 엔진 관리 > 추가 > 네이버, 다음
 * 메뉴 > 도구 > 옵션 > 고급 > [ ] Xshel 시작 시 세션 대화 상자 열기
