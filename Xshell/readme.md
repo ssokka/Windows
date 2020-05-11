@@ -3,9 +3,8 @@
 # [Xshell](https://www.netsarang.com/xshell/)
 <img src="logo.png" width=100>
 
-## [다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
+## [Xshell 6 Build 0193 다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
 **! 30일 평가판이며, 기능 제한은 없다.**  
-**2020.05.12 : Xshell 6 Build 0193**
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
 
@@ -44,7 +43,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 * 메뉴 > 보기 > 도구 모음 > [ ] 연결 표시
 ```
 ### [Xshell.ini](Xshell.ini)
-**! 파일 교체 방식으로 기존 설정은 초기화된다.**
+**! 파일 교체 방식으로 이전 설정은 초기화된다.**
 ```
 * 메뉴 > 도구 > 웹에서 검색 > 검색 엔진 관리 > [V] 구글, 네이버, 다음, Bing
 * 메뉴 > 도구 > 옵션 > 고급 > [ ] Xshel 시작 시 세션 대화 상자 열기
