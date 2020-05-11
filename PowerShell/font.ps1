@@ -20,7 +20,7 @@ try {
     $module = 'module.psm1'
     if ((!(Test-Path $module) -or $m) -and !$t) {
         $temp = "${env:TEMP}\ssokka"
-        New-Item $temp -Type Directory -Force
+        New-Item $temp -Type Directory -Force | Out-Null
         Push-Location $temp
         [Net.WebClient]::new().DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/$module", "$temp\$module")
     }
