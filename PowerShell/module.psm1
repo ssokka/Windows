@@ -137,8 +137,8 @@ function Exit {
     param(
         [int] $c # exit code
     )
+    wh -n
     if ($c -and $c -gt 0) {
-        wh -n
         wh '! 오류가 발생했습니다.' -n
     }
     if ($Global:p) {
