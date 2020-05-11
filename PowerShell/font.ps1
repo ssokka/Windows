@@ -6,6 +6,7 @@ Param (
     [string] $file = "D2Coding.ttc",
     [string] $url = "https://raw.githubusercontent.com/ssokka/Fonts/master/$file",
     [switch] $m,            # force download module.psm1
+    [switch] $r,            # remove working directory
     [switch] $p,            # pause then exit
     [switch] $d,            # debug mode
     [switch] $t             # test mode
@@ -21,7 +22,6 @@ try {
     if ((!(Test-Path $module) -or $m) -and !$t) {
         $temp = "${env:TEMP}\ssokka"
         New-Item $temp -Type Directory -Force | Out-Null
-        Push-Location $temp
         [Net.WebClient]::new().DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/$module", "$temp\$module")
     }
     Import-Module "$temp\$module" -ErrorAction:Stop
@@ -41,7 +41,7 @@ wps -n:$t
 wt "$file 글꼴"
 
 # font files
-$tff = ([IO.FileInfo] $file | Select-Object *).FullName
+$tff = "$temp\$file"
 $sff = "${env:SystemRoot}\Fonts\$file"
 $uff = "${env:LOCALAPPDATA}\Microsoft\Windows\Fonts\$file"
 
@@ -58,7 +58,7 @@ if (Test-Path $sff) {
 
 # check user font file
 if (!(Test-Path $uff)) {
-    df $url $file -e
+    df $url $tff -e
     $i = wh " 설치" DarkGreen -r
     adm powershell.exe "(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere('$tff')"
     if (!(Test-Path $uff)) {

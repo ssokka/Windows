@@ -1,29 +1,25 @@
 # windows euc-kr crlf
 
-# set working directory
-$Global:Temp = "${env:TEMP}\ssokka"
-New-Item $Temp -Type Directory -Force | Out-Null
-Push-Location $Temp
-
-# set global values
+# global values
 $Global:ConsolePadding = 1
 $Global:CursorLeft = 1
 $Global:LastCursorLeft = 0
 # https://www.whatismybrowser.com/guides/the-latest-user-agent/chrome
-$Global:UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'
+$Global:UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
 $Global:OSBit = if ([IntPtr]::Size -eq 4) { 32 } else { 64 }
 $Global:ProgramFiles = if ($OSBit -eq 64) { ${env:ProgramFiles} } else { ${env:ProgramFiles(x86)} }
-$Global:ProgramRepository = 'https://raw.githubusercontent.com/ssokka/Windows/master'
+$Global:ProgramRepository = "https://raw.githubusercontent.com/ssokka/Windows/master"
 
-# $Host.PrivateData.DebugForegroundColor = 'DarkYellow'
-# $Host.PrivateData.ErrorForegroundColor = 'DarkRed'
+# $Host.PrivateData.DebugForegroundColor = "DarkYellow"
+# $Host.PrivateData.ErrorForegroundColor = "DarkRed"
 
+# for debug
 if ($d) {
-    $DebugPreference = 'Continue'
+    $DebugPreference = "Continue"
 }
 
 function WindowPositionSize {
-    [Alias('wps')]
+    [Alias("wps")]
     param(
         [int] $w = 638,         # width (100), 120 (758)
         [int] $h = 402,         # height (25), 30 (472)
@@ -47,11 +43,10 @@ function WindowPositionSize {
 }
 
 function WriteHost {
-    [Alias('wh')]
+    [Alias("wh")]
     param(
         [object] $o, # object
-        [string] $f = 'Gray', # forground color
-        # [int] $c = [Console]::get_CursorLeft(), # console cursor left
+        [string] $f = "Gray", # forground color
         [int] $c, # console cursor left
         [switch] $d = $true, # display
         [switch] $l, # stop get current cursor left then set last get cursor
@@ -72,8 +67,8 @@ function WriteHost {
             $c = $Global:ConsolePadding
         }
         [Console]::CursorLeft = $c
-        if ($o -like '!*') {
-            $f = 'DarkRed'
+        if ($o -like "!*") {
+            $f = "DarkRed"
         }
         Write-Host $o -NoNewline -ForegroundColor $f
         if (!$l -and $Global:d) {
@@ -95,7 +90,7 @@ function WriteHost {
 }
 
 function WriteTitle {
-    [Alias('wt')]
+    [Alias("wt")]
     param (
         [string] $t # title
     )
@@ -106,7 +101,7 @@ function WriteTitle {
 }
 
 function BeautifulLine {
-    [Alias('bl')]
+    [Alias("bl")]
     param(
         [object] $o, # object
         [switch] $s = $false # sort
@@ -120,7 +115,7 @@ function BeautifulLine {
 }
 
 function WriteDebug {
-    [Alias('wd')]
+    [Alias("wd")]
     param(
         [string] $t, # title
         [object] $o, # object
@@ -133,84 +128,87 @@ function WriteDebug {
 }
 
 function Exit {
-    [Alias('e')]
+    [Alias("e")]
     param(
         [int] $c # exit code
     )
     wh -n
     if ($c -and $c -gt 0) {
-        wh '! 오류가 발생했습니다.' -n
+        wh "! 오류가 발생했습니다." -n
     }
     if ($Global:p) {
         wh -n
-        wh '* 스크립트를 종료합니다. 아무 키나 누르십시오.'; [void][Console]::ReadKey($true)
+        wh "* 스크립트를 종료합니다. 아무 키나 누르십시오."; [void][Console]::ReadKey($true)
+    }
+    if ($Global:r) {
+        Remove-Item $temp -Recurse -Force | Out-Null
     }
     wh -n
     exit $c
 }
 
 function FileInfo {
-    [Alias('fi')]
+    [Alias("fi")]
     param (
         [string] $f # file
     )
     $i = [IO.FileInfo] $f
-    wd 'FileInfo' ($i | Select-Object *)
+    wd "FileInfo" ($i | Select-Object *)
     return $i
 }
 
 function Sudo {
-    [Alias('admin','adm','root')]
+    [Alias("admin","adm","root")]
     param (
         [Parameter(Mandatory=$true)]
-        [ValidateScript({@('.bat','.cmd','.exe','msi') -contains [IO.Path]::GetExtension($_)})]
+        [ValidateScript({@(".bat",".cmd",".exe","msi") -contains [IO.Path]::GetExtension($_)})]
         [string] $e, # exec
         [Parameter(Mandatory=$true)]
         [string] $a, # arguments
-        [ValidateSet('nm','hd','mn','mx')]
-        [string] $s = 'hd', # window style
+        [ValidateSet("nm","hd","mn","mx")]
+        [string] $s = "hd", # window style
         [switch] $w = $true # wait
     )
-    if ($e -like 'powershell*') {
-        $a = '-nop -ep bybass -c "& { ' + $a + ' }"'
+    if ($e -like "powershell*") {
+        $a = "-nop -ep bybass -c "& { " + $a + " }""
     }
     switch ($s) {
-        nm { $WindowStyle = 'Normal'; break }
-        hd { $WindowStyle = 'Hidden'; break }
-        mn { $WindowStyle = 'Minimized'; break }
-        mx { $WindowStyle = 'Maximized'; break }
+        nm { $WindowStyle = "Normal"; break }
+        hd { $WindowStyle = "Hidden"; break }
+        mn { $WindowStyle = "Minimized"; break }
+        mx { $WindowStyle = "Maximized"; break }
     }
     Start-Process $e $a -Verb RunAs -WindowStyle $WindowStyle -Wait:$w
 }
 
 function ConvertByteSize {
-    [Alias('cbs')]
+    [Alias("cbs")]
     param(
         [Parameter(Mandatory=$true,Position=0)]
         [AllowNull()]
         [AllowEmptyString()]
         [int64] $b, # byte
-        [ValidateScript({@('k','m','g','t') -contains $_})]
-        [string] $m = 'm', # minimum unit
+        [ValidateScript({@("k","m","g","t") -contains $_})]
+        [string] $m = "m", # minimum unit
         [switch] $n # no display unit
     )
     if (!$b -or $b -le 0) {
         $b = 0
     }
     switch ($b) {
-        { $_ -lt 1MB } { $u = 'KB'; $c = $_/1KB; if ($m -eq 'k') { break } }
-        { $_ -lt 1GB } { $u = 'MB'; $c = $_/1MB; if ($m -eq 'm') { break } }
-        { $_ -lt 1TB } { $u = 'GB'; $c = $_/1GB; if ($m -eq 'g') { break } }
-        { $_ -lt 1PB } { $u = 'TB'; $c = $_/1TB; if ($m -eq 't') { break } }
+        { $_ -lt 1MB } { $u = "KB"; $c = $_/1KB; if ($m -eq "k") { break } }
+        { $_ -lt 1GB } { $u = "MB"; $c = $_/1MB; if ($m -eq "m") { break } }
+        { $_ -lt 1TB } { $u = "GB"; $c = $_/1GB; if ($m -eq "g") { break } }
+        { $_ -lt 1PB } { $u = "TB"; $c = $_/1TB; if ($m -eq "t") { break } }
     }
     if ($n) {
-        $u = ''
+        $u = ""
     }
     return "{0:N1}$u" -f $c
 }
 
 function DownloadFile {
-    [Alias('download','df','dl')]
+    [Alias("download","df","dl")]
     param (
         [Parameter(Mandatory=$true)]
         [string] $u,            # uri
@@ -224,31 +222,31 @@ function DownloadFile {
     try {
         $StartTime = Get-Date
         # [Microsoft.PowerShell.Commands.PSUserAgent]::Chrome
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12,Tls13'
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]"Ssl3,Tls,Tls11,Tls12,Tls13"
         $request = [Net.WebRequest]::Create($u)
         $request.UserAgent = $Global:UserAgent
-        wd 'Request' $request
+        wd "Request" $request
         $response = $request.GetResponse()
-        wd 'Response' $response
+        wd "Response" $response
         $LastModified = $response.LastModified
         $headers = [PSObject]::new()
         $response.Headers.AllKeys | ForEach-Object {
             Add-Member -InputObject $headers -NotePropertyName $_ -NotePropertyValue $response.Headers.GetValues($_)[0]
         }
-        wd 'Headers' $headers
+        wd "Headers" $headers
         $GithubApi = [PSCustomObject]@{
-            Match = '(?i).*?github.*?/(.*?)/(.*?)/(.*)'
-            Remove = @('/blob','/master','\?raw=true')
-            Replace = 'https://api.github.com/repos/$1/$2/commits?path=$3&page=1&per_page=1'
+            Match = "(?i).*?github.*?/(.*?)/(.*?)/(.*)"
+            Remove = @("/blob","/master","\?raw=true")
+            Replace = "https://api.github.com/repos/$1/$2/commits?path=$3&page=1&per_page=1"
             Uri = $u
             Json = $null
             LastCommitDate = $null
         }
         if ($u -match $GithubApi.Match) {
-            $GithubApi.Remove | ForEach-Object { $GithubApi.Uri = $GithubApi.Uri -replace $_, '' }
+            $GithubApi.Remove | ForEach-Object { $GithubApi.Uri = $GithubApi.Uri -replace $_, "" }
             $GithubApi.Uri = $GithubApi.Uri -replace $GithubApi.Match, $GithubApi.Replace
             $wc = [Net.WebClient]::new()
-            $wc.Headers['User-Agent'] = $Global:UserAgent
+            $wc.Headers["User-Agent"] = $Global:UserAgent
             $GithubApi.json = $wc.DownloadString($GithubApi.Uri)
             $GithubApi.LastCommitDate = Get-Date ($GithubApi.json | ConvertFrom-Json).commit.author.date
             wd "GithubApi" $GithubApi
@@ -256,6 +254,7 @@ function DownloadFile {
             $p = $true
         }
         $FileInfo = FileInfo $o
+        New-Item $FileInfo.Directory -Type Directory -Force | Out-Null
         $DownloadInfo = [PSCustomObject]@{
             FileInfFullName = $FileInfo.FullName
             FileInfoExists = $FileInfo.Exists
@@ -272,23 +271,23 @@ function DownloadFile {
             }
             return
         }
-        $f = 'DarkYellow'
-        wh ' 다운로드' $f -d:$d
+        $f = "DarkYellow"
+        wh " 다운로드" $f -d:$d
         if ($p) {
             try {
-                $ProxySite = 'https://www.proxysite.com/'
-                $ProxyUri = 'http://us15.proxysite.com/process.php?d'
+                $ProxySite = "https://www.proxysite.com/"
+                $ProxyUri = "http://us15.proxysite.com/process.php?d"
                 $ProxyRequest = [Net.WebRequest]::Create("$ProxyUri=$u")
                 $ProxyRequest.UserAgent = $Global:UserAgent
                 $ProxyRequest.Referer = $ProxySite
-                wd 'ProxyRequest' $ProxyRequest
+                wd "ProxyRequest" $ProxyRequest
                 $ProxyResponse = $ProxyRequest.GetResponse()
-                wd 'ProxyResponse' $ProxyResponse
+                wd "ProxyResponse" $ProxyResponse
                 $ProxyHeaders = [PSObject]::new()
                 $ProxyResponse.Headers.AllKeys | ForEach-Object {
                     Add-Member -InputObject $ProxyHeaders -NotePropertyName $_ -NotePropertyValue $ProxyResponse.Headers.GetValues($_)[0]
                 }
-                wd 'ProxyHeaders' $ProxyHeaders
+                wd "ProxyHeaders" $ProxyHeaders
                 $response.Close()
                 $response = $ProxyResponse
             }
@@ -298,7 +297,7 @@ function DownloadFile {
                     Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
                 }
             }
-            wd 'Response' $response
+            wd "Response" $response
         }
         $ResponseStream = $response.GetResponseStream()
         $buffer = [byte[]]::new(4KB)
@@ -310,7 +309,7 @@ function DownloadFile {
             $FileStream.Write($buffer, 0, $ReadBuffer)
             $ReadBuffer = $ResponseStream.Read($buffer, 0, $buffer.length)
             $receive = $receive + $ReadBuffer
-            wh (' {0}/{1} {2}%' -f ((cbs $receive -n), (cbs $response.ContentLength), ('{0:N0}' -f ($receive/$response.ContentLength*100)))) $f -l -d:$d
+            wh (" {0}/{1} {2}%" -f ((cbs $receive -n), (cbs $response.ContentLength), ("{0:N0}" -f ($receive/$response.ContentLength*100)))) $f -l -d:$d
         }
         $response.Close()
         $ResponseStream.Dispose()
@@ -318,14 +317,14 @@ function DownloadFile {
         $FileStream.Close()
         $FileInfo.CreationTime = $FileInfo.LastWriteTime = $LastModified
         $TaskTime = (Get-Date).Subtract($StartTime).Seconds
-        wh (' {0}s' -f $TaskTime) $f -d:$d
+        wh (" {0}s" -f $TaskTime) $f -d:$d
         $FileInfo = FileInfo $o
         if ($r) {
             return $true
         }
     }
     catch {
-        wh ' 실패' DarkRed -n
+        wh " 실패" DarkRed -n
         Write-Error ($_.Exception | Format-List -Force | Out-String)
         Write-Error ($_.InvocationInfo | Format-List -Force | Out-String)
         if ($e) {
