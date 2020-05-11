@@ -158,7 +158,7 @@ function FileInfo {
 }
 
 function StartProcess {
-    [Alias("run")]
+    [Alias("se")]
     param(
         [Parameter(Mandatory=$true)]
         [ValidateScript({@(".bat",".cmd",".exe","msi") -contains [IO.Path]::GetExtension($_)})]
@@ -170,7 +170,9 @@ function StartProcess {
         [switch] $w = $true # wait
     )
     if ($f -like "powershell*") {
-        $a = '-nop -ep bybass -c "& { ' + $a + ' }"'
+        if ($a) {
+            $a = '-nop -ep bybass -c "& { ' + $a + ' }"'
+        }
         $v = "RunAs"
     }
     switch ($s) {
@@ -179,7 +181,11 @@ function StartProcess {
         mn { $WindowStyle = "Minimized"; break }
         mx { $WindowStyle = "Maximized"; break }
     }
-    Start-Process $f $a -Verb:$v -WindowStyle:$WindowStyle -Wait:$w
+    if ($a) {
+        Start-Process $f $a -Verb:$v -WindowStyle:$WindowStyle -Wait:$w
+    } else {
+        Start-Process $f -Wait
+    }
 }
 
 function ConvertByteSize {

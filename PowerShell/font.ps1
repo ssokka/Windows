@@ -99,7 +99,7 @@ if ($urn) {
 }
 
 # copy user font file to system font file
-run powershell.exe "Copy-Item '$uff' '$sff' -Force"
+se powershell.exe "Copy-Item '$uff' '$sff' -Force"
 if (!(Test-Path $sff)) {
     wh " 실패" DarkRed -n
     wh "! 파일이 존재하지 않습니다." -n
@@ -108,13 +108,13 @@ if (!(Test-Path $sff)) {
 }
 
 # remove user font regisrty and file
-run powershell.exe "Stop-Service FontCache"
+se powershell.exe "Stop-Service FontCache"
 Remove-ItemProperty $urk $urn
-run powershell.exe "Remove-Item $uff -Force"
-run powershell.exe "Start-Service FontCache"
+se powershell.exe "Remove-Item $uff -Force"
+se powershell.exe "Start-Service FontCache"
 
 # add system registry font name
-run powershell.exe "New-ItemProperty '$srk' '$urn' -PropertyType:String -Value '$file'"
+se powershell.exe "New-ItemProperty '$srk' '$urn' -PropertyType:String -Value '$file'"
 $srn = (Get-ItemProperty $srk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty:Name
 if (!$srn) {
     wh " 실패" DarkRed -n
@@ -123,7 +123,7 @@ if (!$srn) {
     e 1
 }
 if (!$e -and $srn -ne $urn) {
-    run powershell.exe "Remove-ItemProperty '$srk' '$srn'"
+    se powershell.exe "Remove-ItemProperty '$srk' '$srn'"
     Remove-Item $sff -Force
     wh " 실패" DarkRed -n
     wh "! 글꼴 이름이 다릅니다." -n
