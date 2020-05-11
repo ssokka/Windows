@@ -32,7 +32,7 @@ function WindowPositionSize {
     $area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
     $x = ($area.Width - $w) / 2
     $y = ($area.Height - $h) / 2
-    Add-Type -Name Window -Namespace Console -MemberDefinition '
+    Add-Type -Name:Window -Namespace:Console -MemberDefinition:'
     [DllImport("Kernel32.dll")]
     public static extern IntPtr GetConsoleWindow();
     [DllImport("user32.dll")]
@@ -70,7 +70,7 @@ function WriteHost {
         if ($o -like "!*") {
             $f = "DarkRed"
         }
-        Write-Host $o -NoNewline -ForegroundColor $f
+        Write-Host $o -NoNewline -ForegroundColor:$f
         if (!$l -and $Global:d) {
             $n = $true
         }
@@ -233,7 +233,7 @@ function DownloadFile {
         $LastModified = $response.LastModified
         $headers = [PSObject]::new()
         $response.Headers.AllKeys | ForEach-Object {
-            Add-Member -InputObject $headers -NotePropertyName $_ -NotePropertyValue $response.Headers.GetValues($_)[0]
+            Add-Member -InputObject $headers -NotePropertyName:$_ -NotePropertyValue:$response.Headers.GetValues($_)[0]
         }
         wd "Headers" $headers
         $GithubApi = [PSCustomObject]@{
@@ -287,7 +287,7 @@ function DownloadFile {
                 wd "ProxyResponse" $ProxyResponse
                 $ProxyHeaders = [PSObject]::new()
                 $ProxyResponse.Headers.AllKeys | ForEach-Object {
-                    Add-Member -InputObject $ProxyHeaders -NotePropertyName $_ -NotePropertyValue $ProxyResponse.Headers.GetValues($_)[0]
+                    Add-Member -InputObject $ProxyHeaders -NotePropertyName:$_ -NotePropertyValue:$ProxyResponse.Headers.GetValues($_)[0]
                 }
                 wd "ProxyHeaders" $ProxyHeaders
                 $response.Close()
@@ -295,8 +295,8 @@ function DownloadFile {
             }
             catch {
                 if ($Global:d) {
-                    Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
-                    Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
+                    Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction:Continue
+                    Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction:Continue
                 }
             }
             wd "Response" $response

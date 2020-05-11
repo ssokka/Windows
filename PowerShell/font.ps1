@@ -21,21 +21,25 @@ if (!$url) {
 
 # working directory
 $temp = "${env:TEMP}\ssokka"
-New-Item $temp -Type Directory -Force | Out-Null
+New-Item $temp -Type:Directory -Force | Out-Null
 
 # module download and import
 try {
     $module = "module.psm1"
-    if ((!(Test-Path $module) -or $m) -and !$t) {
-        [Net.WebClient]::new().DownloadFile("$repository/Windows/master/PowerShell/$module", "$temp\$module")
+    if ($t) {
+        Copy-Item $module "$temp\$module" -Force
+    } else {
+        if ((!(Test-Path $module) -or $m)) {
+            [Net.WebClient]::new().DownloadFile("$repository/Windows/master/PowerShell/$module", "$temp\$module")
+        }
     }
     Import-Module "$temp\$module" -ErrorAction:Stop
 }
 catch {
     Write-Error ($_.Exception | Format-List -Force | Out-String)
     Write-Error ($_.InvocationInfo | Format-List -Force | Out-String)
-    Write-Host " ! 오류가 발생했습니다.`n" -ForegroundColor DarkRed
-    Write-Host " * 스크립트를 종료합니다. 아무 키나 누르십시오.`n" -NoNewline -ForegroundColor Gray; [void][Console]::ReadKey($true)
+    Write-Host " ! 오류가 발생했습니다.`n" -ForegroundColor:DarkRed
+    Write-Host " * 스크립트를 종료합니다. 아무 키나 누르십시오.`n" -NoNewline -ForegroundColor:Gray; [void][Console]::ReadKey($true)
     exit 1
 }
 
@@ -79,10 +83,10 @@ if (!$i) {
 }
 
 # check user registry font name
-$urn = (Get-ItemProperty $urk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty Name
+$urn = (Get-ItemProperty $urk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty:Name
 if ($urn) {
     # check system registry font name and file
-    if ((Get-ItemProperty $srk $urn -ErrorAction SilentlyContinue) -and (Test-Path $sff)) {
+    if ((Get-ItemProperty $srk $urn -ErrorAction:SilentlyContinue) -and (Test-Path $sff)) {
         e 0
     }
 } else {
@@ -103,13 +107,13 @@ if (!(Test-Path $sff)) {
 
 # remove user font regisrty and file
 run powershell.exe "Stop-Service FontCache"
-Remove-ItemProperty $urk -Name $urn
-Remove-Item $uff -Force
+Remove-ItemProperty $urk $urn
+run powershell.exe "Remove-Item $uff -Force"
 run powershell.exe "Start-Service FontCache"
 
 # add system registry font name
-run powershell.exe "New-ItemProperty '$srk' '$urn' -PropertyType String -Value '$file'"
-$srn = (Get-ItemProperty $srk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty Name
+run powershell.exe "New-ItemProperty '$srk' '$urn' -PropertyType:String -Value '$file'"
+$srn = (Get-ItemProperty $srk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty:Name
 if (!$srn) {
     wh " 실패" DarkRed -n
     wh "! 글꼴 이름이 존재하지 않습니다." -n
@@ -117,7 +121,7 @@ if (!$srn) {
     e 1
 }
 if (!$e -and $srn -ne $urn) {
-    run powershell.exe "Remove-ItemProperty '$srk' -Name '$srn'"
+    run powershell.exe "Remove-ItemProperty '$srk' '$srn'"
     Remove-Item $sff -Force
     wh " 실패" DarkRed -n
     wh "! 글꼴 이름이 다릅니다." -n
