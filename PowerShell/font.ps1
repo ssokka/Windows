@@ -4,13 +4,20 @@
 Param (
     [ValidateScript({@(".ttc",".ttf") -contains [IO.Path]::GetExtension($_)})]
     [string] $file = "D2Coding.ttc",
-    [string] $url = "https://raw.githubusercontent.com/ssokka/Fonts/master/$file",
+    [string] $url,
     [switch] $m, # force download module.psm1
     [switch] $r, # remove working directory
     [switch] $p, # pause then exit
     [switch] $d, # debug mode
     [switch] $t # test mode
 )
+
+$repository = "https://raw.githubusercontent.com/ssokka"
+
+# default url
+if (!$url) {
+    $url = "$repository/Fonts/master/$file"
+}
 
 # working directory
 $temp = "${env:TEMP}\ssokka"
@@ -20,7 +27,7 @@ New-Item $temp -Type Directory -Force | Out-Null
 try {
     $module = "module.psm1"
     if ((!(Test-Path $module) -or $m) -and !$t) {
-        [Net.WebClient]::new().DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/$module", "$temp\$module")
+        [Net.WebClient]::new().DownloadFile("$repository/Windows/master/PowerShell/$module", "$temp\$module")
     }
     Import-Module "$temp\$module" -ErrorAction:Stop
 }
