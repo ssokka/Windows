@@ -2,7 +2,7 @@
 
 # set working directory
 $Global:Temp = "${env:TEMP}\ssokka"
-New-Item $Temp -Type Directory -Force
+New-Item $Temp -Type Directory -Force | Out-Null
 Push-Location $Temp
 
 # set global values

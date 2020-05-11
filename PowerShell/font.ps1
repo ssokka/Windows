@@ -5,6 +5,7 @@ Param (
     [ValidateScript({@('.ttc','.ttf') -contains [IO.Path]::GetExtension($_)})]
     [string] $file = 'D2Coding.ttc',
     [string] $url = "https://raw.githubusercontent.com/ssokka/Fonts/master/$file",
+    [switch] $m,            # force download module.psm1
     [switch] $p,            # pause then exit
     [switch] $d,            # debug mode
     [switch] $t             # test mode
