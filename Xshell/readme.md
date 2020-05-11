@@ -59,7 +59,7 @@
 
 ### 세션 설정
 세션 파일 경로 `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions`  
-<span style="color:#C00000">! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.</span>  
+<span style="color: red">! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.</span>  
 <span>* `D2Coding`은 글꼴이 설치되어 있는 경우에만 적용된다.</span>  
 * 연결  
   [v] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
