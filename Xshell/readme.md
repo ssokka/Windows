@@ -67,9 +67,7 @@
 ```
 
 ### 세션 설정
-```
-* 파일 경로 : %USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions
-```
+파일 경로 : **`%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions`**  
 **! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.**  
 **D2Coding**은 글꼴이 설치되어 있는 경우에만 적용된다.
 ```
@@ -95,13 +93,11 @@
 ```
 
 ## 사용자 지정 키 매핑
-```
-* 파일 경로 : %USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm
-```
+파일 경로 : **`%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm`**  
 **! 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.**  
 파일 수정 후 아래 방법을 적용하면 해당 버그를 해결할 수 있다.
 ```
-* 메뉴 > 도구 > 키 매핑 > Alt + 0 > 편집 > 확인 > 확인
+! 메뉴 > 도구 > 키 매핑 > Alt + 0 > 편집 > 확인 > 확인
 ```
 
 ## 수동 설정
