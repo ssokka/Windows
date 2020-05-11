@@ -47,7 +47,7 @@ catch {
 wps -n:$t
 
 # title
-wt "$file 글꼴"
+wt "글꼴"
 
 # font files
 $tff = "$temp\$file"
@@ -63,14 +63,14 @@ $f = "DarkYellow"
 
 # check system font file
 if (Test-Path $sff) {
-    wh " 설치" $f -n
+    wh " $file 설치" $f -n
     e 0
 }
 
 # check user font file
 if (!(Test-Path $uff)) {
     df $url $tff -e
-    $i = wh " 설치" $f -r
+    $i = wh " $file 설치" $f -r
     (New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($tff)
     if (!(Test-Path $uff)) {
         wh " 실패" DarkRed -n
@@ -81,7 +81,7 @@ if (!(Test-Path $uff)) {
 }
 
 if (!$i) {
-    wh " 설치" $f
+    wh " $file 설치" $f
 }
 
 # check user registry font name
