@@ -4,7 +4,7 @@
 <img src="logo.png" width=100>
 
 ## [Xshell 6 Build 0193 다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
-**! 30일 평가판이며, 기능 제한은 없다.**  
+! 30일 평가판이며, 기능 제한은 없다.
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
 
@@ -43,7 +43,8 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 * 메뉴 > 보기 > 도구 모음 > [ ] 연결 표시
 ```
 ### [Xshell.ini](Xshell.ini)
-**! 파일 교체 방식으로 이전 설정은 초기화된다.**
+파일 경로 : `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Xshell.ini`  
+! 파일 교체 방식으로 이전 설정은 초기화된다.
 ```
 * 메뉴 > 도구 > 웹에서 검색 > 검색 엔진 관리 > [V] 구글, 네이버, 다음, Bing
 * 메뉴 > 도구 > 옵션 > 고급 > [ ] Xshel 시작 시 세션 대화 상자 열기
@@ -51,8 +52,8 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 
 ## 세션 설정
 파일 경로 : `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions`  
-**! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.**  
-**D2Coding**은 글꼴이 설치되어 있는 경우에만 적용된다.
+! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.  
+`D2Coding` 글꼴은 설치되어 있는 경우에만 적용된다.
 ```
 > 연결
   [V] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
@@ -77,7 +78,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 
 ## 사용자 지정 키 매핑
 파일 경로 : `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm`  
-**! 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.**  
+! 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.  
 파일 수정 후 아래 방법을 적용하면 해당 버그를 해결할 수 있다.
 ```
 ! 메뉴 > 도구 > 키 매핑 > Alt + 0 > 편집 > 확인 > 확인
@@ -92,7 +93,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 
 ### 무인 응답 파일
 
-**`xshell.exe`** 파일은 설치 파일이다.
+`xshell.exe` 파일은 설치 파일이다.
 
 #### 생성
 ```
