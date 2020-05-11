@@ -157,20 +157,22 @@ function FileInfo {
     return $i
 }
 
-function Sudo {
-    [Alias("admin","adm","root")]
+function StartProcess {
+    [Alias("run")]
     param(
         [Parameter(Mandatory=$true)]
         [ValidateScript({@(".bat",".cmd",".exe","msi") -contains [IO.Path]::GetExtension($_)})]
-        [string] $e, # exec
+        [string] $f, # filepath
         [Parameter(Mandatory=$true)]
-        [string] $a, # arguments
+        [string] $a, # argumentlist
+        [string] $v = "Open", # verb
         [ValidateSet("nm","hd","mn","mx")]
-        [string] $s = "hd", # window style
+        [string] $s = "hd", # windowstyle
         [switch] $w = $true # wait
     )
-    if ($e -like "powershell*") {
+    if ($f -like "powershell*") {
         $a = '-nop -ep bybass -c "& { ' + $a + ' }"'
+        $v = "RunAs"
     }
     switch ($s) {
         nm { $WindowStyle = "Normal"; break }
@@ -178,7 +180,7 @@ function Sudo {
         mn { $WindowStyle = "Minimized"; break }
         mx { $WindowStyle = "Maximized"; break }
     }
-    Start-Process $e $a -Verb RunAs -WindowStyle $WindowStyle -Wait:$w
+    Start-Process $f $a -Verb:$v -WindowStyle:$WindowStyle -Wait:$w
 }
 
 function ConvertByteSize {
