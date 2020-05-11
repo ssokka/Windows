@@ -123,7 +123,7 @@ function WriteDebug {
     )
     if ($Global:d) {
         Write-Host
-        Write-Debug ("# {0}`n{1}" -f ($t, (bl $o -s:$s)))
+        Write-Debug "# $t`n(bl $o -s:$s)"
     }
 }
 
@@ -235,9 +235,9 @@ function DownloadFile {
         }
         wd "Headers" $headers
         $GithubApi = [PSCustomObject]@{
-            Match = "(?i).*?github.*?/(.*?)/(.*?)/(.*)"
-            Remove = @("/blob","/master","\?raw=true")
-            Replace = "https://api.github.com/repos/$1/$2/commits?path=$3&page=1&per_page=1"
+            Match = '(?i).*?github.*?/(.*?)/(.*?)/(.*)'
+            Remove = @('/blob','/master','\?raw=true')
+            Replace = 'https://api.github.com/repos/$1/$2/commits?path=$3&page=1&per_page=1'
             Uri = $u
             Json = $null
             LastCommitDate = $null
