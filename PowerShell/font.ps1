@@ -5,12 +5,16 @@ Param (
     [ValidateScript({@(".ttc",".ttf") -contains [IO.Path]::GetExtension($_)})]
     [string] $file = "D2Coding.ttc",
     [string] $url = "https://raw.githubusercontent.com/ssokka/Fonts/master/$file",
-    [switch] $m,            # force download module.psm1
-    [switch] $r,            # remove working directory
-    [switch] $p,            # pause then exit
-    [switch] $d,            # debug mode
-    [switch] $t             # test mode
+    [switch] $m, # force download module.psm1
+    [switch] $r, # remove working directory
+    [switch] $p, # pause then exit
+    [switch] $d, # debug mode
+    [switch] $t # test mode
 )
+
+# working directory
+$temp = "${env:TEMP}\ssokka"
+New-Item $temp -Type Directory -Force | Out-Null
 
 # messages
 $ErrorMessage = " ! 오류가 발생했습니다.`n"
@@ -20,8 +24,6 @@ $ExitMessage = " * 스크립트를 종료합니다. 아무 키나 누르십시오.`n"
 try {
     $module = "module.psm1"
     if ((!(Test-Path $module) -or $m) -and !$t) {
-        $temp = "${env:TEMP}\ssokka"
-        New-Item $temp -Type Directory -Force | Out-Null
         [Net.WebClient]::new().DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/$module", "$temp\$module")
     }
     Import-Module "$temp\$module" -ErrorAction:Stop
@@ -60,7 +62,8 @@ if (Test-Path $sff) {
 if (!(Test-Path $uff)) {
     df $url $tff -e
     $i = wh " 설치" DarkGreen -r
-    adm powershell.exe "(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere('$tff')"
+	wh $tff -n
+    (New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($tff)
     if (!(Test-Path $uff)) {
         wh " 실패" DarkRed -n
         wh "! 파일이 존재하지 않습니다." -n

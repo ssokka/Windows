@@ -21,9 +21,9 @@ if ($d) {
 function WindowPositionSize {
     [Alias("wps")]
     param(
-        [int] $w = 638,         # width (100), 120 (758)
-        [int] $h = 402,         # height (25), 30 (472)
-        [switch] $n = $false    # no window position size
+        [int] $w = 638, # width (100), 120 (758)
+        [int] $h = 402, # height (25), 30 (472)
+        [switch] $n = $false # no window position size
     )
     if ($n) {
         return
@@ -91,7 +91,7 @@ function WriteHost {
 
 function WriteTitle {
     [Alias("wt")]
-    param (
+    param(
         [string] $t # title
     )
     $t = "# $t"
@@ -132,8 +132,8 @@ function Exit {
     param(
         [int] $c # exit code
     )
-    wh -n
     if ($c -and $c -gt 0) {
+		wh -n
         wh "! 오류가 발생했습니다." -n
     }
     if ($Global:p) {
@@ -149,7 +149,7 @@ function Exit {
 
 function FileInfo {
     [Alias("fi")]
-    param (
+    param(
         [string] $f # file
     )
     $i = [IO.FileInfo] $f
@@ -159,7 +159,7 @@ function FileInfo {
 
 function Sudo {
     [Alias("admin","adm","root")]
-    param (
+    param(
         [Parameter(Mandatory=$true)]
         [ValidateScript({@(".bat",".cmd",".exe","msi") -contains [IO.Path]::GetExtension($_)})]
         [string] $e, # exec
@@ -170,7 +170,7 @@ function Sudo {
         [switch] $w = $true # wait
     )
     if ($e -like "powershell*") {
-        $a = "-nop -ep bybass -c '& { " + $a + " }'"
+        $a = '-nop -ep bybass -c "& { ' + $a + ' }"'
     }
     switch ($s) {
         nm { $WindowStyle = "Normal"; break }
@@ -209,15 +209,15 @@ function ConvertByteSize {
 
 function DownloadFile {
     [Alias("download","df","dl")]
-    param (
+    param(
         [Parameter(Mandatory=$true)]
-        [string] $u,            # uri
+        [string] $u, # uri
         [Parameter(Mandatory=$true)]
-        [string] $o,            # out
-        [switch] $p,            # proxy
-        [switch] $d = $true,    # display
-        [switch] $e,            # error then exit
-        [switch] $r             # return
+        [string] $o, # out
+        [switch] $p, # proxy
+        [switch] $d = $true, # display
+        [switch] $e, # error then exit
+        [switch] $r # return
     )
     try {
         $StartTime = Get-Date
