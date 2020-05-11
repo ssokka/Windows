@@ -4,7 +4,8 @@
 <img src="logo.png" width=100>
 
 ## [다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
-**! 30일 평가판이며, 기능 제한은 없다.**
+**! 30일 평가판이며, 기능 제한은 없다.**  
+**2020.05.12 : Xshell 6 Build 0193**
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
 
@@ -15,7 +16,7 @@
 
 ## 명령 프롬프트 실행
 ```
-powershell.exe -nop -ep bypass -f Xshell.ps1 -d2coding -install -restore -setting -keymap -m -r -p
+powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -setting -keymap -m -r -p
 ```
 
 ## 실행 옵션
