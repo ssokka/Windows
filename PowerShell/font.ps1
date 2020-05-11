@@ -57,7 +57,7 @@ if (Test-Path $sff) {
 
 # check user font file
 if (!(Test-Path $uff)) {
-    if (!(df $url $tff)) {
+    if (!(df $url $tff -e -r)) {
         e 1
     }
     $i = wh ' ¼³Ä¡' DarkGreen -r
