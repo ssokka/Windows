@@ -93,7 +93,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 
 ### 무인 응답 파일
 
-`xshell.exe` 파일은 설치 파일이다.
+`xshell.exe`는 설치 파일이다.
 
 #### 생성
 ```
