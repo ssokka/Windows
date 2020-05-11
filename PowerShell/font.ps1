@@ -16,10 +16,6 @@ Param (
 $temp = "${env:TEMP}\ssokka"
 New-Item $temp -Type Directory -Force | Out-Null
 
-# messages
-$ErrorMessage = " ! 오류가 발생했습니다.`n"
-$ExitMessage = " * 스크립트를 종료합니다. 아무 키나 누르십시오.`n"
-
 # module download and import
 try {
     $module = "module.psm1"
@@ -31,8 +27,8 @@ try {
 catch {
     Write-Error ($_.Exception | Format-List -Force | Out-String)
     Write-Error ($_.InvocationInfo | Format-List -Force | Out-String)
-    Write-Host $ErrorMessage -ForegroundColor DarkRed
-    Write-Host $ExitMessage -NoNewline -ForegroundColor Gray; [void][Console]::ReadKey($true)
+    Write-Host " ! 오류가 발생했습니다.`n" -ForegroundColor DarkRed
+    Write-Host " * 스크립트를 종료합니다. 아무 키나 누르십시오.`n" -NoNewline -ForegroundColor Gray; [void][Console]::ReadKey($true)
     exit 1
 }
 
@@ -62,7 +58,6 @@ if (Test-Path $sff) {
 if (!(Test-Path $uff)) {
     df $url $tff -e
     $i = wh " 설치" DarkGreen -r
-	wh $tff -n
     (New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($tff)
     if (!(Test-Path $uff)) {
         wh " 실패" DarkRed -n
@@ -77,7 +72,7 @@ if (!$i) {
 }
 
 # check user registry font name
-$urn = (Get-ItemProperty $urk).PSObject.Properties | Where-Object Value -like *$file | Select-Object -ExpandProperty Name
+$urn = (Get-ItemProperty $urk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty Name
 if ($urn) {
     # check system registry font name and file
     if ((Get-ItemProperty $srk $urn -ErrorAction SilentlyContinue) -and (Test-Path $sff)) {
@@ -107,7 +102,7 @@ adm powershell.exe "Start-Service FontCache"
 
 # add system registry font name
 adm powershell.exe "New-ItemProperty '$srk' '$urn' -PropertyType String -Value '$file'"
-$srn = (Get-ItemProperty $srk).PSObject.Properties | Where-Object Value -like *$file | Select-Object -ExpandProperty Name
+$srn = (Get-ItemProperty $srk).PSObject.Properties | Where-Object Value -like "*$file" | Select-Object -ExpandProperty Name
 if (!$srn) {
     wh " 실패" DarkRed -n
     wh "! 글꼴 이름이 존재하지 않습니다." -n
