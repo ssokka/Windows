@@ -4,7 +4,7 @@ setlocal
 pushd %temp%
 
 set _ps1=font.ps1
-set _url=https://raw.githubusercontent.com/ssokka/Windows/master/PowerShell/%_ps1%
+set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Font/%_ps1%
 set _ps=powershell.exe -nop -ep bypass
 
 %_ps% -c "& {[Net.WebClient]::new().DownloadFile('%_url%', '%_ps1%')}"
