@@ -97,7 +97,7 @@ function WriteTitle {
     $t = "# $t"
     $Host.UI.RawUI.WindowTitle = $t
     Write-Host
-    wh $t DarkGreen
+    wh $t Green
 }
 
 function BeautifulLine {
@@ -186,6 +186,22 @@ function StartProcess {
     } else {
         Start-Process $f -Wait
     }
+}
+
+function IniReplace {
+    [Alias("ir")]
+    param (
+        [Parameter(Mandatory=$true)]
+        [string] $i, # ini file
+        [Parameter(Mandatory=$true)]
+        [string] $k, # key
+        [Parameter(Mandatory=$true)]
+        [string] $d # data
+    )
+    if (!(Test-Path $i)) {
+        return
+    }
+    (Get-Content $i) -Replace ('^('+$k+')=.*?$'), ('$1='+$d) | Set-Content $i
 }
 
 function ConvertByteSize {
