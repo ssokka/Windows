@@ -14,7 +14,7 @@ Param (
 
 $repository = "https://raw.githubusercontent.com/ssokka"
 
-# default url
+# default font file url
 if (!$url) {
     $url = "$repository/Fonts/master/$file"
 }
