@@ -1,30 +1,30 @@
-# <img src="https://github.com/ssokka/Icons/blob/master/fonts.ico" width=30> À©µµ¿ì ±Û²Ã ¼³Ä¡
+# <img src="https://github.com/ssokka/Icons/blob/master/fonts.ico" width=30> ìœˆë„ìš° ê¸€ê¼´ ì„¤ì¹˜
 2020.05.16
 <br><br>
 
-## <img src="https://github.com/ssokka/Icons/blob/master/zip.ico" width=25> ÀÚµ¿ ½ºÅ©¸³Æ® ´Ù¿î·Îµå
+## <img src="https://github.com/ssokka/Icons/blob/master/zip.ico" width=25> ìë™ ìŠ¤í¬ë¦½íŠ¸ ë‹¤ìš´ë¡œë“œ
 
 ### [D2Coding.zip](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
 <br>
 
-## <img src="https://github.com/ssokka/Icons/blob/master/powershell.ico" width=25> ÆÄ¿ö¼Ğ ½ºÅ©¸³Æ®
+## <img src="https://github.com/ssokka/Icons/blob/master/powershell.ico" width=25> íŒŒì›Œì…¸ ìŠ¤í¬ë¦½íŠ¸
 
 ### font.ps1
 
-#### ¸í·É ÇÁ·ÒÇÁÆ® ½ÇÇà
+#### ëª…ë ¹ í”„ë¡¬í”„íŠ¸ ì‹¤í–‰
 ```
 powershell.exe -nop -ep bypass -f font.ps1 D2Coding.ttc https://raw.githubusercontent.com/ssokka/Fonts/master/D2Coding.ttc -m -r -p
 ```
 
-#### ½ÇÇà ¿É¼Ç
+#### ì‹¤í–‰ ì˜µì…˜
 ```
--file : ±Û²Ã ÆÄÀÏ .ttc .ttf Áö¿ø
-        ±âº» D2Coding.ttc
--url  : ±âº» https://raw.githubusercontent.com/ssokka/Fonts/master
--m    : ÇÊ¼ö ¸ğµâ module.psm1 °­Á¦ ´Ù¿î·Îµå
--p    : ÀÏ½Ã Á¤Áö ÈÄ ½ºÅ©¸³Æ® Á¾·á
--r    : ½ºÅ©¸³Æ® ÀÛµ¿ ÈÄ ÀÓ½Ã ÀÛ¾÷ Æú´õ »èÁ¦
--d    : µğ¹ö±× ¸ğµå
--t    : Å×½ºÆ® ¸ğµå
-        °³¹ßÀÚ¿ë
+-file : ê¸€ê¼´ íŒŒì¼ .ttc .ttf ì§€ì›
+        ê¸°ë³¸ D2Coding.ttc
+-url  : ê¸°ë³¸ https://raw.githubusercontent.com/ssokka/Fonts/master
+-m    : í•„ìˆ˜ ëª¨ë“ˆ module.psm1 ê°•ì œ ë‹¤ìš´ë¡œë“œ
+-p    : ì¼ì‹œ ì •ì§€ í›„ ìŠ¤í¬ë¦½íŠ¸ ì¢…ë£Œ
+-r    : ìŠ¤í¬ë¦½íŠ¸ ì‘ë™ í›„ ì„ì‹œ ì‘ì—… í´ë” ì‚­ì œ
+-d    : ë””ë²„ê·¸ ëª¨ë“œ
+-t    : í…ŒìŠ¤íŠ¸ ëª¨ë“œ
+        ê°œë°œììš©
 ```
