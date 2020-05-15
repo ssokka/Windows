@@ -10,7 +10,7 @@
 
 # 자동 설치 스크립트
 
-## [Xshell.zip 다운로드](Xshell.zip)
+## [Xshell.zip 다운로드](https://github.com/ssokka/Windows/blob/master/Xshell/Xshell.zip?raw=true)
 
 # Xshell.ps1
 <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
