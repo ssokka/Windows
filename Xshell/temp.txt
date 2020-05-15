@@ -1,0 +1,44 @@
+```
+> 연결
+  [v] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
+  > 연결 유지
+    [v] 네트워크가 유휴 상태일 때 문자열을 보냄
+    간격: 280초, 문자열: \n
+    [v] 네트워크가 유휴 상태일 때 TCP 연결 유지 패킷 보냄
+> 터미널
+  터미널 종류: linux
+  버퍼 크기: 200000
+> 모양
+  색 구성표: New Black
+  글꼴: D2Coding *
+  한글 글꼴: D2Coding *
+  글꼴 품질: Natural ClearType
+> 고급
+  > 로깅
+    [ ] 파일이 존재하는 경우 덮어쓰기
+    [v] 연결 시 로깅 시작
+    [v] 로그 파일에 기록
+```
+```ini
+[CONNECTION]
+AutoReconnect=1
+[CONNECTION:KEEPALIVE]
+SendKeepAlive=1
+SendKeepAliveInterval=280
+KeepAliveString=\n
+TCPKeepAlive=1
+[TERMINAL]
+Type=linux
+ScrollbackSize=200000
+[TERMINAL:WINDOW]
+ColorScheme=New Black
+FontFace=D2Coding
+AsianFont=D2Coding
+FontQuality=6
+[LOGGING]
+Overwrite=0
+AutoStart=1
+WriteFileTimestamp=1
+
+QuickCommand=Default Quick Command Set
+```
