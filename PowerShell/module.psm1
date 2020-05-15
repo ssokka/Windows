@@ -276,10 +276,9 @@ function DownloadFile {
             $LastModified = $GithubApi.LastCommitDate
             $p = $true
         }
-        $FileInfo = FileInfo $o
-        if ($u -match '(?i).*?majorgeeks.com.*?exe$') {
-            $p = $true
-        }
+        # if ($u -match '(?i).*?majorgeeks.com.*?exe$') {
+        #     $p = $true
+        # }
         $FileInfo = FileInfo $o
         New-Item $FileInfo.Directory -Type Directory -Force | Out-Null
         $DownloadInfo = [PSCustomObject]@{
