@@ -10,7 +10,7 @@
 
 # 자동 설치 스크립트
 
-## [Xshell.cmd 다운로드](http://blogattach.naver.com/92078e3f281918ae886904330fe298ee4d1fe25a/20200515_100_blogfile/jeryuni_1589531191018_y3LTjt_cmd/Xshell.cmd?type=attachment)
+## [Xshell.zip 다운로드](Xshell.zip)
 
 # Xshell.ps1
 <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
