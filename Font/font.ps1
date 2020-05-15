@@ -59,7 +59,7 @@ $frk = "Microsoft\Windows NT\CurrentVersion\Fonts"
 $srk = "HKLM:\SOFTWARE\$frk"
 $urk = "HKCU:\Software\$frk"
 
-$f = "DarkYellow"
+$f = "Yellow"
 
 # check system font file
 if (Test-Path $sff) {
