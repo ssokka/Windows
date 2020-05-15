@@ -1,4 +1,4 @@
-# <img src="https://github.com/ssokka/Icons/blob/master/fonts.ico" width=30 style="vertical-align:top"> 윈도우 글꼴 설치
+# ![](https://github.com/ssokka/Icons/blob/master/fonts.ico | width=100) 윈도우 글꼴 설치
 2020.05.16
 <br><br>
 
@@ -11,7 +11,7 @@
 
 ### font.ps1
 
-#### 명령 프롬프트 실행1
+#### 명령 프롬프트 실행
 ```
 powershell.exe -nop -ep bypass -f font.ps1 D2Coding.ttc https://raw.githubusercontent.com/ssokka/Fonts/master/D2Coding.ttc -m -r -p
 ```
