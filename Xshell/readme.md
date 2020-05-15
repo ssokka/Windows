@@ -8,6 +8,10 @@
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
 
+# 자동 설치 스크립트
+
+## [Xshell.cmd 다운로드](http://blogattach.naver.com/92078e3f281918ae886904330fe298ee4d1fe25a/20200515_100_blogfile/jeryuni_1589531191018_y3LTjt_cmd/Xshell.cmd?type=attachment)
+
 # Xshell.ps1
 <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
 
@@ -25,7 +29,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 -restore  : 개인 자료 복원
             암호 필요
 -setting  : 기본 설정
--keymap   : 개인 키 매핑 추가
+-keymap   : 개인 키 매핑 추가 [코딩중]
             암호 필요
 -m        : 필수 모듈 module.psm1 강제 다운로드
 -p        : 일시 정지 후 스크립트 종료
@@ -36,7 +40,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 ```
 
 ## 기본 설정
-### [Xshell.reg](Xshell.reg)
+### [setting.reg](setting.reg)
 ```
 * 실험 기능 창 닫기
 * 메뉴 > 보기 > 도구 모음 > [ ] 주소 표시줄
@@ -59,7 +63,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
   [V] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
   > 연결 유지
     [V] 네트워크가 유휴 상태일 때 문자열을 보냄
-    간격: 290초, 문자열: \s
+    간격: 290초, 문자열: (!공백 한칸)
     [V] 네트워크가 유휴 상태일 때 TCP 연결 유지 패킷 보냄
 > 터미널
   터미널 종류: linux
