@@ -13,7 +13,7 @@
 
 ## 명령 프롬프트 실행
 ```
-powershell.exe -nop -ep bypass -f font.ps1  -m -r -p
+powershell.exe -nop -ep bypass -f font.ps1 D2Coding.ttc https://raw.githubusercontent.com/ssokka/Fonts/master/D2Coding.ttc -m -r -p
 ```
 
 ## 실행 옵션
