@@ -3,9 +3,9 @@
 <img src="logo.png" width=100>
 <br><br>
 
-# 자동 설치 스크립트
+# 자동 설치 스크립트 다운로드
 
-## [D2Coding.cmd 다운로드](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
+## [D2Coding.cmd](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
 <br>
 
 # font.ps1
