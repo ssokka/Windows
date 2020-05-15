@@ -1,13 +1,13 @@
-# <img src="https://github.com/ssokka/Icons/blob/master/fonts.ico" width=30> 윈도우 글꼴 설치
+# <img src="https://github.com/ssokka/Icons/blob/master/fonts.ico" width=30 style="vertical-align:middle"> 윈도우 글꼴 설치
 2020.05.16
 <br><br>
 
-## <img src="https://github.com/ssokka/Icons/blob/master/zip.ico" width=25> 자동 스크립트 다운로드
+## <img src="https://github.com/ssokka/Icons/blob/master/zip.ico" width=25 style="vertical-align:middle"> 자동 스크립트 다운로드
 
 ### [D2Coding.zip](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
 <br>
 
-## <img src="https://github.com/ssokka/Icons/blob/master/powershell.ico" width=25> 파워셸 스크립트
+## <img src="https://github.com/ssokka/Icons/blob/master/powershell.ico" width=25 style="vertical-align:middle"> 파워셸 스크립트
 
 ### font.ps1
 
