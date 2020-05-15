@@ -63,7 +63,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
   [V] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
   > 연결 유지
     [V] 네트워크가 유휴 상태일 때 문자열을 보냄
-    간격: 290초, 문자열: (!공백 한칸)
+    간격: 290초, 문자열: (공백한칸)
     [V] 네트워크가 유휴 상태일 때 TCP 연결 유지 패킷 보냄
 > 터미널
   터미널 종류: linux
