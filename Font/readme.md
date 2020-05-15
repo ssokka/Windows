@@ -1,4 +1,4 @@
-# ![](https://github.com/ssokka/Icons/blob/master/fonts.ico | width=100) 윈도우 글꼴 설치
+# [[https://github.com/ssokka/Icons/blob/master/fonts.ico|width=30px]] 윈도우 글꼴 설치
 2020.05.16
 <br><br>
 
