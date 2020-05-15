@@ -3,8 +3,8 @@
 setlocal
 pushd %temp%
 
-set _ps1=%~n.ps1
-set _url=https://raw.githubusercontent.com/ssokka/Windows/master/%~n/%_ps1%
+set _ps1=%~n0.ps1
+set _url=https://raw.githubusercontent.com/ssokka/Windows/master/%~n0/%_ps1%
 set _ps=powershell.exe -nop -ep bypass
 
 %_ps% -c "& {[Net.WebClient]::new().DownloadFile('%_url%', '%_ps1%')}"
