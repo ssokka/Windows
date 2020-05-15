@@ -63,10 +63,15 @@ wd "ProgramInfo" $ProgramInfo
 $FileInfo = fi "$($ProgramInfo.Directory)\$($ProgramInfo.Executable)"
 
 if ($d2coding) {
+    if ($p) {
+        $p = $false
+        $b = $true
+    }
     $ps1 = "font.ps1"
     if (df "$repository/Windows/master/Font/$ps1" "$temp\$ps1" -d:$false -r) {
-        & "$temp\$ps1" -p:$false
+        & "$temp\$ps1"
     }
+    $p = $b
 }
 
 # kill program
