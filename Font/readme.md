@@ -1,24 +1,22 @@
 2020.05.15
-# 윈도우 글꼴 설치
-<img src="logo.png" width=100>
-<br><br>
-
-# 자동 설치 스크립트 다운로드
-
-## [D2Coding.cmd](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
+# <img src="https://github.com/ssokka/Icons/blob/master/fonts.ico"> 윈도우 글꼴 설치
 <br>
 
-# font.ps1
-<img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
+# <img src="https://github.com/ssokka/Icons/blob/master/zip.ico"> 자동 스크립트 다운로드
 
-윈도우 글꼴 설치 파워셸 스크립트
+## [D2Coding.zip](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
+<br>
 
-## 명령 프롬프트 실행
+# <img src="https://github.com/ssokka/Icons/blob/master/powershell.ico"> 파워셸 스크립트
+
+## font.ps1
+
+### 명령 프롬프트 실행
 ```
 powershell.exe -nop -ep bypass -f font.ps1 D2Coding.ttc https://raw.githubusercontent.com/ssokka/Fonts/master/D2Coding.ttc -m -r -p
 ```
 
-## 실행 옵션
+### 실행 옵션
 ```
 -file : 글꼴 파일 .ttc .ttf 지원
         기본 D2Coding.ttc
