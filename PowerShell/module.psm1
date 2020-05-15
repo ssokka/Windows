@@ -21,8 +21,8 @@ if ($d) {
 function WindowPositionSize {
     [Alias("wps")]
     param(
-        [int] $w = 638, # width (100), 120 (758)
-        [int] $h = 402, # height (25), 30 (472)
+        [int] $w = 758, # width 120, 638 (100), 120 (758)
+        [int] $h = 472, # height 30, 402 (25), 30 (472)
         [switch] $n = $false # no window position size
     )
     if ($n) {
@@ -298,7 +298,7 @@ function DownloadFile {
             }
             return
         }
-        $f = "DarkYellow"
+        $f = "Yellow"
         wh " 다운로드" $f -d:$d
         if ($p) {
             try {
