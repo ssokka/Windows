@@ -1,10 +1,12 @@
 2020.05.15
 # 윈도우 글꼴 설치
 <img src="logo.png" width=100>
+<br><br>
 
 # 자동 설치 스크립트
 
-## [D2Coding.cmd 다운로드](http://blogattach.naver.com/24b1388b9dc7c01c33debe83b85c2e5bf6af53b271/20200515_244_blogfile/jeryuni_1589529989199_5f3B53_cmd/D2Coding.cmd?type=attachment)
+## [D2Coding.cmd 다운로드](https://github.com/ssokka/Windows/blob/master/Font/D2Coding.zip?raw=true)
+<br>
 
 # font.ps1
 <img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
