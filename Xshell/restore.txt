@@ -1,4 +1,0 @@
-Setup=restore.vbs
-TempMode
-Silent=1
-Overwrite=1
