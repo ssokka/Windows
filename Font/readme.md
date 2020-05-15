@@ -11,7 +11,7 @@
 
 ### font.ps1
 
-#### 명령 프롬프트 실행
+#### 명령 프롬프트 실행1
 ```
 powershell.exe -nop -ep bypass -f font.ps1 D2Coding.ttc https://raw.githubusercontent.com/ssokka/Fonts/master/D2Coding.ttc -m -r -p
 ```
