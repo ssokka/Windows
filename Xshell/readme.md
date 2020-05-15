@@ -1,28 +1,30 @@
 2020.05.12
 
-# [Xshell](https://www.netsarang.com/xshell/)
-<img src="logo.png" width=100>
+# <img src="https://raw.githubusercontent.com/ssokka/Icons/master/xshell.ico" width=25> [Xshell](https://www.netsarang.com/xshell/)
 
 ## [Xshell 6 Build 0193 다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
 ! 30일 평가판이며, 기능 제한은 없다.
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
 
-# 자동 설치 스크립트
+<br>
 
-## [Xshell.zip 다운로드](https://github.com/ssokka/Windows/blob/master/Xshell/Xshell.zip?raw=true)
+# 일반 사용자 - 자동 스크립트
 
-# Xshell.ps1
-<img src="https://github.com/ssokka/Windows/raw/master/PowerShell/logo.png" width=100>
+## [Xshell.zip](https://raw.githubusercontent.com/ssokka/Windows/blob/master/Xshell/Xshell.zip)
 
-설치 및 설정 파워셸 스크립트
+<br>
 
-## 명령 프롬프트 실행
+# 고급 사용자 - 파워셸 스크립트
+
+## Xshell.ps1
+
+### 기본 실행
 ```
 powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -setting -keymap -m -r -p
 ```
 
-## 실행 옵션
+### 실행 옵션
 ```
 -d2coding : D2Coding.ttc 글꼴 설치
 -install  : 30일 평가판 설치
@@ -39,22 +41,21 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
             개발자용
 ```
 
-## 기본 설정
-### [setting.reg](setting.reg)
+### 기본 설정
+#### [setting.reg](setting.reg)
 ```
 * 실험 기능 창 닫기
 * 메뉴 > 보기 > 도구 모음 > [ ] 주소 표시줄
 * 메뉴 > 보기 > 도구 모음 > [ ] 연결 표시
 ```
-### [Xshell.ini](Xshell.ini)
+#### [Xshell.ini](Xshell.ini)
 파일 경로 : `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Xshell.ini`  
 ! 파일 교체 방식으로 이전 설정은 초기화된다.
 ```
 * 메뉴 > 도구 > 웹에서 검색 > 검색 엔진 관리 > [V] 구글, 네이버, 다음, Bing
 * 메뉴 > 도구 > 옵션 > 고급 > [ ] Xshel 시작 시 세션 대화 상자 열기
 ```
-
-## 세션 설정
+### 세션 설정
 파일 경로 : `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\Sessions`  
 ! 기본 세션을 포함하여 모든 세션 파일이 아래 설정으로 적용된다.  
 `D2Coding` 글꼴은 설치되어 있는 경우에만 적용된다.
@@ -79,8 +80,7 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
     [V] 연결 시 로깅 시작
     [V] 로그 파일에 기록
 ```
-
-## 사용자 지정 키 매핑
+### 사용자 지정 키 매핑
 파일 경로 : `%USERPROFILE%\Documents\NetSarang Computer\6\Xshell\CustomKeyMap.ckm`  
 ! 파일을 직접 수정하여 사용할 경우 초기화되는 버그가 있다.  
 파일 수정 후 아래 방법을 적용하면 해당 버그를 해결할 수 있다.
@@ -88,10 +88,12 @@ powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -restore -settin
 ! 메뉴 > 도구 > 키 매핑 > Alt + 0 > 편집 > 확인 > 확인
 ```
 
-## 수동 설정
+### 수동 설정
 ```
 * 세선 관리 창 자동 숨김
 ```
+
+<br>
 
 ## 참고
 
