@@ -11,7 +11,7 @@
 
 # 일반 사용자 - 자동 스크립트
 
-## [Xshell.zip](https://raw.githubusercontent.com/ssokka/Windows/blob/master/Xshell/Xshell.zip)
+## [Xshell.zip](https://raw.githubusercontent.com/ssokka/Windows/master/Xshell/Xshell.zip)
 
 <br>
 
