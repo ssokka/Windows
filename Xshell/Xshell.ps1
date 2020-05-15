@@ -145,7 +145,7 @@ if ($setting -and $FileInfo.Exists) {
        [V] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
        > 연결 유지
          [V] 네트워크가 유휴 상태일 때 문자열을 보냄
-         간격: 280초, 문자열:  (공백한칸)
+         간격: 290초, 문자열:  (공백한칸)
          [V] 네트워크가 유휴 상태일 때 TCP 연결 유지 패킷 보냄
      > 터미널
        터미널 종류: linux
@@ -165,7 +165,7 @@ if ($setting -and $FileInfo.Exists) {
     Get-ChildItem "$udf\$($ProgramInfo.Name)\Sessions\" -Include @("default", "*.xsh") -Recurse | ForEach-Object {
         ir $_ "AutoReconnect" "1"
         ir $_ "SendKeepAlive" "1"
-        ir $_ "SendKeepAliveInterval" "280"
+        ir $_ "SendKeepAliveInterval" "290"
         ir $_ "KeepAliveString" " "
         ir $_ "TCPKeepAlive" "1"
         ir $_ "Type" "linux"
@@ -192,4 +192,9 @@ if ($keymap -and $FileInfo.Exists) {
         se "$temp\$exe"
         wh -n
     }
+}
+
+wh -n
+if ($p) {
+    e 0
 }
