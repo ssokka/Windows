@@ -47,7 +47,7 @@ catch {
 wps -n:$t
 
 # title
-wt "글꼴"
+wt "글꼴 $file"
 
 # font files
 $tff = "$temp\$file"
@@ -63,7 +63,7 @@ $f = "Yellow"
 
 # check system font file
 if (Test-Path $sff) {
-    wh " $file 설치" $f -n
+    wh " 설치" $f -n
     e 0
 }
 
