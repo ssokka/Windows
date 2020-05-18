@@ -118,7 +118,7 @@ if ($setting -and $FileInfo.Exists) {
     $drv = @(Get-WmiObject -class win32_logicaldisk | Where-Object { $_.DriveType -eq 3 -and $_.DeviceID -ne $env:SystemDrive })[0].DeviceID
     if ($drv) {
         $dst = "$drv\Programs\$($ProgramInfo.Name)"
-        New-Item $udf -Type:Directory -Force | Out-Null
+        New-Item $dst -Type:Directory -Force | Out-Null
         Move-Item "$udf\*" $dst -Force -ErrorAction:SilentlyContinue
         Remove-Item $udf -Recurse -ErrorAction:SilentlyContinue
         se cmd.exe "/c mklink /d `"$udf`" `"$dst`"" "RunAs"
@@ -188,16 +188,16 @@ if ($setting -and $FileInfo.Exists) {
     }
 }
 
-if ($keymap -and $FileInfo.Exists) {
-    $exe = 'keymap.exe'
-    df "$($ProgramInfo.Repository)/$exe" "$temp\$exe" -d:$false
-    if (Test-Path "$temp\$exe") {
-        wt "$title"
-        wh " 개인 키 매핑 추가 설정" $f
-        se "$temp\$exe"
-        wh -n
-    }
-}
+# if ($keymap -and $FileInfo.Exists) {
+#     $exe = 'keymap.exe'
+#     df "$($ProgramInfo.Repository)/$exe" "$temp\$exe" -d:$false
+#     if (Test-Path "$temp\$exe") {
+#         wt "$title"
+#         wh " 개인 키 매핑 추가 설정" $f
+#         se "$temp\$exe"
+#         wh -n
+#     }
+# }
 
 wh -n
 if ($p) {
