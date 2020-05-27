@@ -1,8 +1,8 @@
-2020.05.12
+2020.05.27
 
 # <img src="https://raw.githubusercontent.com/ssokka/Icons/master/xshell.ico" width=25> [Xshell](https://www.netsarang.com/xshell/)
 
-## [Xshell 6 Build 0193 다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
+## [Xshell 6 Build 0197 다운로드](https://www.majorgeeks.com/mg/getmirror/xshell,1.html)  
 ! 30일 평가판이며, 기능 제한은 없다.
 
 ## [업데이트 내역](https://www.netsarang.com/ko/xshell-update-history/)
