@@ -93,6 +93,9 @@ if ($install) {
     $iss | ForEach-Object {
         se "$temp\$($ProgramInfo.Executable)" "-s -f1`"$temp\$_`""
     }
+    $iss | ForEach-Object {
+        se "$temp\$($ProgramInfo.Executable)" "-s -f1`"$temp\$_`""
+    }
     wh -n
 }
 
