@@ -56,7 +56,8 @@ $ProgramInfo | Add-Member Directory "$ProgramFiles\$($ProgramInfo.Company)\$($Pr
 $ProgramInfo | Add-Member Executable "$($ProgramInfo.Name).exe" -MemberType:NoteProperty
 $ProgramInfo | Add-Member Registry "Software\$($ProgramInfo.Company)" -MemberType:NoteProperty
 $ProgramInfo | Add-Member Repository "$ProgramRepository/$($ProgramInfo.Name)" -MemberType:NoteProperty
-$ProgramInfo | Add-Member Download "https://www.majorgeeks.com/mg/getmirror/xshell,1.html" -MemberType:NoteProperty
+# $ProgramInfo | Add-Member Download "https://www.majorgeeks.com/mg/getmirror/xshell,1.html" -MemberType:NoteProperty
+$ProgramInfo | Add-Member Download "https://www.filehorse.com/download/file/cdKOQPRLm5zLbM1sfEeMxGua_qZXF9YYtcuJxTR9cQVUGMBnTP4cnHIyVVtweZmSXFigoLRBvCYXq4b_Csozyi46Ky-QE4r4k_r98I3m4LM/" -MemberType:NoteProperty
 wd "ProgramInfo" $ProgramInfo
 
 # file info for debug
