@@ -50,14 +50,13 @@ $title = "Xshell"
 $ProgramFiles = if ($OSBit -eq 64) { ${env:ProgramFiles(x86)} } else { ${env:ProgramFiles} }
 $ProgramInfo = [PSCustomObject]@{}
 $ProgramInfo | Add-Member Name $title -MemberType:NoteProperty
-$ProgramInfo | Add-Member Version 6 -MemberType:NoteProperty
+$ProgramInfo | Add-Member Version 7 -MemberType:NoteProperty
 $ProgramInfo | Add-Member Company "NetSarang" -MemberType:NoteProperty
 $ProgramInfo | Add-Member Directory "$ProgramFiles\$($ProgramInfo.Company)\$($ProgramInfo.Name) $($ProgramInfo.Version)" -MemberType:NoteProperty
 $ProgramInfo | Add-Member Executable "$($ProgramInfo.Name).exe" -MemberType:NoteProperty
 $ProgramInfo | Add-Member Registry "Software\$($ProgramInfo.Company)" -MemberType:NoteProperty
 $ProgramInfo | Add-Member Repository "$ProgramRepository/$($ProgramInfo.Name)" -MemberType:NoteProperty
-# $ProgramInfo | Add-Member Download "https://www.majorgeeks.com/mg/getmirror/xshell,1.html" -MemberType:NoteProperty
-$ProgramInfo | Add-Member Download "https://www.bytesin.com/software/download-link-4/86860" -MemberType:NoteProperty
+$ProgramInfo | Add-Member Download "https://www.filehorse.com/download-xshell-free/download/" -MemberType:NoteProperty
 wd "ProgramInfo" $ProgramInfo
 
 # file info for debug
@@ -86,7 +85,7 @@ if ($install) {
     $iss | ForEach-Object {
         df "$($ProgramInfo.Repository)/$_" "$temp\$_" -d:$false -e
     }
-    $url = [Net.WebClient]::new().DownloadString($ProgramInfo.Download) -replace '(?is).*(http.*?exe).*', '$1'
+    $url = [Net.WebClient]::new().DownloadString($ProgramInfo.Download) -replace '(?is).*(https://www.filehorse.com/download/file/.*?)".*', '$1'
     df $url "$temp\$($ProgramInfo.Executable)" -e
     wh " ¼³Ä¡" $f
     se reg.exe "delete `"HKCU\$($ProgramInfo.Registry)`" /f"
@@ -187,7 +186,7 @@ if ($setting -and $FileInfo.Exists) {
         ir $_ "FontQuality" "6"
         ir $_ "Overwrite" "0"
         ir $_ "AutoStart" "1"
-        ir $_ "WriteFileTimestamp" "1"
+        # ir $_ "WriteFileTimestamp" "1"
         wh $_ -c:7 -n
     }
 }
