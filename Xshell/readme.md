@@ -1,6 +1,7 @@
 2021.02.07
 
 ## <img src="https://raw.githubusercontent.com/ssokka/Icons/master/xshell.ico" width=25> [Xshell](https://www.netsarang.com/xshell/)
+### 최신 평가 버전 자동 설치 및 설정 스크립트
 
 <br><br>
 
@@ -16,7 +17,7 @@
 * 메뉴 > 보기 > 도구 모음 > [ ] 연결 표시
 ```
 ### [Xshell.ini](Xshell.ini)
-- 파일 : `%USERPROFILE%\Documents\NetSarang Computer\7\Xshell\Xshell.ini`
+- 파일 : %USERPROFILE%\Documents\NetSarang Computer\7\Xshell\Xshell.ini
 - ! 주의 : 파일 교체 방식으로 이전 설정은 초기화된다.
 ```
 * 메뉴 > 도구 > 웹에서 검색 > 검색 엔진 관리 > [V] 구글, 네이버, 다음, Bing
@@ -25,7 +26,7 @@
 ### Sessions
 - 파일 : %USERPROFILE%\Documents\NetSarang Computer\7\Xshell\Sessions
 - ! 주의 : 모든 세션 파일이 아래 설정으로 적용된다. (기본 세션 포함)
-- \* `D2Coding` : 글꼴이 설치되어 있는 경우에만 적용된다.
+- \*D2Coding : 글꼴이 설치되어 있는 경우에만 적용된다.
 ```
 * 메뉴 > 파일 > 세션 등록 정보
    > 연결
@@ -41,8 +42,8 @@
      버퍼 크기: 200000
    > 모양
      색 구성표: New Black
-     글꼴: D2Coding
-     한글 글꼴: D2Coding
+     글꼴: *D2Coding
+     한글 글꼴: *D2Coding
      글꼴 품질: Natural ClearType
    > 고급
      > 로깅
