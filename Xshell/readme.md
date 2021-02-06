@@ -1,7 +1,7 @@
 2021.02.07
 
 ## <img src="https://raw.githubusercontent.com/ssokka/Icons/master/xshell.ico" width=25> [Xshell](https://www.netsarang.com/xshell/)
-### 최신 평가 버전 자동 설치 및 설정 스크립트
+### 최신 평가 버전 자동 설치/설정 스크립트
 
 <br><br>
 
