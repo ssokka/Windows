@@ -93,9 +93,6 @@ if ($install) {
     $iss | ForEach-Object {
         se "$temp\$($ProgramInfo.Executable)" "-s -f1`"$temp\$_`""
     }
-    $iss | ForEach-Object {
-        se "$temp\$($ProgramInfo.Executable)" "-s -f1`"$temp\$_`""
-    }
     wh -n
 }
 
@@ -106,8 +103,8 @@ if ($setting -and $FileInfo.Exists) {
     wt "$title"
     wh " 설정" $f -n
     # user data folder
-    # $udf = "${env:USERPROFILE}\Documents\NetSarang Computer\$($ProgramInfo.Version)"
-    # se reg.exe "add `"HKCU\$($ProgramInfo.Registry)\Common\$($ProgramInfo.Version)\UserData`" /v UserDataPath /t REG_SZ /d `"$udf`" /f"
+    $udf = "${env:USERPROFILE}\Documents\NetSarang Computer\$($ProgramInfo.Version)"
+    se reg.exe "add `"HKCU\$($ProgramInfo.Registry)\Common\$($ProgramInfo.Version)\UserData`" /v UserDataPath /t REG_SZ /d `"$udf`" /f"
     # $drv = @(Get-WmiObject -class win32_logicaldisk | Where-Object { $_.DriveType -eq 3 -and $_.DeviceID -ne $env:SystemDrive })[0].DeviceID
     # if ($drv) {
     #     $dst = "$drv\Programs\$($ProgramInfo.Name)"
@@ -116,7 +113,7 @@ if ($setting -and $FileInfo.Exists) {
     #     Remove-Item $udf -Recurse -ErrorAction:SilentlyContinue
     #     se cmd.exe "/c mklink /d `"$udf`" `"$dst`"" "RunAs"
     # }
-    # wh "* 사용자 데이터 폴더 : $udf" -c:$c -n
+    wh "* 사용자 데이터 폴더 : $udf" -c:$c -n
     # https://github.com/ssokka/Windows/blob/master/Xshell/setting.reg
     $reg = "setting.reg"
     if (df "$($ProgramInfo.Repository)/$reg" "$temp\$reg" -d:$false -r) {
