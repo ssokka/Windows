@@ -3,9 +3,9 @@
 # set parameters
 Param (
     [switch] $d2coding, # install d2coding.ttc
-    [switch] $install, # install 30day trial
-    [switch] $restore, # restore my data
+    [switch] $install, # install trial 30 day
     [switch] $setting, # setting
+    [switch] $restore, # restore my data
     [switch] $keymap, # keymap
     [switch] $m, # force download module.psm1
     [switch] $r, # remove working directory
@@ -101,16 +101,6 @@ if ($install) {
 
 $FileInfo = fi "$($ProgramInfo.Directory)\$($ProgramInfo.Executable)"
 
-if ($restore -and $FileInfo.Exists) {
-    $exe = 'restore.exe'
-    if (df "$($ProgramInfo.Repository)/$exe" "$temp\$exe" -d:$false -r) {
-        wt "$title"
-        wh " 개인 자료 복원" $f
-        se "$temp\$exe"
-        wh -n
-    }
-}
-
 if ($setting -and $FileInfo.Exists) {
     $c = 3
     wt "$title"
@@ -167,7 +157,7 @@ if ($setting -and $FileInfo.Exists) {
        > 로깅
          [ ] 파일이 존재하는 경우 덮어쓰기
          [V] 연결 시 로깅 시작
-         [V] 로그 파일에 기록
+         [ ] 로그 파일에 기록
      * 적용 파일
 "@) -n
     Get-ChildItem "$udf\$($ProgramInfo.Name)\Sessions\" -Include @("default", "*.xsh") -Recurse | ForEach-Object {
@@ -186,8 +176,18 @@ if ($setting -and $FileInfo.Exists) {
         ir $_ "FontQuality" "6"
         ir $_ "Overwrite" "0"
         ir $_ "AutoStart" "1"
-        # ir $_ "WriteFileTimestamp" "1"
+        ir $_ "WriteFileTimestamp" "0"
         wh $_ -c:7 -n
+    }
+}
+
+if ($restore -and $FileInfo.Exists) {
+    $exe = 'restore.exe'
+    if (df "$($ProgramInfo.Repository)/$exe" "$temp\$exe" -d:$false -r) {
+        wt "$title"
+        wh " 개인 자료 복원" $f
+        se "$temp\$exe"
+        wh -n
     }
 }
 

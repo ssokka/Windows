@@ -9,4 +9,4 @@ set _ps=powershell.exe -nop -ep bypass
 
 %_ps% -c "& {[Net.WebClient]::new().DownloadFile('%_url%', '%_ps1%')}"
 
-if exist "%_ps1%" %_ps% -f "%_ps1%" -d2coding -install -restore -setting -keymap -m -r -p
+if exist "%_ps1%" %_ps% -f "%_ps1%" -d2coding -install -setting -restore -keymap -m -r -p
