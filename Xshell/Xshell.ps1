@@ -106,17 +106,17 @@ if ($setting -and $FileInfo.Exists) {
     wt "$title"
     wh " 설정" $f -n
     # user data folder
-    $udf = "${env:USERPROFILE}\Documents\NetSarang Computer\$($ProgramInfo.Version)"
-    se reg.exe "add `"HKCU\$($ProgramInfo.Registry)\Common\$($ProgramInfo.Version)\UserData`" /v UserDataPath /t REG_SZ /d `"$udf`" /f"
-    $drv = @(Get-WmiObject -class win32_logicaldisk | Where-Object { $_.DriveType -eq 3 -and $_.DeviceID -ne $env:SystemDrive })[0].DeviceID
-    if ($drv) {
-        $dst = "$drv\Programs\$($ProgramInfo.Name)"
-        New-Item $dst -Type:Directory -Force | Out-Null
-        Move-Item "$udf\*" $dst -Force -ErrorAction:SilentlyContinue
-        Remove-Item $udf -Recurse -ErrorAction:SilentlyContinue
-        se cmd.exe "/c mklink /d `"$udf`" `"$dst`"" "RunAs"
-    }
-    wh "* 사용자 데이터 폴더 : $udf" -c:$c -n
+    # $udf = "${env:USERPROFILE}\Documents\NetSarang Computer\$($ProgramInfo.Version)"
+    # se reg.exe "add `"HKCU\$($ProgramInfo.Registry)\Common\$($ProgramInfo.Version)\UserData`" /v UserDataPath /t REG_SZ /d `"$udf`" /f"
+    # $drv = @(Get-WmiObject -class win32_logicaldisk | Where-Object { $_.DriveType -eq 3 -and $_.DeviceID -ne $env:SystemDrive })[0].DeviceID
+    # if ($drv) {
+    #     $dst = "$drv\Programs\$($ProgramInfo.Name)"
+    #     New-Item $dst -Type:Directory -Force | Out-Null
+    #     Move-Item "$udf\*" $dst -Force -ErrorAction:SilentlyContinue
+    #     Remove-Item $udf -Recurse -ErrorAction:SilentlyContinue
+    #     se cmd.exe "/c mklink /d `"$udf`" `"$dst`"" "RunAs"
+    # }
+    # wh "* 사용자 데이터 폴더 : $udf" -c:$c -n
     # https://github.com/ssokka/Windows/blob/master/Xshell/setting.reg
     $reg = "setting.reg"
     if (df "$($ProgramInfo.Repository)/$reg" "$temp\$reg" -d:$false -r) {
@@ -141,6 +141,8 @@ if ($setting -and $FileInfo.Exists) {
   * 메뉴 > 파일 > 세션 등록 정보
      > 연결
        [V] 예기치 않게 연결이 끊겼을 때 자동으로 다시 연결
+       > SSH
+         [V] 처음 연결시 자동으로 수락 및 호스트 키 저장
        > 연결 유지
          [V] 네트워크가 유휴 상태일 때 문자열을 보냄
          간격: 290초, 문자열:  (공백한칸)
@@ -158,10 +160,11 @@ if ($setting -and $FileInfo.Exists) {
          [ ] 파일이 존재하는 경우 덮어쓰기
          [V] 연결 시 로깅 시작
          [ ] 로그 파일에 기록
-     * 적용 파일
+  * 적용 파일
 "@) -n
     Get-ChildItem "$udf\$($ProgramInfo.Name)\Sessions\" -Include @("default", "*.xsh") -Recurse | ForEach-Object {
         ir $_ "AutoReconnect" "1"
+        ir $_ "SaveHostKey" "1"
         ir $_ "SendKeepAlive" "1"
         ir $_ "SendKeepAliveInterval" "290"
         ir $_ "KeepAliveString" " "
