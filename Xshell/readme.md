@@ -68,13 +68,10 @@
 
 <br><br>
 
-## 참고 - 파워쉘
-### 실행
+## 참고 - 파워쉘 실행
 ```
 powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -setting -restore -keymap -m -r -p
-```
-### 옵션
-```
+
 -d2coding : D2Coding.ttc 글꼴 설치
 -install  : 30일 평가판 설치
 -setting  : 기본 설정
