@@ -72,7 +72,7 @@
 ```
 powershell.exe -nop -ep bypass -f xshell.ps1 -d2coding -install -setting -restore -keymap -m -r -p
 ```
-### 실행 옵션
+### 옵션
 ```
 -d2coding : D2Coding.ttc 글꼴 설치
 -install  : 30일 평가판 설치
