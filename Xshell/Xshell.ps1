@@ -97,7 +97,7 @@ if ($install) {
 }
 
 $FileInfo = fi "$($ProgramInfo.Directory)\$($ProgramInfo.Executable)"
-#
+
 if ($setting -and $FileInfo.Exists) {
     $c = 3
     wt "$title"
