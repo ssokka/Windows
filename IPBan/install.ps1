@@ -6,13 +6,11 @@ if (! $(Test-Path "${dir}\DigitalRuby.IPBan.exe")) {
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString("https://raw.githubusercontent.com/DigitalRuby/IPBan/master/IPBanCore/Windows/Scripts/install_latest.ps1"))
 }
 
-
-echo ""
-echo "### Edit ipban.config"
-
 Stop-Service "IPBAN" -Force
 
+echo ""
 $file = "$dir\ipban.config"
+echo "### Edit "$file""
 if (Test-Path "${file}") {
 	$xml = [xml](Get-Content "${file}")
 	echo "FailedLoginAttemptsBeforeBan = 4"
