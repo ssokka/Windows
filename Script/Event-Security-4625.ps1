@@ -1,3 +1,5 @@
+echo ""
+echo "### Event - Security - ID 4625"
 $Events = Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625} -ErrorAction Ignore
 if(! $?){ echo "Not Exist" }
 foreach($Event in $Events){
@@ -14,4 +16,4 @@ foreach($Event in $Events){
 }
 
 echo ""
-pause
+cmd /c 'pause'
