@@ -9,6 +9,7 @@ if (! $(Test-Path "${dir}\DigitalRuby.IPBan.exe")) {
 
 echo ""
 echo "### Edit ipban.config"
+
 Stop-Service "IPBAN" -Force
 
 $file = "$dir\ipban.config"
