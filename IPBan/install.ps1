@@ -8,8 +8,6 @@ if (! $(Test-Path $dir\DigitalRuby.IPBan.exe)) {
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString("https://raw.githubusercontent.com/DigitalRuby/IPBan/master/IPBanCore/Windows/Scripts/install_latest.ps1"))
 }
 
-Stop-Service "IPBAN" -Force
-
 echo ""
 $file = "$dir\ipban.config"
 echo "### Edit ""$file"""
@@ -27,10 +25,6 @@ if (Test-Path $file) {
 	echo "ExpireTime = 00:00:00:00"
 	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'ExpireTime'}
 	$node.value = '00:00:00:00'
-	
-	echo "Whitelist = 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
-	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'Whitelist'}
-	$node.value = '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16'
 	
 	echo "UseDefaultBannedIPAddressHandler = false"
 	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'UseDefaultBannedIPAddressHandler'}
