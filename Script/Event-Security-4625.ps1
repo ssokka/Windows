@@ -8,12 +8,13 @@ foreach($Event in $Events){
 	foreach($XML in $XMLs){
 		$Log = New-Object psobject -Property @{
 			Date = $Event.TimeCreated
-			UserName = $XML.Event.EventData.Data[5].'#text'
+			User = $XML.Event.EventData.Data[5].'#text'
 			IP = $XML.Event.EventData.Data[19].'#text'
 		}
 		$Log
 	}
 }
 
+Start-Sleep -Seconds 1
 echo ""
 cmd /c 'pause'
