@@ -1,10 +1,9 @@
-Write-Host "`n### Event - Security - ID 4625"
+echo "`n### Event - Security - ID 4625"
 $Events = Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625} -ErrorAction Ignore
 if(! $?){
-	Write-Host "`nNot Exist"
+	echo "`nNot Exist"
 }
 foreach($Event in $Events){
-	# Convert the event to XML
 	$XMLs = [xml]$Event.ToXml()
 	foreach($XML in $XMLs){
 		$Log = New-Object psobject -Property @{
@@ -15,7 +14,6 @@ foreach($Event in $Events){
 		$Log
 	}
 }
-
-#Start-Sleep -Milliseconds 500
-Write-Host "`n"
-cmd /c 'pause'
+Start-Sleep -Milliseconds 500
+echo "`n"
+cmd /c pause
