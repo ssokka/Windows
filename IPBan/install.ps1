@@ -10,7 +10,7 @@ Stop-Service "IPBAN" -Force
 
 echo ""
 $file = "$dir\ipban.config"
-echo "### Edit "$file""
+echo "### Edit \"${file}\""
 if (Test-Path "${file}") {
 	$xml = [xml](Get-Content "${file}")
 	echo "FailedLoginAttemptsBeforeBan = 4"
