@@ -1,4 +1,4 @@
 ### IPBan
 ```
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ssokka/windows/master/script/ipban.cmd'))"
+powershell -Command "Start-Process powershell -ArgumentList '-noexit -Command [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString("""""""""https://raw.githubusercontent.com/ssokka/windows/master/script/ipban.ps1"""""""""))' -Wait -Verb RunAs"
 ```
