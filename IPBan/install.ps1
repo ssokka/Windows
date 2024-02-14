@@ -35,6 +35,6 @@ if (Test-Path $file) {
 
 Start-Service "IPBAN"
 
-Start-Sleep -Seconds 1
+Start-Sleep -Milliseconds 500
 echo ""
 cmd /c 'pause'
