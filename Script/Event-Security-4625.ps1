@@ -1,4 +1,5 @@
 $Events = Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625} -ErrorAction Ignore
+if(! ?$){ exit }
 foreach($Event in $Events){
 	# Convert the event to XML
 	$XMLs = [xml]$Event.ToXml()
@@ -11,3 +12,6 @@ foreach($Event in $Events){
 		$Log
 	}
 }
+
+echo ""
+pause
