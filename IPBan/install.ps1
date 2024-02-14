@@ -1,8 +1,8 @@
 # https://github.com/DigitalRuby/IPBan
 
-$dir = "${Env:ProgramFiles}\IPBan"
+$dir = "$Env:ProgramFiles\IPBan"
 
-if (! $(Test-Path "${dir}\DigitalRuby.IPBan.exe")) {
+if (! $(Test-Path $dir\DigitalRuby.IPBan.exe)) {
 	echo ""
 	echo "### IPBan 설치"
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString("https://raw.githubusercontent.com/DigitalRuby/IPBan/master/IPBanCore/Windows/Scripts/install_latest.ps1"))
@@ -12,9 +12,9 @@ Stop-Service "IPBAN" -Force
 
 echo ""
 $file = "$dir\ipban.config"
-echo "### Edit ""${file}"""
-if (Test-Path "${file}") {
-	$xml = [xml](Get-Content "${file}")
+echo "### Edit ""$file"""
+if (Test-Path $file) {
+	$xml = [xml](Get-Content $file)
 	
 	echo "FailedLoginAttemptsBeforeBan = 4"
 	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'FailedLoginAttemptsBeforeBan'}
@@ -36,7 +36,7 @@ if (Test-Path "${file}") {
 	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'UseDefaultBannedIPAddressHandler'}
 	$node.value = 'false'
 	
- 	$xml.Save("${file}")
+ 	$xml.Save($file)
 }
 
 Start-Service "IPBAN"
