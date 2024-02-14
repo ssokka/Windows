@@ -3,14 +3,12 @@
 $dir = "$Env:ProgramFiles\IPBan"
 
 if (! $(Test-Path $dir\DigitalRuby.IPBan.exe)) {
-	echo ""
-	echo "### IPBan 설치"
+	echo "`n### IPBan 설치"
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString("https://raw.githubusercontent.com/DigitalRuby/IPBan/master/IPBanCore/Windows/Scripts/install_latest.ps1"))
 }
 
-echo ""
 $file = "$dir\ipban.config"
-echo "### Edit ""$file"""
+echo "`n### Edit ""$file"""
 if (Test-Path $file) {
 	$xml = [xml](Get-Content $file)
 	
@@ -36,5 +34,5 @@ if (Test-Path $file) {
 Start-Service "IPBAN"
 
 Start-Sleep -Milliseconds 500
-echo ""
+echo "`n"
 cmd /c 'pause'
