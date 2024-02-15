@@ -4,6 +4,7 @@
 https://notepad-plus-plus.org/downloads/
 
 ### 기본 설정
+```
 > 보기
   [v] 자동 줄바꿈
 > 설정 (Settings)
@@ -40,3 +41,4 @@ https://notepad-plus-plus.org/downloads/
     > 사용 가능
       찾기 : compare > [v] Compare > 설치
       찾기 : json > [v] JSON Viewer > 설치
+```
