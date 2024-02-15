@@ -7,10 +7,10 @@ https://notepad-plus-plus.org/downloads/
 ```
 > 보기
   [v] 자동 줄바꿈
-> 설정 (Settings)
-  > 환경 설정 (Preferences)
-    > 일반 (General)
-      표시 언어 : 한국어
+> 설정
+  > 환경 설정
+    > 편집
+      [o] 부드러운 폰트 활성화
     > 최근 파일 사용 기록
       최대 기록 수 : 30
     > 자동 완성
@@ -26,11 +26,11 @@ https://notepad-plus-plus.org/downloads/
       [v] Notepad++ 자동 업데이트 사용
       [v] 바로 쓰기 사용 (특수 문자 그리기 속도가 개선될 수 있음, Notepad++ 재시작 필요)
   > 스타일 설정
-    테마 선택 : Mono Industrial
+    테마 선택 : Dracula
     언어 : Global Styles
     스타일 : Global override
     글꼴이름 : Consolas
-    크기 : 12
+    크기 : 11
     [v] 전역 글꼴 사용
     [v] 전역 글꼴 크기 사용
     [v] 전역 굵은 글꼴 사용
