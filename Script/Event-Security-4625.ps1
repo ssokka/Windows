@@ -1,3 +1,4 @@
+# https://lifeisju.tistory.com/entry/Powershell-Event-Log-Parsing
 echo "`n### Event - Security - ID 4625"
 $Events = Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625} -ErrorAction Ignore
 if(! $?){
