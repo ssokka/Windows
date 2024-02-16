@@ -1,22 +1,3 @@
-[Console]::InputEncoding = [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$PSDefaultParameterValues['*:Encoding'] = 'utf8'
-
-[int] $w = 758
-[int] $h = 472
-Add-Type -AssemblyName System.Windows.Forms
-$area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
-$x = ($area.Width - $w) / 2
-$y = ($area.Height - $h) / 2
-Add-Type -Name:Window -Namespace:Console -MemberDefinition:'
-[DllImport("Kernel32.dll")]
-public static extern IntPtr GetConsoleWindow();
-[DllImport("user32.dll")]
-public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int W, int H);'
-[Console.Window]::MoveWindow([Console.Window]::GetConsoleWindow(), $x, $y, $w, $h) | Out-Null
-[console]::BufferWidth = [Math]::Min($Host.UI.RawUI.WindowSize.Width, $Host.UI.RawUI.BufferSize.Width)
-[console]::BufferHeight = 9999
-
-#chcp 65001
 echo "`n### 파일 열기 보안 경고 끄기"
 
 $data = @(
