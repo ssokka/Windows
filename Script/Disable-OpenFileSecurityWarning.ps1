@@ -1,5 +1,3 @@
-chcp 65001
-
 echo "`n### 파일 열기 보안 경고 끄기"
 
 $data = @(
@@ -37,3 +35,7 @@ $data = @(
 
 $data | % { reg add $_.k /v $_.v /t $_.t /d $_.d /f }
 gpupdate /force
+
+sleep -Milliseconds 500
+echo "`n"
+cmd /c pause
