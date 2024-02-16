@@ -1,4 +1,4 @@
-echo "`n### íŒŒì¼ ì—´ê¸° ë³´ì•ˆ ê²½ê³  ë„ê¸°"
+echo "`n### ÆÄÀÏ ¿­±â º¸¾È °æ°í ²ô±â"
 
 $data = @(
 	[pscustomobject]@{
@@ -34,6 +34,8 @@ $data = @(
 )
 
 $data | % { reg add $_.k /v $_.v /t $_.t /d $_.d /f }
+
+echo "`n"
 gpupdate /force
 
 sleep -Milliseconds 500
