@@ -35,9 +35,7 @@ $data = @(
 
 $data | % { reg add $_.k /v $_.v /t $_.t /d $_.d /f }
 
-echo "`n"
 gpupdate /force
 
 sleep -Milliseconds 500
-echo "`n"
 cmd /c pause
