@@ -9,25 +9,25 @@ if(!(Test-Path "$path\notepad++.exe")){
 spps -n 'Notepad++' -ea ig
 
 $name = 'Compare', 'ComparePlus'
-if(!(Test-Path "$path\plugins\$name[1]")){
-	echo "`n### Notepad++ 플러그인 - $name[0] 설치"
-	ni "$path\plugins\$name[1]" -it d -ea ig | Out-Null
-	$repo = "pnedev/$name[1]"
+if(!(Test-Path "$path\plugins\$($name[1])")){
+	$repo = "pnedev/$($name[1])"
+	echo "`n### Notepad++ 플러그인 - $($name[0]) 설치"
+	ni "$path\plugins\$($name[1])" -it d -ea ig | Out-Null
 	$info = irm https://api.github.com/repos/$repo/releases/latest | % assets | ? name -like '*x64.zip'
-	iwr $($info.browser_download_url) -o "$path\plugins\$name[1]\$($info.name)"
-	Expand-Archive "$path\plugins\$name[1]\$($info.name)" -d "$path\plugins\$name[1]" -f
-	ri "$path\plugins\$name[1]\$($info.name)" -ea ig
+	iwr $($info.browser_download_url) -o "$path\plugins\$($name[1])\$($info.name)"
+	Expand-Archive "$path\plugins\$($name[1])\$($info.name)" -d "$path\plugins\$($name[1])" -f
+	ri "$path\plugins\$($name[1])\$($info.name)" -ea ig
 }
 
 $name = 'JSON Viewer', 'NPPJSONViewer'
-if(!(Test-Path "$path\plugins\$name[1]")){
-	echo "`n### Notepad++ 플러그인 - $name[0] 설치"
-	ni "$path\plugins\$name[1]" -it d -ea ig | Out-Null
+(!(Test-Path "$path\plugins\$($name[1])")){
 	$repo = "kapilratnani/JSON-Viewer"
+	echo "`n### Notepad++ 플러그인 - $($name[0]) 설치"
+	ni "$path\plugins\$($name[1])" -it d -ea ig | Out-Null
 	$info = irm https://api.github.com/repos/$repo/releases/latest | % assets | ? name -like '*x64.zip'
-	iwr $($info.browser_download_url) -o "$path\plugins\$name[1]\$($info.name)"
-	Expand-Archive "$path\plugins\$name[1]\$($info.name)" -d "$path\plugins\$name[1]" -f
-	ri "$path\plugins\$name[1]\$($info.name)" -ea ig
+	iwr $($info.browser_download_url) -o "$path\plugins\$($name[1])\$($info.name)"
+	Expand-Archive "$path\plugins\$($name[1])\$($info.name)" -d "$path\plugins\$($name[1])" -f
+	ri "$path\plugins\$($name[1])\$($info.name)" -ea ig
 }
 
 $path = "$Env:AppData\Notepad++"
