@@ -6,41 +6,40 @@ if(!(Test-Path "$path\notepad++.exe")){
 	start -wait (Get-Item "$Env:TEMP\npp*.x64.exe") '/S'
 }
 
-spps 'Notepad++'
+spps -n 'Notepad++' -ea ig
 
-$title = 'Compare'
-$name = 'ComparePlus'
-if(!(Test-Path "$path\plugins\$name")){
-	echo "`n### Notepad++ 플러그인 - $title 설치"
-	ni "$path\plugins\$name" -it d -ea ig
-	$repo = "pnedev/$name"
+$name = 'Compare', 'ComparePlus'
+if(!(Test-Path "$path\plugins\$name[1]")){
+	echo "`n### Notepad++ 플러그인 - $name[0] 설치"
+	ni "$path\plugins\$name[1]" -it d -ea ig | Out-Null
+	$repo = "pnedev/$name[1]"
 	$info = irm https://api.github.com/repos/$repo/releases/latest | % assets | ? name -like '*x64.zip'
-	iwr $($info.browser_download_url) -o "$path\plugins\$name\$($info.name)"
-	Expand-Archive "$path\plugins\$name\$($info.name)" -d "$path\plugins\$name" -f
-	ri "$path\plugins\$name\$($info.name)" -ea ig
+	iwr $($info.browser_download_url) -o "$path\plugins\$name[1]\$($info.name)"
+	Expand-Archive "$path\plugins\$name[1]\$($info.name)" -d "$path\plugins\$name[1]" -f
+	ri "$path\plugins\$name[1]\$($info.name)" -ea ig
 }
 
-$title = 'JSON Viewer'
-$name = 'NPPJSONViewer'
-if(!(Test-Path "$path\plugins\$name")){
-	echo "`n### Notepad++ 플러그인 - $title 설치"
-	ni "$path\plugins\$name" -it d -ea ig
+$name = 'JSON Viewer', 'NPPJSONViewer'
+if(!(Test-Path "$path\plugins\$name[1]")){
+	echo "`n### Notepad++ 플러그인 - $name[0] 설치"
+	ni "$path\plugins\$name[1]" -it d -ea ig | Out-Null
 	$repo = "kapilratnani/JSON-Viewer"
 	$info = irm https://api.github.com/repos/$repo/releases/latest | % assets | ? name -like '*x64.zip'
-	iwr $($info.browser_download_url) -o "$path\plugins\$name\$($info.name)"
-	Expand-Archive "$path\plugins\$name\$($info.name)" -d "$path\plugins\$name" -f
-	ri "$path\plugins\$name\$($info.name)" -ea ig
+	iwr $($info.browser_download_url) -o "$path\plugins\$name[1]\$($info.name)"
+	Expand-Archive "$path\plugins\$name[1]\$($info.name)" -d "$path\plugins\$name[1]" -f
+	ri "$path\plugins\$name[1]\$($info.name)" -ea ig
 }
 
 $path = "$Env:AppData\Notepad++"
 
 echo "`n### Notepad++ 기본 설정"
 $file = 'config.xml'
+ni "$path" -it 'directory' -ea ig | Out-Null
 iwr https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B/config.xml -o "$path\$file"
 
 echo "`n### Notepad++ 테마 설정"
 $file = 'Dracula.xml'
-ni "$path\themes" -it 'directory' -ea ig
+ni "$path\themes" -it 'directory' -ea ig | Out-Null
 iwr https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file -o "$path\themes\$file"
 
 #$xml = [xml](Get-Content '$path\themes\$file')
