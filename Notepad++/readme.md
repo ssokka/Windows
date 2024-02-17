@@ -1,5 +1,12 @@
 ## Notepad++
 
+### 설치
+```
+set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B/install.ps1
+powershell start -Wait -v RunAs powershell 'iex([Text.Encoding]::UTF8.GetString(([Net.WebClient]::new()).DownloadData(''%_url%'')))'
+
+```
+
 ### 다운로드
 https://notepad-plus-plus.org/downloads/
 
