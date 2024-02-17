@@ -20,7 +20,7 @@ if(!(Test-Path "$path\plugins\$($name[1])")){
 }
 
 $name = 'JSON Viewer', 'NPPJSONViewer'
-(!(Test-Path "$path\plugins\$($name[1])")){
+if(!(Test-Path "$path\plugins\$($name[1])")){
 	$repo = "kapilratnani/JSON-Viewer"
 	echo "`n### Notepad++ 플러그인 - $($name[0]) 설치"
 	ni "$path\plugins\$($name[1])" -it d -ea ig | Out-Null
