@@ -16,5 +16,5 @@ foreach($Event in $Events){
 	}
 }
 Start-Sleep -Milliseconds 500
-echo "`n"
+echo ""
 cmd /c pause
