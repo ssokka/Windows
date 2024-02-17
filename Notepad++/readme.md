@@ -7,9 +7,6 @@ powershell start -Wait -v RunAs powershell 'iex([Text.Encoding]::UTF8.GetString(
 
 ```
 
-### 다운로드
-https://notepad-plus-plus.org/downloads/
-
 ### 기본 설정
 ```
 > 보기
@@ -49,3 +46,6 @@ https://notepad-plus-plus.org/downloads/
       찾기 : compare > [v] Compare > 설치
       찾기 : json > [v] JSON Viewer > 설치
 ```
+
+### 다운로드
+https://notepad-plus-plus.org/downloads/
