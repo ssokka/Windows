@@ -3,7 +3,8 @@ $path = "$Env:ProgramFiles\Notepad++"
 if(!(Test-Path "$path\notepad++.exe")){
 	echo "`n### Notepad++ 설치"
 	irm https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest | % assets | ? name -like '*.x64.exe' | % { iwr $_.browser_download_url -o (Join-Path $Env:TEMP $_.name) }
-	start -wait (Get-Item "$Env:TEMP\npp*.x64.exe") '/S'
+	ri (Get-Item "$Env:TEMP\npp*.x64.exe" -ea ig)
+ 	start -wait (Get-Item "$Env:TEMP\npp*.x64.exe") '/S'
 }
 
 spps -n 'Notepad++' -ea ig
