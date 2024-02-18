@@ -1,6 +1,6 @@
 ## OpenVPN
 
-### 설치
+### 설치 [CMD]
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/OpenVPN/install.ps1
 set _scr=%temp%\openvpn.ps1
