@@ -2,7 +2,7 @@ try{
 	$name = 'OpenVPN'
 	$path = "$Env:ProgramFiles\$name"
 	
-	Write-Host "`n### $name 버전 확인"
+	Write-Host -f Green "`n### $name 버전 확인"
 	$cver = (gi "$path\bin\openvpn.exe" -ea ig).VersionInfo.FileVersion -replace '(.*)\.0','$1'
 	$data = (New-Object Net.WebClient).DownloadString("https://openvpn.net/community-downloads")
 	$patt = '(?is).*?Windows 64-bit MSI installer.*?GnuPG Signature.*?<a href="(.*?)".*?OpenVPN-(.*?)-.*'
@@ -12,24 +12,24 @@ try{
 	Write-Host "최신 버전 = $rver"
 	
 	if($cver -ne $rver){
-		Write-Host "`n### $name 다운로드"
+		Write-Host -f Green "`n### $name 다운로드"
 		$file = "$Env:TEMP\$($rurl -replace '.*/(.*)','$1')"
 		Start-BitsTransfer $rurl $file -ea Stop
-		Write-Host "`n### $name 설치"
+		Write-Host -f Green "`n### $name 설치"
 		('OpenVpnService','OpenVPNServiceLegacy','OpenVPNServiceInteractive') | % { spsv $_ -f -ea ig }
 		('openvpn','openvpn-gui', 'openvpnserv','openvpnserv2') | % { spps -n $_ -f -ea ig }
 		msiexec.exe /i "$file" addlocal=all /passive /norestart
 		ri $file -Force -ea ig
 	}
 	
-	Write-Host "`n### $name 서비스 설정"
+	Write-Host -f Green "`n### $name 서비스 설정"
 	('OpenVPNServiceInteractive','OpenVPNServiceLegacy') | % {
 		spsv $_ -f -ea ig
 		Set-Service $_ -st Disabled -ea ig
 	}
 	sc.exe failure 'OpenVPNService' reset= 0 actions= restart/0/restart/0/restart/0
 	
-	Write-Host "`n### $name 설정"
+	Write-Host -f Green "`n### $name 설정"
 	$menu = ('회사 클라이언트','개인 클라이언트','회사 서버','개인 서버','종료')
 	$menu | % { $i = 1 }{
 		$str = ''
@@ -68,14 +68,14 @@ try{
 		5 { exit }
 	}
 	
-	Write-Host "`n### $name $($menu[$read-1]) 설정"
+	Write-Host -f Green "`n### $name $($menu[$read-1]) 설정"
 	$url = "https://github.com/ssokka/Windows/raw/master/OpenVPN/$file"
 	$zip = "$Env:TEMP\$file"
 	Start-BitsTransfer $url $zip -ea Stop
 	if (!(gmo 7Zip4Powershell -l)) {
-		Install-PackageProvider NuGet -min 2.8.5.201 -Force
-		Set-PSRepository PSGallery 'https://www.powershellgallery.com/api/v2' -i Trusted
-		inmo 7Zip4PowerShell -f
+		Install-PackageProvider NuGet -min 2.8.5.201 -Force | Out-Null
+		Set-PSRepository PSGallery 'https://www.powershellgallery.com/api/v2' -i Trusted | Out-Null
+		inmo 7Zip4PowerShell -f | Out-Null
 	}
 	Write-Host -n "암호: "
 	$last = 0
@@ -99,12 +99,12 @@ try{
 	}
 	ri $zip -Force -ea ig
 	
-	Write-Host "`n### $name 네트워크 어탭터 설정"
+	Write-Host -f Green "`n### $name 네트워크 어탭터 설정"
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
 		Get-PnpDevice -f "$_*"
 	} | % {
-		# pnputil.exe /remove-device $_.InstanceId
-		Write-Host "$_ : $_.InstanceId"
+		pnputil.exe /remove-device $_.InstanceId
+		# Write-Host "$_ : $_.InstanceId"
 	}
 	(gi "$path\config-auto\*.ovpn") | % {
 		$read = gc $_ -raw
@@ -112,14 +112,14 @@ try{
 		if ($read -match '(?im)^port') { $hwid = 'wintun' }
 		$read -replace '(?is).*dev-node (.*?)[\r|\n|\r\n].*','$1'
 	} | % {
-		# start -n -Wait "$path\bin\tapctl.exe" "create --hwid $hwid --name `"$_`"" -ea Stop
-		Write-Host "$_ : $hwid"
+		start -n -Wait "$path\bin\tapctl.exe" "create --hwid $hwid --name `"$_`"" -ea Stop
+		# Write-Host "$_ : $hwid"
 	}
 	
-	Write-Host "`n### $name 서비스 재시작"
-	# Restart-Service -f 'OpenVPNService'
+	Write-Host -f Green "`n### $name 서비스 재시작"
+	Restart-Service -f 'OpenVPNService'
 	
-	Write-Host -n "`n### 완료"
+	Write-Host -f Green "`n### 완료"
 }
 catch {
 	Write-Error ($_.Exception | fl -Force | Out-String)
