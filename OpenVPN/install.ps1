@@ -8,8 +8,8 @@ try {
 	$patt = '(?is).*?Windows 64-bit MSI installer.*?GnuPG Signature.*?<a href="(.*?)".*?OpenVPN-(.*?)-.*'
 	$rurl = $data -replace $patt,'$1'
 	$rver = $data -replace $patt,'$2'
-	Write-Host "현재 버전 = $cver"
-	Write-Host "최신 버전 = $rver"
+	Write-Host "현재: $cver"
+	Write-Host "최신: $rver"
 	
 	if ($cver -ne $rver) {
 		Write-Host -f Green "`n### $name 다운로드"
@@ -69,14 +69,15 @@ try {
 	}
 	
 	Write-Host -f Green "`n### $name $($menu[$read-1]) 설정"
-	$url = "https://github.com/ssokka/Windows/raw/master/OpenVPN/$file"
-	$zip = "$Env:TEMP\$file"
-	Start-BitsTransfer $url $zip -ea Stop
 	if (!(gmo 7Zip4Powershell -l)) {
+		Set-ExecutionPolicy Bypass
 		Install-PackageProvider NuGet -min 2.8.5.201 -Force | Out-Null
 		Set-PSRepository PSGallery 'https://www.powershellgallery.com/api/v2' -i Trusted | Out-Null
 		inmo 7Zip4PowerShell -f | Out-Null
 	}
+	$url = "https://github.com/ssokka/Windows/raw/master/OpenVPN/$file"
+	$zip = "$Env:TEMP\$file"
+	Start-BitsTransfer $url $zip -ea Stop
 	Write-Host -n "암호: "
 	$last = 0
 	while ($true) {
