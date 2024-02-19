@@ -8,7 +8,7 @@ try{
 		iex $PSCommandpath
 		exit
 	}
-
+	
 	$name = 'OpenVPN'
 	$path = "$Env:ProgramFiles\$name"
 	
@@ -40,7 +40,7 @@ try{
 	sc.exe failure 'OpenVPNService' reset= 0 actions= restart/0/restart/0/restart/0
 	
 	Write-Host "`n### $name 설정"
-	$menu = ('클라이언트 회사','클라이언트 개인','서버 회사','서버 개인','종료')
+	$menu = ('회사클라이언트','개인 클라이언트','회사 서버','개인 서버','종료')
 	$menu | % { $i = 1 }{
 		$str = ''
 		if ($i -eq 1) { $str = ' (기본)' }
@@ -113,27 +113,26 @@ try{
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
 		Get-PnpDevice -f "$_*"
 	} | % {
-		pnputil.exe /remove-device $_.InstanceId
-		# Write-Host "$_ : $_.InstanceId"
+		# pnputil.exe /remove-device $_.InstanceId
+		Write-Host "$_ : $_.InstanceId"
 	}
 	(gi "$path\config-auto\*.ovpn") | % {
 		$read = gc $_ -raw
 		$hwid = 'ovpn-dco'
-		if ($read -match '^port') { $hwid = 'wintun' }
+		if ($read -match '(?im)^port') { $hwid = 'wintun' }
 		$read -replace '(?is).*dev-node (.*?)[\r|\n|\r\n].*','$1'
 	} | % {
-		"$path\bin\tapctl.exe" create --hwid $hwid --name "$_"
-		# Write-Host "$_ : $hwid"
+		# start -n -Wait "$path\bin\tapctl.exe" "create --hwid $hwid --name `"$_`"" -ea Stop
+		Write-Host "$_ : $hwid"
 	}
 	
 	Write-Host "`n### $name 서비스 재시작"
-	Restart-Service -f 'OpenVPNService'
+	# Restart-Service -f 'OpenVPNService'
 }
-
-catch{
+catch {
 	Write-Error ($_.Exception | fl -Force | Out-String)
 	Write-Error ($_.InvocationInfo | fl -Force | Out-String)
 }
 
 Write-Host -n "`n### 완료`n아무 키나 누르십시오..."
-$Host.UI.ReadLine()
+Read-Host
