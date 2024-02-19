@@ -19,7 +19,7 @@ try{
 		('OpenVpnService','OpenVPNServiceLegacy','OpenVPNServiceInteractive') | % { spsv $_ -f -ea ig }
 		('openvpn','openvpn-gui', 'openvpnserv','openvpnserv2') | % { spps -n $_ -f -ea ig }
 		msiexec.exe /i "$file" addlocal=all /passive /norestart
-		ri $file -f -ea ig
+		ri $file -Force -ea ig
 	}
 	
 	Write-Host "`n### $name 서비스 설정"
@@ -97,7 +97,7 @@ try{
 			[Console]::SetCursorPosition($x, $y)
 		}
 	}
-	ri $zip -f -ea ig
+	ri $zip -Force -ea ig
 	
 	Write-Host "`n### $name 네트워크 어탭터 설정"
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
@@ -118,11 +118,13 @@ try{
 	
 	Write-Host "`n### $name 서비스 재시작"
 	# Restart-Service -f 'OpenVPNService'
+	
+	Write-Host -n "`n### 완료"
 }
 catch {
 	Write-Error ($_.Exception | fl -Force | Out-String)
 	Write-Error ($_.InvocationInfo | fl -Force | Out-String)
 }
 
-Write-Host -n "`n### 완료`n아무 키나 누르십시오..."
+Write-Host -n "`n아무 키나 누르십시오..."
 Read-Host
