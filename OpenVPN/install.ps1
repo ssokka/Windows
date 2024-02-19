@@ -1,14 +1,4 @@
 try{
-	$gfe = 'Get-FileEncoding.ps1'
-	if(!(Test-Path "$Env:TEMP\$gfe")){
-		(New-Object Net.WebClient).DownloadFile("https://raw.githubusercontent.com/ssokka/Windows/master/Script/$gfe","$Env:TEMP\$gfe")
-	}
-	if(((iex "$Env:TEMP\$gfe $PSCommandpath").BodyName).ToLower() -ne 'utf-8'){
-		(gc $PSCommandpath -enc UTF8) | Out-File $PSCommandpath UTF8
-		iex $PSCommandpath
-		exit
-	}
-	
 	$name = 'OpenVPN'
 	$path = "$Env:ProgramFiles\$name"
 	
