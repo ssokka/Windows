@@ -17,6 +17,7 @@ try{
 	$data = (New-Object Net.WebClient).DownloadString("https://openvpn.net/community-downloads")
 	$rurl = $data -replace $patt,'$1'
 	$rver = $data -replace $patt,'$2'
+	 
 	echo "현재 버전 = $cver"
 	echo "최신 버전 = $rver"
 	
@@ -28,6 +29,7 @@ try{
 		@('OpenVpnService', 'OpenVPNServiceLegacy', 'OpenVPNServiceInteractive') | % { spsv -f $_ -ea ig }
 		@('openvpn', 'openvpn-gui', 'openvpnserv', 'openvpnserv2') | % { spps -f -n $_ -ea ig }
 		msiexec.exe /i "$msi" addlocal=all /passive /norestart
+		ri $msi
 	}
 }
 catch{
