@@ -1,4 +1,4 @@
-try{
+try {
 	$name = 'OpenVPN'
 	$path = "$Env:ProgramFiles\$name"
 	
@@ -11,7 +11,7 @@ try{
 	Write-Host "현재 버전 = $cver"
 	Write-Host "최신 버전 = $rver"
 	
-	if($cver -ne $rver){
+	if ($cver -ne $rver) {
 		Write-Host -f Green "`n### $name 다운로드"
 		$file = "$Env:TEMP\$($rurl -replace '.*/(.*)','$1')"
 		Start-BitsTransfer $rurl $file -ea Stop
@@ -31,7 +31,7 @@ try{
 	
 	Write-Host -f Green "`n### $name 설정"
 	$menu = ('회사 클라이언트','개인 클라이언트','회사 서버','개인 서버','종료')
-	$menu | % { $i = 1 }{
+	$menu | % { $i = 1 } {
 		$str = ''
 		if ($i -eq 1) { $str = ' (기본)' }
 		write-host "[$i] $_$str"
@@ -43,7 +43,7 @@ try{
 	$last = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-		$read = if($nread = Read-Host) { $nread } else { $dread }
+		$read = if ($nread = Read-Host) { $nread } else { $dread }
 		if ($read -match '^[1-5]$') {
 			break
 		} else {
