@@ -1,5 +1,6 @@
-* text=auto
+* text=auto encoding=UTF-8
 *.bat eol=crlf
 *.cmd eol=crlf
 *.ps1 eol=crlf
 *.txt eol=crlf
+*.sh text eol=lf
