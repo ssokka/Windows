@@ -104,7 +104,7 @@ try {
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
 		Get-PnpDevice -f "$_*"
 	} | % {
-		start -n -Wait pnputil.exe "/remove-device $_.InstanceId"
+		start -n -Wait pnputil.exe '/remove-device ' + $_.InstanceId
 		# Write-Host "$_ : $_.InstanceId"
 	}
 	(gi "$path\config-auto\*.ovpn") | % {
