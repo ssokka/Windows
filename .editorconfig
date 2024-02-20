@@ -7,4 +7,4 @@ charset = utf-8
 charset = utf-8-bom
 
 [*.{cmd,bat}]
-charset = ansi
+charset = euc-kr
