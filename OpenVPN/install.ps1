@@ -27,7 +27,7 @@ try {
 		spsv $_ -f -ea ig
 		Set-Service $_ -st Disabled -ea ig
 	}
-	start -n -Wait sc.exe 'failure `"OpenVPNService`" reset= 0 actions= restart/0/restart/0/restart/0'
+	start -n -Wait sc.exe 'failure OpenVPNService reset= 0 actions= restart/0/restart/0/restart/0'
 	
 	Write-Host -f Green "`n### $name 설정"
 	$menu = ('회사 클라이언트','개인 클라이언트','회사 서버','개인 서버','종료')
@@ -104,7 +104,7 @@ try {
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
 		Get-PnpDevice -f "$_*"
 	} | % {
-		start -n -Wait pnputil.exe '/remove-device ' + $_.InstanceId
+		start -n -Wait pnputil.exe '/remove-device',$_.InstanceId
 		# Write-Host "$_ : $_.InstanceId"
 	}
 	(gi "$path\config-auto\*.ovpn") | % {
