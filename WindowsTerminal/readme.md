@@ -21,5 +21,5 @@ powershell start wt 'powershell iex ([Net.WebClient]::new()).DownloadString(''%_
     글꼴 크기 : 10
   > 고급
     텍스트 앤티앨리어싱 : ClearType
-    기록 크기 : 2147483640
+    기록 크기 : 2147483647
 ```
