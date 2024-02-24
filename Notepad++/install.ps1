@@ -13,7 +13,7 @@ function set-consoleFontName {
 	[Win32API.Console]::SetName($name)
 }
 
-$src = gc -raw (([Net.WebClient]::new()).DownloadData('https://raw.githubusercontent.com/ssokka/Windows/master/Script/psm/console.cs')))
+$src = gc -raw (([Net.WebClient]::new()).DownloadData('https://raw.githubusercontent.com/ssokka/Windows/master/Script/psm/console.cs'))
 add-type -typeDef $src
 
 set-consoleFontName -name 'Consolas'
