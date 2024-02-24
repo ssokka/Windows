@@ -61,7 +61,7 @@ try {
 	$path = "$Env:AppData\$name\themes"
 	$file = 'Dracula.xml'
 	ni $path -it d -f -ea ig | Out-Null
-	Start-BitsTransfer "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" "$path\themes\$file"
+	Start-BitsTransfer "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" "$path\$file"
 
 	#$xml = [xml](Get-Content '$path\themes\$file')
 	#$node = $xml.NotepadPlus.GlobalStyles.WidgetStyle | where {$_.name -eq 'Global override'}
