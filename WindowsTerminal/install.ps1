@@ -13,7 +13,7 @@ try {
 	Start-BitsTransfer "$url/$file" "$path\$file"
 
 	Write-Host -f Green "`n### $name 설정 내용"
-	$str = [Text.Encoding]::UTF8.GetString(([Net.WebClient]::new()).DownloadData("$url\readme.md"))
+	$str = ([Net.WebClient]::new()).DownloadString("$url\readme.md")
 	$str -replace '(?is).*?설정 내용.*```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
 
 	Write-Host -f Green "`n### 완료"

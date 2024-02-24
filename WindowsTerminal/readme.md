@@ -1,7 +1,7 @@
-### 설정
+﻿### 설정
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal/install.ps1
-powershell start wt 'powershell iex ([Net.WebClient]::new()).DownloadData(''%_url%'')'
+powershell start wt 'powershell iex ([Net.WebClient]::new()).DownloadString(''%_url%'')'
 
 ```
 
