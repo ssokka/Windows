@@ -4,8 +4,10 @@ try {
 	$name = 'Windows 터미널'
 	$path = "$Env:ProgramFiles\WindowsApps\Microsoft.WindowsTerminal_1.18.10301.0_x64__8wekyb3d8bbwe"
 	$exec = "$path\wt.exe"
-
-	Write-Host -f Green "`n### $name 설정"
+	
+	$host.ui.RawUI.WindowTitle = 'Windows 터미널'
+	
+    Write-Host -f Green "`n### $name 설정"
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 	$file = 'settings.json'
 	$url = 'https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal'
