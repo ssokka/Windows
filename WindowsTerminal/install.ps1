@@ -1,11 +1,24 @@
 ﻿$ErrorActionPreference = 'Stop'
 
+function Show-Process ($Process, [Switch]$Maximize) {
+	$sig = '
+	[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+	[DllImport("user32.dll")] public static extern int SetForegroundWindow(IntPtr hwnd);
+	'
+	if ($Maximize) { $Mode = 3 } else { $Mode = 4 }
+	$type = Add-Type -MemberDefinition $sig -Name WindowAPI -PassThru
+	$hwnd = $process.MainWindowHandle
+	$null = $type::ShowWindowAsync($hwnd, $Mode)
+	$null = $type::SetForegroundWindow($hwnd) 
+}
+Show-Process -Process ([System.Diagnostics.Process]::GetCurrentProcess()).ID
+
 try {
 	$name = 'Windows 터미널'
 	$path = "$Env:ProgramFiles\WindowsApps\Microsoft.WindowsTerminal_1.18.10301.0_x64__8wekyb3d8bbwe"
 	$exec = "$path\wt.exe"
 	
-	$host.ui.RawUI.WindowTitle = 'Windows 터미널'
+	$host.ui.RawUI.WindowTitle = $name
 	
     Write-Host -f Green "`n### $name 설정"
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
