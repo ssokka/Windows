@@ -1,4 +1,11 @@
-﻿### 설정
+### 설정
+```
+set _url=https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal/install.ps1
+powershell start wt 'powershell iex([Text.Encoding]::UTF8.GetString(([Net.WebClient]::new()).DownloadData(''%_url%'')))'
+
+```
+
+### 설정 내용
 ```
 > 시작
     - 기본 프로필 : 명령 프롬프트
