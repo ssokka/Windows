@@ -10,7 +10,7 @@ try {
 	$file = 'settings.json'
 	ni $path -it d -f -ea ig | Out-Null
 	Start-BitsTransfer "https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal/$file" "$path\$file"
-    
+
 	Write-Host -f Green "`n### 완료"
 }
 catch {
