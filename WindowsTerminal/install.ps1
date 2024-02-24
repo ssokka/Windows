@@ -11,8 +11,6 @@ try {
 	$url = 'https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal'
 	ni $path -it d -f -ea ig | Out-Null
 	Start-BitsTransfer "$url/$file" "$path\$file"
-
-	Write-Host -f Green "`n### $name 설정 내용"
 	$str = ([Net.WebClient]::new()).DownloadString("$url\readme.md")
 	$str -replace '(?is).*?설정 내용.*```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
 
