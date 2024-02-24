@@ -1,24 +1,92 @@
+function CurrentCursorPosition {
+	[Alias("ccp")]
+	param(
+		[Parameter(Mandatory=$true)]
+		[Int]$x,
+		[Int]$y
+	)
+	if ($lline -eq $null) { $lline = 0 }
+	if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
+		if ($lline -eq 0 -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) {
+			$lline = 1
+			--$y
+		}
+	}
+	[Console]::SetCursorPosition($x, $y)
+	$w = [Console]::WindowWidth
+	[Console]::Write("{0,-$w}" -f " ")
+	[Console]::SetCursorPosition($x, $y)
+}
+
+function PinToStartScreen {
+	[Alias("ptss")]
+	param(
+		[Parameter(Mandatory=$true)]
+		[string]$p,
+		[string]$i ="$Env:ProgramFiles\WindowsApps\Microsoft.WindowsTerminal_1.18.10301.0_x64__8wekyb3d8bbwe\wt.exe"
+	)
+	$ErrorActionPreference = 'Ignore'
+	$bnm = (gi $p).BaseName
+	Write-Host -f Green "`n### $bnm 시작 화면에 고정"
+	$exe = "syspin.exe"
+	$gid = ([System.Guid]::NewGuid()).ToString()
+	$tmp = "$Env:TEMP\$gid.exe"
+	$dir = "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+	$lnk = "$dir\$gid.lnk"
+	$new = "$dir\$bnm.lnk"
+	ri $new -Force
+	if (!(Test-Path "$Env:TEMP\$exe")) {
+		Start-BitsTransfer "https://github.com/ssokka/Windows/raw/master/Tool/$exe" "$Env:TEMP\$exe"
+	}
+	ni $tmp -it File -f | Out-Null
+	start -wait -win h "$Env:TEMP\$exe" "`"$tmp`" 51201"
+	do {
+		sleep 1
+	} until (Test-Path $lnk)
+	sleep 5
+	$sc = (New-Object -ComObject WScript.Shell).CreateShortcut($lnk)
+	$sc.TargetPath = $p
+	$sc.IconLocation = $i
+	$sc.Save()
+	rni $lnk $new -f
+	ri $tmp -Force
+}
+
+function StopOpenVPN {
+	[Alias("sov")]
+	PARAM()
+	('OpenVpnService','OpenVPNServiceLegacy','OpenVPNServiceInteractive') | % { spsv $_ -f -ea ig }
+	('openvpn','openvpn-gui', 'openvpnserv','openvpnserv2') | % { spps -n $_ -f -ea ig }
+}
+
+$ErrorActionPreference = 'Stop'
+
 try {
 	$name = 'OpenVPN'
 	$path = "$Env:ProgramFiles\$name"
+	$exec = "$path\bin\openvpn.exe"
 	
 	Write-Host -f Green "`n### $name 버전 확인"
-	$cver = (gi "$path\bin\openvpn.exe" -ea ig).VersionInfo.FileVersion -replace '(.*)\.0','$1'
-	$data = (New-Object Net.WebClient).DownloadString("https://openvpn.net/community-downloads")
-	$patt = '(?is).*?Windows 64-bit MSI installer.*?GnuPG Signature.*?<a href="(.*?)".*?OpenVPN-(.*?)-.*'
-	$rurl = $data -replace $patt,'$1'
-	$rver = $data -replace $patt,'$2'
+	$cver = "$((gi $exec -ea ig).VersionInfo.FileVersion -replace '(.*)\.0','$1')".Trim()
+	$site = "https://openvpn.net/community-downloads"
+	$spat = '(?is)Windows 64-bit MSI installer.*?GnuPG Signature.*?<a href="(.*?)".*?OpenVPN-(.*?)-'
+	$rver = ''; $rurl = ''
+	$oweb = New-Object Net.WebClient
+	$ostr = $oweb.DownloadString($site)
+	if ($ostr -match $spat) {
+		$rurl = "$($Matches[1])".Trim()
+		$rver = "$($Matches[2])".Trim()
+	}
 	Write-Host "현재: $cver"
 	Write-Host "최신: $rver"
 	
 	if ($cver -ne $rver) {
 		Write-Host -f Green "`n### $name 다운로드"
 		$file = "$Env:TEMP\$($rurl -replace '.*/(.*)','$1')"
-		Start-BitsTransfer $rurl $file -ea Stop
+		Start-BitsTransfer $rurl $file
 		Write-Host -f Green "`n### $name 설치"
-		('OpenVpnService','OpenVPNServiceLegacy','OpenVPNServiceInteractive') | % { spsv $_ -f -ea ig }
-		('openvpn','openvpn-gui', 'openvpnserv','openvpnserv2') | % { spps -n $_ -f -ea ig }
-		start -n -Wait msiexec.exe "/i `"$file`" addlocal=all /passive /norestart"
+		sov
+		start -n -wait msiexec.exe "/i `"$file`" addlocal=all /passive /norestart"
 		ri $file -Force -ea ig
 	}
 	
@@ -27,36 +95,27 @@ try {
 		spsv $_ -f -ea ig
 		Set-Service $_ -st Disabled -ea ig
 	}
-	start -n -Wait sc.exe 'failure OpenVPNService reset= 0 actions= restart/0/restart/0/restart/0'
+	start -n -wait sc.exe 'failure OpenVPNService reset= 0 actions= restart/0/restart/0/restart/0'
 	
 	Write-Host -f Green "`n### $name 설정"
 	$menu = ('회사 클라이언트','개인 클라이언트','회사 서버','개인 서버','종료')
 	$menu | % { $i = 1 } {
-		$str = ''
-		if ($i -eq 1) { $str = ' (기본)' }
-		write-host "[$i] $_$str"
+		$def = ''
+		if ($i -eq 1) { $def = ' (기본)' }
+		write-host "[$i] $_$def"
 		$i++
 	}
 	Write-Host -n "선택: "
 	
 	$dread = 1
-	$last = 0
+	$lline = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 		$read = if ($nread = Read-Host) { $nread } else { $dread }
-		if ($read -match '^[1-5]$') {
+		if ($read -match "^[1-$($menu.count)]$") {
 			break
 		} else {
-			if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
-				if ($last -eq 0 -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) {
-					$last = 1
-					--$y
-				}
-			}
-			[Console]::SetCursorPosition($x, $y)
-			$w = [Console]::WindowWidth
-			[Console]::Write("{0,-$w}" -f " ")
-			[Console]::SetCursorPosition($x, $y)
+			ccp -x $x -y $y
 		}
 	}
 	
@@ -70,55 +129,64 @@ try {
 	
 	Write-Host -f Green "`n### $name $($menu[$read-1]) 설정"
 	if (!(gmo 7Zip4Powershell -l)) {
-		Set-ExecutionPolicy Bypass
+		Set-ExecutionPolicy Bypass -f
 		Install-PackageProvider NuGet -min 2.8.5.201 -Force | Out-Null
-		Set-PSRepository PSGallery 'https://www.powershellgallery.com/api/v2' -i Trusted | Out-Null
-		inmo 7Zip4PowerShell -f | Out-Null
+		Register-PSRepository -d -ea ig
+		Set-PSRepository PSGallery -i Trusted
+		inmo 7Zip4PowerShell -f | Out-Null	
 	}
 	$url = "https://github.com/ssokka/Windows/raw/master/OpenVPN/$file"
 	$zip = "$Env:TEMP\$file"
-	Start-BitsTransfer $url $zip -ea Stop
+	Start-BitsTransfer $url $zip
 	Write-Host -n "암호: "
-	$last = 0
+	$lline = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-		Expand-7Zip $zip "$path\config-auto" -sec (Read-Host -a) -ea ig
-		if ($?) {
+		try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) }
+		catch {}
+		if ($test){
 			break
 		} else {
-			if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
-				if ($last -eq 0 -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) {
-					$last = 1
-					--$y
-				}
-			}
-			[Console]::SetCursorPosition($x, $y)
-			$w = [Console]::WindowWidth
-			[Console]::Write("{0,-$w}" -f " ")
-			[Console]::SetCursorPosition($x, $y)
+			ccp -x $x -y $y
 		}
 	}
+	if (Test-Path "$path\config-auto\server.ovpn") { ri "$path\config-auto\*" -Force -ea ig }
+	Expand-7Zip $zip "$path\config-auto" -s $pass
 	ri $zip -Force -ea ig
 	
-	Write-Host -f Green "`n### $name 네트워크 어탭터 설정"
+	Write-Host -f Green "`n### $name $($menu[$read-1]) 네트워크 어탭터 설정"
+	sov
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
 		Get-PnpDevice -f "$_*"
 	} | % {
-		start -n -Wait pnputil.exe '/remove-device',$_.InstanceId
+		start -wait -win h pnputil.exe '/remove-device',$_.InstanceId
 		# Write-Host "$_ : $_.InstanceId"
 	}
 	(gi "$path\config-auto\*.ovpn") | % {
-		$read = gc $_ -raw
+		$conf = gc $_ -raw
 		$hwid = 'ovpn-dco'
-		if ($read -match '(?im)^port') { $hwid = 'wintun' }
-		$read -replace '(?is).*dev-node (.*?)[\r|\n|\r\n].*','$1'
+		if ($conf -match '(?im)^port') { $hwid = 'wintun' }
+		$conf -replace '(?is).*dev-node (.*?)[\r|\n|\r\n].*','$1'
 	} | % {
-		start -n -Wait "$path\bin\tapctl.exe" "create --hwid $hwid --name `"$_`"" -ea Stop
+		start -wait -win h "$path\bin\tapctl.exe" "create --hwid $hwid --name `"$_`""
+		Get-NetAdapter "$_"
 		# Write-Host "$_ : $hwid"
 	}
 	
 	Write-Host -f Green "`n### $name 서비스 재시작"
 	Restart-Service -f 'OpenVPNService'
+	
+	(gi "$path\config-auto\drive*.cmd" -ea ig) | % {
+		$dname = $_ -replace '(?i).*drive-(.*?)\..*','$1'
+		$dname = (Get-Culture).TextInfo.ToTitleCase($dname)
+		$sname = (gi $_).Basename
+		Write-Host -f Green "`n### $dname 네트워크 드라이브 연결"
+		start -n -wait schtasks.exe "/create /tn `"$sname`" /tr `"$_`" /sc onstart /ru `"$Env:USERNAME`" /f"
+		start -n -wait schtasks.exe "/run /tn `"$sname`""
+		start -n -wait schtasks.exe "/delete /tn `"$sname`" /f"
+		ptss -p "$_"
+	}
+	
 	
 	Write-Host -f Green "`n### 완료"
 }
