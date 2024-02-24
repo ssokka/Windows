@@ -23,7 +23,7 @@ try {
 		ri $file -Force -ea ig
 	}
 
-	start -n -wait $file '/S'
+	spps -n $name -f -ea ig
 
 	function InstallPlugin {
 		[Alias("ip")]
