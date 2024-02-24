@@ -1,23 +1,3 @@
-function set-consoleFontSize {
-	param (
-		[int16] $h
-	)
-	[int16] $w = 0
-	[Win32API.Console]::SetSize($w, $h)
-}
-
-function set-consoleFontName {
-	param (
-		[string] $name
-	)
-	[Win32API.Console]::SetName($name)
-}
-
-$src = gc -raw (([Net.WebClient]::new()).DownloadData('https://raw.githubusercontent.com/ssokka/Windows/master/Script/psm/console.cs'))
-add-type -typeDef $src
-
-set-consoleFontName -name 'Consolas'
-
 $ErrorActionPreference = 'Stop'
 
 try {
