@@ -43,9 +43,10 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
 > 플러그인
   > 플러그인 관리
     > 사용 가능
-      찾기 : comp > [v] ComparePlus > 설치
-      찾기 : expl > [v] Explorer > 설치
-      찾기 : hexe > [v] HexEditor > 설치
-      찾기 : nppe > [v] NppExec > 설치
-      찾기 : json > [v] JSON Viewer > 설치
+      찾기 : comp > [v] ComparePlus
+      찾기 : expl > [v] Explorer
+      찾기 : hexe > [v] HexEditor
+      찾기 : nppe > [v] NppExec
+      찾기 : json > [v] JSON Viewer
+      > 설치
 ```
