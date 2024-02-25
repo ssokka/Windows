@@ -277,5 +277,5 @@
         }
     ],
     "trimBlockSelection": true,
-    "windowingBehavior": "useNew"
+    "windowingBehavior": "useAnyExisting"
 }
