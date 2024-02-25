@@ -10,14 +10,14 @@ try {
     Write-Host -f Green "`n### $name 설정"
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 	$file = 'settings.json'
-	$url = 'https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal'
+	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal'
 	
-	reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f | Out-Null
-	reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationTerminal' /t REG_SZ /d '{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}' /f | Out-Null
+	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f
+	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationTerminal' /t REG_SZ /d '{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}' /f
 	
 	ni $path -it d -f -ea ig | Out-Null
-	Start-BitsTransfer "$url/$file" "$path\$file"
-	([Net.WebClient]::new()).DownloadString("$url\readme.md") -replace '(?is).*?설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
+	Start-BitsTransfer "$site/$file" "$path\$file"
+	([Net.WebClient]::new()).DownloadString("$site\readme.md") -replace '(?is).*?설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
 	
 	Write-Host -f Green "`n### 완료"
 }
