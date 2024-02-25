@@ -7,7 +7,7 @@ try {
 	
 	$host.ui.RawUI.WindowTitle = $name
     
-	if (!(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr) -match '정품 인증되었습니다')) {
+	if (!(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr) -match '정품 인증되었습니다') {
         Write-Host -f Green "`n### $name"
         if (!(gmo 7Zip4Powershell -l)) {
             Set-ExecutionPolicy Bypass -f
