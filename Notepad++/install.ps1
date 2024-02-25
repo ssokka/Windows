@@ -42,7 +42,7 @@ try {
 		if(!(Test-Path "$path\plugins\$n")){
 			Write-Host "$t"
 			$repo = "pnedev/$($name[1])"
-			ni "$path\plugins\$n" -it d -ea ig | Out-Null
+			$null = ni "$path\plugins\$n" -it d -ea ig
 			$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
 			$file = "$path\plugins\$n\$($rurl -replace '.*/(.*)','$1')"
 			Start-BitsTransfer $rurl $file

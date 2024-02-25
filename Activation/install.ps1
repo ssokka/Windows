@@ -28,6 +28,7 @@ try {
 			try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) } catch {}
 			if ($test) { break } else { ccp $x $y }
 		}
+		$null = ni $tdir -it d -ea ig
 		Add-MpPreference $tdir -f
 		Expand-7Zip $zip $tdir -s $pass
 		ri $zip -Force -ea ig
@@ -43,7 +44,5 @@ catch {
 	Write-Error ($_.Exception | fl -Force | Out-String)
 	Write-Error ($_.InvocationInfo | fl -Force | Out-String)
 }
-finally {
-	Write-Host -n "`n아무 키나 누르십시오..."
-	Read-Host
-}
+Write-Host -n "`n아무 키나 누르십시오..."
+Read-Host
