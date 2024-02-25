@@ -7,6 +7,8 @@ try {
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\notepad++.exe"
 	
+	$host.ui.RawUI.WindowTitle = $name
+
 	Write-Host -f Green "`n### $name 버전"
 	$cver = "$((gi $exec -ea ig).VersionInfo.FileVersion)".Trim()
 	$site = "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
@@ -27,6 +29,7 @@ try {
 
 	spps -n $name -f -ea ig
 
+	Write-Host -f Green "`n### $name 플러그인"
 	# https://github.com/notepad-plus-plus/nppPluginList/blob/master/doc/plugin_list_x64.md
 	function InstallPlugin {
 		[Alias("ip")]
@@ -38,7 +41,7 @@ try {
 		)
 		$ErrorActionPreference = 'Ignore'
 		if(!(Test-Path "$path\plugins\$n")){
-			Write-Host -f Green "`n### $name 플러그인 설치 - $t"
+			Write-Host "$t 설치"
 			$repo = "pnedev/$($name[1])"
 			ni "$path\plugins\$n" -it d -ea ig | Out-Null
 			$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
