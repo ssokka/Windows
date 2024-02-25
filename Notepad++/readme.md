@@ -42,8 +42,9 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
     > 사용 가능
       찾기 : comp > [v] ComparePlus
       찾기 : expl > [v] Explorer
-      찾기 : hexe > [v] HexEditor
+      찾기 : hex  > [v] HexEditor
       찾기 : nppe > [v] NppExec
       찾기 : json > [v] JSON Viewer
+      찾기 : xml  > [v] XML Tools
     > 설치  
 ```

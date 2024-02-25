@@ -53,6 +53,7 @@ try {
 	ip -n 'HexEditor' -r 'chcg/NPP_HexEdit' -t 'HexEditor'
 	ip -n 'NppExec' -r 'd0vgan/nppexec' -t 'NppExec'
 	ip -n 'NPPJSONViewer' -r 'kapilratnani/JSON-Viewer' -t 'JSON Viewer'
+	ip -n 'XMLTools' -r 'morbac/xmltools' -t 'XML Tools'
 	
 	Write-Host -f Green "`n### $name 설정"
 	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B'
