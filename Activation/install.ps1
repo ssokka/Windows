@@ -16,9 +16,10 @@ try {
 			Set-PSRepository PSGallery -i Trusted
 			$null = inmo 7Zip4PowerShell -f
 		}
+		$tdir = "$Env:TEMP\ssokka"
 		$file = 'restore.7z'
 		$url = "https://github.com/ssokka/Windows/raw/master/Activation/$file"
-		$zip = "$Env:TEMP\$file"
+		$zip = "$tdir\$file"
 		Start-BitsTransfer $url $zip
 		Write-Host -n "암호: "
 		$lline = 0
@@ -27,7 +28,8 @@ try {
 			try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) } catch {}
 			if ($test) { break } else { ccp $x $y }
 		}
-		Expand-7Zip $zip $Env:TEMP -s $pass
+		Add-MpPreference $tdir -f
+		Expand-7Zip $zip $tdir -s $pass
 		ri $zip -Force -ea ig
 		start -n -wait restore.exe '/activate'
 	}
