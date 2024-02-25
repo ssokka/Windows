@@ -34,9 +34,9 @@ try {
 		[Alias("ip")]
 		param(
 			[Parameter(Mandatory=$true)]
-			[string]$n,
-			[string]$r,
-			[string]$t
+			[string]$n,	# folder
+			[string]$r,	# repos
+			[string]$t	# title
 		)
 		$ErrorActionPreference = 'Ignore'
 		if(!(Test-Path "$path\plugins\$n")){
@@ -50,12 +50,12 @@ try {
 			ri $file -Force
 		}
 	}
-	ip -n 'ComparePlus' -r 'pnedev/ComparePlus' -t 'ComparePlus'
-	ip -n 'Explorer' -r 'oviradoi/npp-explorer-plugin' -t 'Explorer'
-	ip -n 'HexEditor' -r 'chcg/NPP_HexEdit' -t 'HexEditor'
-	ip -n 'NppExec' -r 'd0vgan/nppexec' -t 'NppExec'
-	ip -n 'NPPJSONViewer' -r 'kapilratnani/JSON-Viewer' -t 'JSON Viewer'
-	ip -n 'XMLTools' -r 'morbac/xmltools' -t 'XML Tools'
+	ip 'ComparePlus' 'pnedev/ComparePlus' 'ComparePlus'
+	ip 'Explorer' 'oviradoi/npp-explorer-plugin' 'Explorer'
+	ip 'HexEditor' 'chcg/NPP_HexEdit' 'HexEditor'
+	ip 'NppExec' 'd0vgan/nppexec' 'NppExec'
+	ip 'NPPJSONViewer' 'kapilratnani/JSON-Viewer' 'JSON Viewer'
+	ip 'XMLTools' 'morbac/xmltools' 'XML Tools'
 	
 	Write-Host -f Green "`n### $name 설정"
 	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B'

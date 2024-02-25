@@ -1,4 +1,4 @@
-function CurrentCursorPosition {
+﻿function CurrentCursorPosition {
 	[Alias("ccp")]
 	param(
 		[Parameter(Mandatory=$true)]
@@ -12,8 +12,8 @@ function CurrentCursorPosition {
 			--$y
 		}
 	}
-	[Console]::SetCursorPosition($x, $y)
 	$w = [Console]::WindowWidth
+	[Console]::SetCursorPosition($x, $y)
 	[Console]::Write("{0,-$w}" -f " ")
 	[Console]::SetCursorPosition($x, $y)
 }
@@ -38,7 +38,7 @@ function PinToStartScreen {
 	if (!(Test-Path "$Env:TEMP\$exe")) {
 		Start-BitsTransfer "https://github.com/ssokka/Windows/raw/master/Tool/$exe" "$Env:TEMP\$exe"
 	}
-	ni $tmp -it File -f | Out-Null
+	$null = ni $tmp -it File -f
 	start -wait -win h "$Env:TEMP\$exe" "`"$tmp`" 51201"
 	do {
 		sleep 1
@@ -55,8 +55,9 @@ function PinToStartScreen {
 function StopOpenVPN {
 	[Alias("sov")]
 	PARAM()
-	('OpenVpnService','OpenVPNServiceLegacy','OpenVPNServiceInteractive') | % { spsv $_ -f -ea ig }
-	('openvpn','openvpn-gui', 'openvpnserv','openvpnserv2') | % { spps -n $_ -f -ea ig }
+	$ErrorActionPreference = 'Ignore'
+	('OpenVpnService','OpenVPNServiceLegacy','OpenVPNServiceInteractive') | % { spsv $_ -f }
+	('openvpn','openvpn-gui', 'openvpnserv','openvpnserv2') | % { spps -n $_ -f }
 }
 
 $ErrorActionPreference = 'Stop'
@@ -65,15 +66,16 @@ try {
 	$name = 'OpenVPN'
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\bin\openvpn.exe"
+
+	$host.ui.RawUI.WindowTitle = $name
 	
-	Write-Host -f Green "`n### $name 버전 확인"
+	Write-Host -f Green "`n### $name 버전"
 	$cver = "$((gi $exec -ea ig).VersionInfo.FileVersion -replace '(.*)\.0','$1')".Trim()
 	$site = "https://openvpn.net/community-downloads"
 	$spat = '(?is)Windows 64-bit MSI installer.*?GnuPG Signature.*?<a href="(.*?)".*?OpenVPN-(.*?)-'
 	$rver = ''; $rurl = ''
-	$oweb = New-Object Net.WebClient
-	$ostr = $oweb.DownloadString($site)
-	if ($ostr -match $spat) {
+	$data = (New-Object Net.WebClient).DownloadString($site)
+	if ($data -match $spat) {
 		$rurl = "$($Matches[1])".Trim()
 		$rver = "$($Matches[2])".Trim()
 	}
@@ -81,10 +83,9 @@ try {
 	Write-Host "최신: $rver"
 	
 	if ($cver -ne $rver) {
-		Write-Host -f Green "`n### $name 다운로드"
+		Write-Host -f Green "`n### $name 설치"
 		$file = "$Env:TEMP\$($rurl -replace '.*/(.*)','$1')"
 		Start-BitsTransfer $rurl $file
-		Write-Host -f Green "`n### $name 설치"
 		sov
 		start -n -wait msiexec.exe "/i `"$file`" addlocal=all /passive /norestart"
 		ri $file -Force -ea ig
@@ -115,7 +116,7 @@ try {
 		if ($read -match "^[1-$($menu.count)]$") {
 			break
 		} else {
-			ccp -x $x -y $y
+			ccp $x $y
 		}
 	}
 	
@@ -130,10 +131,10 @@ try {
 	Write-Host -f Green "`n### $name $($menu[$read-1]) 설정"
 	if (!(gmo 7Zip4Powershell -l)) {
 		Set-ExecutionPolicy Bypass -f
-		Install-PackageProvider NuGet -min 2.8.5.201 -Force | Out-Null
+		$null = Install-PackageProvider NuGet -min 2.8.5.201 -Force
 		Register-PSRepository -d -ea ig
 		Set-PSRepository PSGallery -i Trusted
-		inmo 7Zip4PowerShell -f | Out-Null	
+		$null = inmo 7Zip4PowerShell -f
 	}
 	$url = "https://github.com/ssokka/Windows/raw/master/OpenVPN/$file"
 	$zip = "$Env:TEMP\$file"
@@ -142,19 +143,19 @@ try {
 	$lline = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-		try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) }
-		catch {}
+		try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) } catch {}
 		if ($test){
 			break
 		} else {
-			ccp -x $x -y $y
+			ccp $x $y
 		}
 	}
 	if (Test-Path "$path\config-auto\server.ovpn") { ri "$path\config-auto\*" -Force -ea ig }
 	Expand-7Zip $zip "$path\config-auto" -s $pass
 	ri $zip -Force -ea ig
 	
-	Write-Host -f Green "`n### $name $($menu[$read-1]) 네트워크 어탭터 설정"
+	Write-Host -f Green "`n### 네트워크 어탭터 설정"
+	Write-Host "$name - $($menu[$read-1])"
 	sov
 	('TAP-Windows Adapter V9','Wintun Userspace Tunnel','OpenVPN Data Channel Offload') | % {
 		Get-PnpDevice -f "$_*"
@@ -173,18 +174,20 @@ try {
 		# Write-Host "$_ : $hwid"
 	}
 	
-	Write-Host -f Green "`n### $name 서비스 재시작"
+	Write-Host -f Green "`n### 서비스 재시작"
+	Write-Host "$name"
 	Restart-Service -f 'OpenVPNService'
 	
+	Write-Host -f Green "`n### 네트워크 드라이브 연결"
 	(gi "$path\config-auto\drive*.cmd" -ea ig) | % {
 		$dname = $_ -replace '(?i).*drive-(.*?)\..*','$1'
 		$dname = (Get-Culture).TextInfo.ToTitleCase($dname)
 		$sname = (gi $_).Basename
-		Write-Host -f Green "`n### $dname 네트워크 드라이브 연결"
+		Write-Host $dname
 		start -n -wait schtasks.exe "/create /tn `"$sname`" /tr `"$_`" /sc onstart /ru `"$Env:USERNAME`" /f"
 		start -n -wait schtasks.exe "/run /tn `"$sname`""
 		start -n -wait schtasks.exe "/delete /tn `"$sname`" /f"
-		ptss -p "$_"
+		ptss "$_"
 	}
 	
 	
