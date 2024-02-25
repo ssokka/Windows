@@ -18,10 +18,9 @@ try {
 	Write-Host "최신: $rver"
 	
 	if ($cver -ne $rver) {
-		Write-Host -f Green "`n### $name 다운로드"
+		Write-Host -f Green "`n### $name 설치"
 		$file = "$Env:TEMP\$($rurl -replace '.*/(.*)','$1')"
 		Start-BitsTransfer $rurl $file
-		Write-Host -f Green "`n### $name 설치"
 		spps -n $name -f -ea ig
 		start -n -wait $file '/S'
 		ri $file -Force -ea ig
@@ -29,7 +28,7 @@ try {
 
 	spps -n $name -f -ea ig
 
-	Write-Host -f Green "`n### $name 플러그인"
+	Write-Host -f Green "`n### $name 플러그인 설치"
 	# https://github.com/notepad-plus-plus/nppPluginList/blob/master/doc/plugin_list_x64.md
 	function InstallPlugin {
 		[Alias("ip")]
@@ -41,7 +40,7 @@ try {
 		)
 		$ErrorActionPreference = 'Ignore'
 		if(!(Test-Path "$path\plugins\$n")){
-			Write-Host "$t 설치"
+			Write-Host "$t"
 			$repo = "pnedev/$($name[1])"
 			ni "$path\plugins\$n" -it d -ea ig | Out-Null
 			$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
