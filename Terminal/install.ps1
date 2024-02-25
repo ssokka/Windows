@@ -10,7 +10,7 @@ try {
     Write-Host -f Green "`n### $name 설정"
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 	$file = 'settings.json'
-	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal'
+	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/Terminal'
 	
 	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f
 	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationTerminal' /t REG_SZ /d '{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}' /f
