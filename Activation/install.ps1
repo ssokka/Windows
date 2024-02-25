@@ -7,8 +7,16 @@ try {
 	
 	$host.ui.RawUI.WindowTitle = $name
 	
-	if (!(( cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr) -match '정품 인증되었 습다')) {
-		Write-Host -f Green "`n### $name"
+	Write-Host -f Green "`n### $name"
+	
+	$str = ("$(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
+	if (!($str -match '인증되었습니다')) {
+		$site = "https://github.com/ssokka/Windows/raw/master/Activation"
+		$file = 'restore.7z'
+		$dir = "$Env:TEMP\ssokka"
+		$zip = "$dir\$file"
+		$exe = "$dir\restore.exe"
+		$null = ni $dir -it d -ea ig
 		if (!(gmo 7Zip4Powershell -l)) {
 			Set-ExecutionPolicy Bypass -f
 			$null = Install-PackageProvider NuGet -min 2.8.5.201 -Force
@@ -16,12 +24,7 @@ try {
 			Set-PSRepository PSGallery -i Trusted
 			$null = inmo 7Zip4PowerShell -f
 		}
-		$tdir = "$Env:TEMP\ssokka"
-		$file = 'restore.7z'
-		$url = "https://github.com/ssokka/Windows/raw/master/Activation/$file"
-		$zip = "$tdir\$file"
-		$null = ni $tdir -it d -ea ig
-		Start-BitsTransfer $url $zip
+		Start-BitsTransfer "$site/$file" $zip
 		Write-Host -n "암호: "
 		$lline = 0
 		while ($true) {
@@ -29,14 +32,13 @@ try {
 			try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) } catch {}
 			if ($test) { break } else { ccp $x $y }
 		}
-		Add-MpPreference $tdir -f
-		Expand-7Zip $zip $tdir -s $pass
-		ri $zip -Force -ea ig
-		start -n -wait restore.exe '/activate'
+		Add-MpPreference -ExclusionPath $dir -f
+		Expand-7Zip $zip $dir -s $pass
+		start -n -wait $exe '/activate'
+		($zip, $exe) | % { ri $_ -Force -ea ig }
 	}
 	
-	Write-Host -f Green "`n### $name 확인"
-	cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr
+	("$(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
 
 	Write-Host -f Green "`n### 완료"
 }
