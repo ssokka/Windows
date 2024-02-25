@@ -14,16 +14,13 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
 > 설정
   > 환경 설정
     > 편집
-      [o] 부드러운 폰트 활성화
+      [v] 부드러운 폰트 활성화
     > 최근 파일 사용 기록
       최대 기록 수 : 30
     > 자동 완성
-      [v] (
-      [v] [
-      [v] {
-      [v] "
-      [v] '
-      [v] html/xml 닫기 태그
+      [v] ( )     [v] " "
+      [v] [ ]     [v] ' '
+      [v] { }     [v] html/xml 닫기 태그
     > 다중 실행 & 날짜
       [o] 항상 다중 실행 모드
     > 기타
@@ -32,7 +29,7 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
   > 스타일 설정
     테마 선택 : Dracula
     언어 : Global Styles
-    스타일 : Global override
+    형식 : Global override
     글꼴이름 : Consolas
     크기 : 10
     [v] 전역 글꼴 사용
@@ -48,5 +45,5 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
       찾기 : hexe > [v] HexEditor
       찾기 : nppe > [v] NppExec
       찾기 : json > [v] JSON Viewer
-      > 설치  
+    > 설치  
 ```
