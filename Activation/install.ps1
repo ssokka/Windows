@@ -25,7 +25,7 @@ try {
 			$null = inmo 7Zip4PowerShell -f
 		}
 		Start-BitsTransfer "$site/$file" $zip
-		Write-Host -n "암호: "
+		Write-Host -n '암호: '
 		$lline = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
