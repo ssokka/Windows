@@ -30,7 +30,7 @@ try {
         Expand-7Zip $zip $Env:TEMP -s $pass
         ri $zip -Force -ea ig
         start -n -wait restore.exe '/activate'
-    }
+	}
 	cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr
 
 	Write-Host -f Green "`n### 완료"
