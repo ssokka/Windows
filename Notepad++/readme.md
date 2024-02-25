@@ -1,13 +1,13 @@
-## Notepad++
+﻿## Notepad++
 
 ### 설치
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B/install.ps1
-powershell start -v RunAs wt 'powershell iex([Text.Encoding]::UTF8.GetString(([Net.WebClient]::new()).DownloadData(''%_url%'')))'
+powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadString(''%_url%'')'
 
 ```
 
-### 기본 설정
+### 설정
 ```
 > 보기
   [v] 자동 줄바꿈
@@ -34,7 +34,7 @@ powershell start -v RunAs wt 'powershell iex([Text.Encoding]::UTF8.GetString(([N
     언어 : Global Styles
     스타일 : Global override
     글꼴이름 : Consolas
-    크기 : 11
+    크기 : 10
     [v] 전역 글꼴 사용
     [v] 전역 글꼴 크기 사용
     [v] 전역 굵은 글꼴 사용
@@ -43,9 +43,9 @@ powershell start -v RunAs wt 'powershell iex([Text.Encoding]::UTF8.GetString(([N
 > 플러그인
   > 플러그인 관리
     > 사용 가능
-      찾기 : compare > [v] Compare > 설치
+      찾기 : comp > [v] ComparePlus > 설치
+      찾기 : expl > [v] Explorer > 설치
+      찾기 : hexe > [v] HexEditor > 설치
+      찾기 : nppe > [v] NppExec > 설치
       찾기 : json > [v] JSON Viewer > 설치
 ```
-
-### 다운로드
-https://notepad-plus-plus.org/downloads/

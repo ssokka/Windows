@@ -15,7 +15,7 @@ try {
 	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f
 	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationTerminal' /t REG_SZ /d '{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}' /f
 	
-	ni $path -it d -f -ea ig | Out-Null
+	$null = ni $path -it d -f -ea ig
 	Start-BitsTransfer "$site/$file" "$path\$file"
 	([Net.WebClient]::new()).DownloadString("$site\readme.md") -replace '(?is).*?설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
 	

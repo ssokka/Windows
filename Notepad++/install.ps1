@@ -1,4 +1,4 @@
-iex ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
+﻿iex ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
 
 $ErrorActionPreference = 'Stop'
 
@@ -41,31 +41,33 @@ try {
 			Write-Host -f Green "`n### $name 플러그인 - $t 설치"
 			$repo = "pnedev/$($name[1])"
 			ni "$path\plugins\$n" -it d -ea ig | Out-Null
-			$url = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
-			$file = "$path\plugins\$n\$($url -replace '.*/(.*)','$1')"
-			Start-BitsTransfer $url $file
+			$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
+			$file = "$path\plugins\$n\$($rurl -replace '.*/(.*)','$1')"
+			Start-BitsTransfer $rurl $file
 			Expand-Archive $file -d "$path\plugins\$n" -f
 			ri $file -Force
 		}
 	}
-
 	ip -n 'ComparePlus' -r 'pnedev/ComparePlus' -t 'ComparePlus'
+	ip -n 'Explorer' -r 'oviradoi/npp-explorer-plugin' -t 'Explorer'
+	ip -n 'HexEditor' -r 'chcg/NPP_HexEdit' -t 'HexEditor'
 	ip -n 'NppExec' -r 'd0vgan/nppexec' -t 'NppExec'
 	ip -n 'NPPJSONViewer' -r 'kapilratnani/JSON-Viewer' -t 'JSON Viewer'
 	
-	$path = "$Env:AppData\$name"
-
-	Write-Host -f Green "`n### $name 기본 설정"
+	Write-Host -f Green "`n### $name 설정"
+	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B'
+	
 	$path = "$Env:AppData\$name"
 	$file = 'config.xml'
 	$null = ni $path -it d -f -ea ig
-	Start-BitsTransfer "https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B/$file" "$path\$file"
+	Start-BitsTransfer "$site/$file" "$path\$file"
 
-	Write-Host -f Green "`n### $name 테마 설정"
 	$path = "$Env:AppData\$name\themes"
 	$file = 'Dracula.xml'
 	$null = ni $path -it d -f -ea ig
 	Start-BitsTransfer "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" "$path\$file"
+
+	([Net.WebClient]::new()).DownloadString("$site\readme.md") -replace '(?is).*?설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
 
 	#$xml = [xml](Get-Content '$path\themes\$file')
 	#$node = $xml.NotepadPlus.GlobalStyles.WidgetStyle | where {$_.name -eq 'Global override'}
