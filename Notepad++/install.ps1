@@ -1,3 +1,5 @@
+iex ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
+
 $ErrorActionPreference = 'Stop'
 
 try {
@@ -25,6 +27,7 @@ try {
 
 	spps -n $name -f -ea ig
 
+	# https://github.com/notepad-plus-plus/nppPluginList/blob/master/doc/plugin_list_x64.md
 	function InstallPlugin {
 		[Alias("ip")]
 		param(
@@ -46,7 +49,8 @@ try {
 		}
 	}
 
-	ip -n 'ComparePlus' -r 'pnedev/ComparePlus' -t 'Compare'
+	ip -n 'ComparePlus' -r 'pnedev/ComparePlus' -t 'ComparePlus'
+	ip -n 'NppExec' -r 'd0vgan/nppexec' -t 'NppExec'
 	ip -n 'NPPJSONViewer' -r 'kapilratnani/JSON-Viewer' -t 'JSON Viewer'
 	
 	$path = "$Env:AppData\$name"
@@ -54,13 +58,13 @@ try {
 	Write-Host -f Green "`n### $name 기본 설정"
 	$path = "$Env:AppData\$name"
 	$file = 'config.xml'
-	ni $path -it d -f -ea ig | Out-Null
+	$null = ni $path -it d -f -ea ig
 	Start-BitsTransfer "https://raw.githubusercontent.com/ssokka/Windows/master/Notepad%2B%2B/$file" "$path\$file"
 
 	Write-Host -f Green "`n### $name 테마 설정"
 	$path = "$Env:AppData\$name\themes"
 	$file = 'Dracula.xml'
-	ni $path -it d -f -ea ig | Out-Null
+	$null = ni $path -it d -f -ea ig
 	Start-BitsTransfer "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" "$path\$file"
 
 	#$xml = [xml](Get-Content '$path\themes\$file')
