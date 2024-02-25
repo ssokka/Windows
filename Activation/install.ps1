@@ -7,10 +7,7 @@ try {
 	
 	$host.ui.RawUI.WindowTitle = $name
     
-	Write-Host -f Green "`n### $name 확인"
-	$chk = cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr
-
-    if (!($chk -match '정품 인증되었습니다')) {
+	if (!(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr) -match '정품 인증되었습니다')) {
         Write-Host -f Green "`n### $name"
         if (!(gmo 7Zip4Powershell -l)) {
             Set-ExecutionPolicy Bypass -f
@@ -33,15 +30,16 @@ try {
         Expand-7Zip $zip $Env:TEMP -s $pass
         ri $zip -Force -ea ig
         start -n -wait restore.exe '/activate'
-        cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr
     }
-	
+	cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr
+
 	Write-Host -f Green "`n### 완료"
 }
 catch {
 	Write-Error ($_.Exception | fl -Force | Out-String)
 	Write-Error ($_.InvocationInfo | fl -Force | Out-String)
 }
-
-Write-Host -n "`n아무 키나 누르십시오..."
-Read-Host
+finally {
+	Write-Host -n "`n아무 키나 누르십시오..."
+	Read-Host
+}
