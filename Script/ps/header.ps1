@@ -25,7 +25,6 @@ $h = $rect.Bottom - $rect.Top
 $area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
 $x = ($area.Width - $w) / 2
 $y = ($area.Height - $h) / 2
-sleep 5
 $null = [Window]::MoveWindow($hwnd,$x,$y,$w,$h,$true)
 $null = [Window]::ShowWindow($hwnd, 1)
 $null = [Window]::ShowWindow($hwnd, 2)
