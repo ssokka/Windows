@@ -7,7 +7,7 @@ try {
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\notepad++.exe"
 	
-	Write-Host -f Green "`n### $name 버전 확인"
+	Write-Host -f Green "`n### $name 버전"
 	$cver = "$((gi $exec -ea ig).VersionInfo.FileVersion)".Trim()
 	$site = "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
 	$rver = "$(((irm $site).tag_name) -replace '(?i)v','')".Trim()
@@ -38,7 +38,7 @@ try {
 		)
 		$ErrorActionPreference = 'Ignore'
 		if(!(Test-Path "$path\plugins\$n")){
-			Write-Host -f Green "`n### $name 플러그인 - $t 설치"
+			Write-Host -f Green "`n### $name 플러그인 설치 - $t"
 			$repo = "pnedev/$($name[1])"
 			ni "$path\plugins\$n" -it d -ea ig | Out-Null
 			$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
