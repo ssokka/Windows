@@ -20,6 +20,7 @@ try {
 		$file = 'restore.7z'
 		$url = "https://github.com/ssokka/Windows/raw/master/Activation/$file"
 		$zip = "$tdir\$file"
+		$null = ni $tdir -it d -ea ig
 		Start-BitsTransfer $url $zip
 		Write-Host -n "암호: "
 		$lline = 0
@@ -28,7 +29,6 @@ try {
 			try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) } catch {}
 			if ($test) { break } else { ccp $x $y }
 		}
-		$null = ni $tdir -it d -ea ig
 		Add-MpPreference $tdir -f
 		Expand-7Zip $zip $tdir -s $pass
 		ri $zip -Force -ea ig
