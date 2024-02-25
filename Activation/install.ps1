@@ -11,7 +11,7 @@ try {
 	
 	$str = ("$(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
 	if (!($str -match '인증되었습니다')) {
-		$site = "https://github.com/ssokka/Windows/raw/master/Activation"
+		$site = 'https://github.com/ssokka/Windows/raw/master/Activation'
 		$file = 'restore.7z'
 		$dir = "$Env:TEMP\ssokka"
 		$zip = "$dir\$file"
