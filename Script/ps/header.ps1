@@ -28,3 +28,23 @@ $x = ($area.Width - $w) / 2
 $y = ($area.Height - $h) / 2
 $null = [Window]::MoveWindow($hwnd,$x,$y,$w,$h,$true)
 (1,2,9) | % { $null = [Window]::ShowWindow($hwnd, $_) }
+
+function CurrentCursorPosition {
+	[Alias("ccp")]
+	param(
+		[Parameter(Mandatory=$true)]
+		[Int]$x,
+		[Int]$y
+	)
+	if ($lline -eq $null) { $lline = 0 }
+	if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
+		if ($lline -eq 0 -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) {
+			$lline = 1
+			--$y
+		}
+	}
+	$w = [Console]::WindowWidth
+	[Console]::SetCursorPosition($x, $y)
+	[Console]::Write("{0,-$w}" -f " ")
+	[Console]::SetCursorPosition($x, $y)
+}
