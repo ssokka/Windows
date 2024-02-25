@@ -17,7 +17,7 @@ try {
 	
 	ni $path -it d -f -ea ig | Out-Null
 	Start-BitsTransfer "$url/$file" "$path\$file"
-	([Net.WebClient]::new()).DownloadString("$url\readme.md") -replace '(?is).*?설정 내용.*```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
+	([Net.WebClient]::new()).DownloadString("$url\readme.md") -replace '(?is).*?설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*','$1'
 	
 	Write-Host -f Green "`n### 완료"
 }

@@ -1,11 +1,11 @@
-﻿### 설정
+﻿### 설치
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/WindowsTerminal/install.ps1
-powershell start wt 'powershell iex ([Net.WebClient]::new()).DownloadString(''%_url%'')'
+wt powershell iex ([Net.WebClient]::new()).DownloadString('%_url%')
 
 ```
 
-### 설정 내용
+### 설정
 ```
 > 시작
   기본 프로필 : 명령 프롬프트
