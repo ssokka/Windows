@@ -3,7 +3,7 @@
 $ErrorActionPreference = 'Stop'
 
 try {
-	$name = 'Windows 터미널'
+	$name = '터미널'
 	$path = "$Env:ProgramFiles\WindowsApps\Microsoft.WindowsTerminal_1.18.10301.0_x64__8wekyb3d8bbwe"
 	$exec = "$path\wt.exe"
 	
