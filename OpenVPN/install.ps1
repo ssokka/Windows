@@ -87,9 +87,14 @@ try {
 		$file = "$Env:TEMP\$($rurl -replace '.*/(.*)','$1')"
 		Start-BitsTransfer $rurl $file
 		sov
+		('config','config-auto') | % {
+			if ((gi "$path\$_" -ea ig).LinkType -eq 'SymbolicLink') { ri $_ -Force -ea ig }
+		}
 		start -n -wait msiexec.exe "/i `"$file`" addlocal=all /passive /norestart"
 		ri $file -Force -ea ig
 	}
+	$null = reg.exe delete "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OPENVPN-GUI" /f 2>$null
+	ri "$Env:Public\Desktop\OpenVPN GUI.lnk" -Force -ea ig
 	
 	Write-Host -f Green "`n### $name 서비스 설정"
 	('OpenVPNServiceInteractive','OpenVPNServiceLegacy') | % {

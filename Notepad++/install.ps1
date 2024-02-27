@@ -41,16 +41,25 @@ try {
 		$ErrorActionPreference = 'Ignore'
 		if(!(Test-Path "$path\plugins\$n")){
 			Write-Host "$t"
-			$repo = "pnedev/$($name[1])"
 			$null = ni "$path\plugins\$n" -it d -ea ig
-			$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
-			$file = "$path\plugins\$n\$($rurl -replace '.*/(.*)','$1')"
+			if ($r -match '^http') {
+				$req = [Net.WebRequest]::Create($r)
+				$req.AllowAutoRedirect = $true
+				$res = $req.GetResponse()
+				$gfn = [IO.Path]::GetFileName($res.ResponseUri.AbsoluteUri)
+				$rurl = $r
+				$file = "$path\plugins\$n\$gfn"
+			} else {
+				$rurl = (irm https://api.github.com/repos/$r/releases/latest | % assets | ? name -like '*x64.zip').browser_download_url
+				$file = "$path\plugins\$n\$($rurl -replace '.*/(.*)','$1')"
+			}
 			Start-BitsTransfer $rurl $file
 			Expand-Archive $file -d "$path\plugins\$n" -f
 			ri $file -Force
 		}
 	}
 	ip 'ComparePlus' 'pnedev/ComparePlus' 'ComparePlus'
+	ip '_CustomizeToolbar' 'https://sourceforge.net/projects/npp-customize/files/latest/download' 'Customize Toolbar'
 	ip 'Explorer' 'oviradoi/npp-explorer-plugin' 'Explorer'
 	ip 'HexEditor' 'chcg/NPP_HexEdit' 'HexEditor'
 	ip 'NppExec' 'd0vgan/nppexec' 'NppExec'
