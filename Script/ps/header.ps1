@@ -1,50 +1,91 @@
 ﻿Add-Type @'
-	using System;
-	using System.Runtime.InteropServices;
-	public class Window {
-		[DllImport("user32.dll")]
-		public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-		[DllImport("user32.dll")]
-		public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);    
-		[DllImport("user32.dll")]
-		public extern static bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
-	}
-	public struct RECT {
-		public int Left;
-		public int Top;
-		public int Right;
-		public int Bottom;
-	}
+using System;
+using System.Runtime.InteropServices;
+public class Window {
+	[DllImport("user32.dll")]
+	public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+	[DllImport("user32.dll")]
+	public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);    
+	[DllImport("user32.dll")]
+	public extern static bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+}
+public struct RECT {
+	public int Left;
+	public int Top;
+	public int Right;
+	public int Bottom;
+}
 '@
-Add-Type -a System.Windows.Forms
+Add-Type -AssemblyName System.Windows.Forms
 $area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
-$ppid = (gwmi win32_process -Filter "processid='$PID'").ParentProcessId
-$hwnd = (Get-Process -Id $ppid).MainWindowHandle
-$rect = New-Object RECT
-$null = [Window]::GetWindowRect($hwnd,[ref]$rect)
-$w = $rect.Right - $rect.Left
-$h = $rect.Bottom - $rect.Top
-$x = ($area.Width - $w) / 2
-$y = ($area.Height - $h) / 2
-$null = [Window]::MoveWindow($hwnd,$x,$y,$w,$h,$true)
-(1,2,9) | % { $null = [Window]::ShowWindow($hwnd, $_) }
 
-function CurrentCursorPosition {
-	[Alias("ccp")]
+function set-window {
 	param(
-		[Parameter(Mandatory=$true)]
+		[int[]]$show = (1, 9)
+	)
+	$ErrorActionPreference = 'SilentlyContinue'
+	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$PID'").ParentProcessId
+	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
+	if (!$hwnd) { $hwnd = (Get-Process -Id $pid).MainWindowHandle }
+	$rect = New-Object RECT
+	$null = [Window]::GetWindowRect($hwnd, [ref]$rect)
+	$w = $rect.Right - $rect.Left
+	$h = $rect.Bottom - $rect.Top
+	$x = ($Global:area.Width - $w) / 2
+	$y = ($Global:area.Height - $h) / 2
+	$null = [Window]::MoveWindow($hwnd, $x, $y, $w, $h, $true)
+	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
+}
+
+function current-cursor-position {
+	[Alias('ccp')]
+	param(
 		[Int]$x,
 		[Int]$y
 	)
-	if ($lline -eq $null) { $lline = 0 }
+	# if (!$lline) { $lline = 0 }
 	if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
-		if ($lline -eq 0 -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) {
-			$lline = 1
-			--$y
-		}
+		if (!$lline -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $lline = 1; --$y }
 	}
-	$w = [Console]::WindowWidth
 	[Console]::SetCursorPosition($x, $y)
-	[Console]::Write("{0,-$w}" -f " ")
+	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f ' ')
 	[Console]::SetCursorPosition($x, $y)
 }
+
+function pin-to {
+	[Alias('pt')]
+	param(
+		[string]$type,
+		[string]$path,
+		[string]$icon,
+		[bool]$kill = $false
+	)
+	$ErrorActionPreference = 'Stop'
+	switch ($type) {
+		task { $type = '5386'; $pdir = "$Env:AppData\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" }
+		start { $type = '51201'; $pdir = "$Env:AppData\Microsoft\Windows\Start Menu\Programs" }
+	}
+	$name = (Get-Item $path).BaseName
+	if (!$icon) { $icon = $path }
+	Write-Host "- $name"
+	$exec = 'syspin.exe'
+	$guid = ([System.Guid]::NewGuid()).ToString()
+	$temp = "$Env:Temp\$guid.exe"
+	$glnk = "$pdir\$guid.lnk"
+	$nlnk = "$pdir\$name.lnk"
+	if (!(Test-Path "$Env:Temp\$exec")) { Start-BitsTransfer "https://github.com/ssokka/Windows/raw/master/Tool/$exec" "$Env:Temp\$exec" }
+	$null = New-Item $temp -ItemType File -Force
+	Start-Process -Wait -WindowStyle Hidden "$Env:Temp\$exec" "`"$temp`" $type"
+	do { Start-Sleep 1 } until (Test-Path $glnk)
+	Start-Sleep 5
+	$owsc = (New-Object -ComObject WScript.Shell).CreateShortcut($glnk)
+	$owsc.TargetPath = $path
+	$owsc.IconLocation = $icon
+	$owsc.Save()
+	Remove-Item $nlnk -Force -ErrorAction Ignore
+	Rename-Item $glnk $nlnk -Force
+	Remove-Item $temp -Force
+	if ($kill) { Start-Sleep 3; Stop-Process -Name explorer -Force }
+}
+
+set-window
