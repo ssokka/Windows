@@ -12,9 +12,9 @@ echo "`n### Edit ""$file"""
 if (Test-Path $file) {
 	$xml = [xml](Get-Content $file)
 	
-	echo "FailedLoginAttemptsBeforeBan = 4"
+	echo "FailedLoginAttemptsBeforeBan = 1"
 	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'FailedLoginAttemptsBeforeBan'}
-	$node.value = '4'
+	$node.value = '1'
 	
 	echo "BanTime = 00:00:00:00"
 	$node = $xml.configuration.appSettings.add | where {$_.key -eq 'BanTime'}

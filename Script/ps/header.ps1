@@ -88,4 +88,14 @@ function pin-to {
 	if ($kill) { Start-Sleep 3; Stop-Process -Name explorer -Force }
 }
 
+function install-7zip {
+	if (!(Get-Module 7Zip4Powershell -ListAvailable)) {
+		Set-ExecutionPolicy Bypass -Force
+		$null = Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force
+		Register-PSRepository -Default -ErrorAction Ignore
+		Set-PSRepository PSGallery -InstallationPolicy Trusted
+		$null = Install-Module 7Zip4PowerShell -Force
+	}
+}
+
 set-window
