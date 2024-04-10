@@ -1,5 +1,7 @@
 <h1><img src="./images/logo.ico" height="25"> Microsoft Visual C++ 재배포 가능 패키지</h1>
 
+https://github.com/abbodi1406/vcredist/releases
+
 2019.05.09
 - 설치하려면 인터넷에 연결되어 있어야 합니다.
 - 2005/2008/2010/2012/2013/2019 제품이 설치됩니다.
