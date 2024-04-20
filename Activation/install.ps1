@@ -1,4 +1,4 @@
-﻿iex ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
+﻿Invoke-Expression ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
 
 $ErrorActionPreference = 'Stop'
 
@@ -7,7 +7,7 @@ try {
 	
 	$host.ui.RawUI.WindowTitle = $name
 	
-	Write-Host -f Green "`n### $name"
+	Write-Host -ForegroundColor Green "`n### $name"
 	
 	$str = ("$(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
 	if (!($str -match '인증되었습니다')) {
@@ -16,35 +16,35 @@ try {
 		$dir = "$Env:TEMP\ssokka"
 		$zip = "$dir\$file"
 		$exe = "$dir\restore.exe"
-		$null = ni $dir -it d -ea ig
-		if (!(gmo 7Zip4Powershell -l)) {
-			Set-ExecutionPolicy Bypass -f
+		$null = New-Item $dir -ItemType Directory -ErrorAction Ignore
+		Add-MpPreference -ExclusionPath "$dir" -Force
+		if (!(Get-Module 7Zip4Powershell -ListAvailable)) {
+			Set-ExecutionPolicy Bypass -Force
 			$null = Install-PackageProvider NuGet -min 2.8.5.201 -Force
-			Register-PSRepository -d -ea ig
-			Set-PSRepository PSGallery -i Trusted
-			$null = inmo 7Zip4PowerShell -f
+			Register-PSRepository -Default -ErrorAction Ignore
+			Set-PSRepository PSGallery -InstallationPolicy Trusted
+			$null = Install-Module 7Zip4PowerShell -Force
 		}
 		Start-BitsTransfer "$site/$file" $zip
-		Write-Host -n '암호: '
+		Write-Host -NoNewline '암호: '
 		$lline = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-			try { $test = $(Get-7Zip $zip -s ($pass = read-host -a)) } catch {}
+			try { $test = $(Get-7Zip $zip -s ($pass = Read-Host -AsSecureString)) } catch {}
 			if ($test) { break } else { ccp $x $y }
 		}
-		Add-MpPreference -ExclusionPath $dir -f
-		Expand-7Zip $zip $dir -s $pass
-		start -n -wait $exe '/activate'
-		($zip, $exe) | % { ri $_ -Force -ea ig }
+		Expand-7Zip $zip $dir -SecurePassword $pass
+		Start-Process -NoNewWindow -Wait $exe '/activate'
+		($zip, $exe) | % { Remove-Item $_ -Force -ErrorAction Ignore }
 	}
 	
 	("$(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
 
-	Write-Host -f Green "`n### 완료"
+	Write-Host -ForegroundColor Green "`n### 완료"
 }
 catch {
-	Write-Error ($_.Exception | fl -Force | Out-String)
-	Write-Error ($_.InvocationInfo | fl -Force | Out-String)
+	Write-Error ($_.Exception | Format-List -Force | Out-String)
+	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String)
 }
-Write-Host -n "`n아무 키나 누르십시오..."
+Write-Host -NoNewline "`n아무 키나 누르십시오..."
 Read-Host
