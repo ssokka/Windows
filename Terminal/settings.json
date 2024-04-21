@@ -1,4 +1,4 @@
-﻿{
+{
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": 
@@ -40,6 +40,7 @@
             "antialiasingMode": "cleartype",
             "font": 
             {
+                "face": "Consolas",
                 "size": 10
             },
             "historySize": 2147483647
