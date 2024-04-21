@@ -2,11 +2,10 @@
 $ErrorActionPreference = 'Stop'
 
 try {
-	$name = '터미널'
-	$path = "$Env:ProgramFiles\WindowsApps\Microsoft.WindowsTerminal_1.18.10301.0_x64__8wekyb3d8bbwe"
-	$exec = "$path\wt.exe"
-	
-    Write-Host -ForegroundColor Green "`n### $name 설정"
+	$name = '터미널 설정'
+	$host.ui.RawUI.WindowTitle = $name
+    Write-Host -ForegroundColor Green "`n### $name"
+
 	$site = 'https://raw.githubusercontent.com/ssokka/Windows/master/Terminal'
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 	$file = 'settings.json'
@@ -26,5 +25,5 @@ catch {
 	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String)
 }
 
-Write-Host -n "`n아무 키나 누르십시오..."
+Write-Host -NoNewline "`n아무 키나 누르십시오..."
 Read-Host
