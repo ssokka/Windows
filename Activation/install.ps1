@@ -13,7 +13,7 @@ try {
 		$file = 'restore.7z'
 		$path = "$Env:Temp\Download"
 		$exec = 'restore.exe'
-		$null = New-Item $path -ItemType Directory -ErrorAction Ignore
+		$null = New-Item "$path" -ItemType Directory -ErrorAction Ignore
 		install-7zip
  		drp $false
 		Start-BitsTransfer "$site/$file" "$path\$file"
