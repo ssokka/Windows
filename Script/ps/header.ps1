@@ -21,29 +21,19 @@ public struct RECT {
 Add-Type -AssemblyName System.Windows.Forms
 $area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
 
-function set-window {
+function current-cursor-position {
+	[Alias('ccp')]
 	param(
-		[int[]]$show = (1, 9)
+		[Int]$x,
+		[Int]$y
 	)
-	$ErrorActionPreference = 'SilentlyContinue'
-	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$PID'").ParentProcessId
-	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
-	if (!$hwnd) { $hwnd = (Get-Process -Id $pid).MainWindowHandle }
-	$rect = New-Object RECT
-	$null = [Window]::GetWindowRect($hwnd, [ref]$rect)
-	$w = $rect.Right - $rect.Left
-	$h = $rect.Bottom - $rect.Top
-	$x = ($Global:area.Width - $w) / 2
-	$y = ($Global:area.Height - $h) / 2
-	$null = [Window]::MoveWindow($hwnd, $x, $y, $w, $h, $true)
-	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
-}
-
-function disable-uac {
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	# if (!$lline) { $lline = 0 }
+	if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
+		if (!$lline -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $lline = 1; --$y }
+	}
+	[Console]::SetCursorPosition($x, $y)
+	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f ' ')
+	[Console]::SetCursorPosition($x, $y)
 }
 
 function defender-realtime-protection {
@@ -65,7 +55,7 @@ public static extern bool BlockInput(bool fBlockIt);
 			do {
 				Start-Sleep -Milliseconds 1500
 				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id
-			} until ($wid)
+			} until ($wid -ne '')
 			Start-Sleep -Milliseconds 1500
 			$wshell = New-Object -ComObject WScript.Shell
 			$null = $userInput::BlockInput($true)
@@ -81,19 +71,21 @@ public static extern bool BlockInput(bool fBlockIt);
 	}
 }
 
-function current-cursor-position {
-	[Alias('ccp')]
-	param(
-		[Int]$x,
-		[Int]$y
-	)
-	# if (!$lline) { $lline = 0 }
-	if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
-		if (!$lline -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $lline = 1; --$y }
+function disable-uac {
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+}
+
+function install-7zip {
+	if (!(Get-Module 7Zip4Powershell -ListAvailable)) {
+		Set-ExecutionPolicy Bypass -Force
+		$null = Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force
+		Register-PSRepository -Default -ErrorAction Ignore
+		Set-PSRepository PSGallery -InstallationPolicy Trusted
+		$null = Install-Module 7Zip4PowerShell -Force
 	}
-	[Console]::SetCursorPosition($x, $y)
-	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f ' ')
-	[Console]::SetCursorPosition($x, $y)
 }
 
 function pin-to {
@@ -132,14 +124,22 @@ function pin-to {
 	if ($kill) { Start-Sleep 3; Stop-Process -Name explorer -Force }
 }
 
-function install-7zip {
-	if (!(Get-Module 7Zip4Powershell -ListAvailable)) {
-		Set-ExecutionPolicy Bypass -Force
-		$null = Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force
-		Register-PSRepository -Default -ErrorAction Ignore
-		Set-PSRepository PSGallery -InstallationPolicy Trusted
-		$null = Install-Module 7Zip4PowerShell -Force
-	}
+function set-window {
+	param(
+		[int[]]$show = (1, 9)
+	)
+	$ErrorActionPreference = 'SilentlyContinue'
+	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$PID'").ParentProcessId
+	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
+	if (!$hwnd) { $hwnd = (Get-Process -Id $pid).MainWindowHandle }
+	$rect = New-Object RECT
+	$null = [Window]::GetWindowRect($hwnd, [ref]$rect)
+	$w = $rect.Right - $rect.Left
+	$h = $rect.Bottom - $rect.Top
+	$x = ($Global:area.Width - $w) / 2
+	$y = ($Global:area.Height - $h) / 2
+	$null = [Window]::MoveWindow($hwnd, $x, $y, $w, $h, $true)
+	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
 }
 
 disable-uac
