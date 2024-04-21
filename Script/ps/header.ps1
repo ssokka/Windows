@@ -50,12 +50,11 @@ public static extern bool BlockInput(bool fBlockIt);
 	Set-MpPreference -SubmitSamplesConsent NeverSend
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
-		while($true) {
+		do {
 			explorer windowsdefender://ThreatSettings
 			do {
 				Start-Sleep -Milliseconds 1500
-				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id
-			} until ($wid -ne '')
+			} until ((Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id)
 			Start-Sleep -Milliseconds 1500
 			$wshell = New-Object -ComObject WScript.Shell
 			$null = $userInput::BlockInput($true)
@@ -63,11 +62,8 @@ public static extern bool BlockInput(bool fBlockIt);
 			$wshell.SendKeys(' ')
 			$null = $userInput::BlockInput($false)
 			Start-Sleep -Milliseconds 1500
-			if ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status) {
-				Stop-Process $wid
-				break
-			}
-		}
+		} until ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status)
+		Stop-Process -Id (Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id -ErrorAction Ignore
 	}
 }
 
