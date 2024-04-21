@@ -140,5 +140,5 @@ function install-7zip {
 	}
 }
 
-set-window
 disable-uac
+set-window
