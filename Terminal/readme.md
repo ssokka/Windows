@@ -20,6 +20,7 @@ wt powershell Invoke-Expression ([Net.WebClient]::new()).DownloadString('%_url%'
   창 애니메이션 : 끔
 > 기본값
   > 모양
+    글꼴 : Consolas
     글꼴 크기 : 10
   > 고급
     텍스트 앤티앨리어싱 : ClearType
