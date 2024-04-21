@@ -15,7 +15,7 @@ try {
 		$exec = 'restore.exe'
 		$null = New-Item "$path" -ItemType Directory -ErrorAction Ignore
 		install-7zip
- 		drp $false
+ 		ddr $false
 		Start-BitsTransfer "$site/$file" "$path\$file"
 		Write-Host -NoNewline '암호: '
 		$lline = 0
@@ -27,7 +27,7 @@ try {
 		Expand-7Zip "$path\$file" "$path" -SecurePassword $pass
 		Start-Process -NoNewWindow -Wait "$path\$exec" '/activate'
 		Remove-Item "$path" -Force -ErrorAction Ignore
-		drp $true
+		ddr $true
 	}
 	("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
 	Write-Host -ForegroundColor Green "`n### 완료"
