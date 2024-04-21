@@ -26,7 +26,7 @@ try {
 		}
 		Expand-7Zip "$path\$file" "$path" -SecurePassword $pass
 		Start-Process -NoNewWindow -Wait "$path\$exec" '/activate'
-		Remove-Item "$path" -Force -ErrorAction Ignore
+		Remove-Item "$path" -Recurse -Force -ErrorAction Ignore
 		ddr $true
 	}
 	("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
