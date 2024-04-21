@@ -53,16 +53,16 @@ public static extern bool BlockInput(bool fBlockIt);
 		do {
 			explorer windowsdefender://ThreatSettings
 			do {
-				Start-Sleep 2
-				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id
+				Start-Sleep -Milliseconds 1500
+				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -like "Windows *" -and $_.ProcessName -eq "ApplicationFrameHost"}).Id
 			} until ($wid)
-			Start-Sleep 2
+			Start-Sleep -Milliseconds 1500
 			$wshell = New-Object -ComObject WScript.Shell
 			$null = $userInput::BlockInput($true)
 			$null = $wshell.AppActivate($wid)
 			$wshell.SendKeys(' ')
 			$null = $userInput::BlockInput($false)
-			Start-Sleep 2
+			Start-Sleep -Milliseconds 1500
 		} until ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status)
 		Stop-Process -Id $wid -ErrorAction Ignore
 	}
