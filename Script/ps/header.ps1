@@ -1,4 +1,6 @@
-﻿Add-Type @'
+$global:temp = "$Env:Temp\Download"
+
+Add-Type @'
 using System;
 using System.Runtime.InteropServices;
 public class Window {
@@ -55,7 +57,7 @@ public static extern bool BlockInput(bool fBlockIt);
 '@
 	Set-MpPreference -MAPSReporting Disable
 	Set-MpPreference -SubmitSamplesConsent NeverSend
-	Add-MpPreference -ExclusionPath "$Env:TEMP\Download" -Force
+	Add-MpPreference -ExclusionPath "$global:temp" -Force
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 		while($true) {
@@ -63,12 +65,12 @@ public static extern bool BlockInput(bool fBlockIt);
 			do {
 				Start-Sleep -Milliseconds 1500
 				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -eq "Windows 보안"}).Id
-			} until ($wid -ne '')
+			} until ($wid)
 			Start-Sleep -Milliseconds 1500
 			$wshell = New-Object -ComObject WScript.Shell
 			$null = $userInput::BlockInput($true)
 			$null = $wshell.AppActivate($wid)
-			$wshell.SendKeys(" ")
+			$wshell.SendKeys(' ')
 			$null = $userInput::BlockInput($false)
 			Start-Sleep -Milliseconds 1500
 			if ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status) {
@@ -116,7 +118,7 @@ function pin-to {
 	$glnk = "$pdir\$guid.lnk"
 	$nlnk = "$pdir\$name.lnk"
 	if (!(Test-Path "$Env:Temp\$exec")) { Start-BitsTransfer "https://github.com/ssokka/Windows/raw/master/Tool/$exec" "$Env:Temp\$exec" }
-	$null = New-Item $temp -ItemType File -Force
+	$null = New-Item "$temp" -ItemType File -Force
 	Start-Process -Wait -WindowStyle Hidden "$Env:Temp\$exec" "`"$temp`" $type"
 	do { Start-Sleep 1 } until (Test-Path $glnk)
 	Start-Sleep 5
