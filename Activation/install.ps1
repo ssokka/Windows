@@ -25,7 +25,7 @@ try {
 			Set-PSRepository PSGallery -InstallationPolicy Trusted
 			$null = Install-Module 7Zip4PowerShell -Force
 		}
- 		drtp $false
+ 		drp $false
 		Start-BitsTransfer "$site/$file" $zip
 		Write-Host -NoNewline '암호: '
 		$lline = 0
@@ -37,7 +37,7 @@ try {
 		Expand-7Zip $zip $dir -SecurePassword $pass
 		Start-Process -NoNewWindow -Wait $exe '/activate'
 		($zip, $exe) | % { Remove-Item $_ -Force -ErrorAction Ignore }
-		drtp $true
+		drp $true
 	}
 	
 	("$(cscript /Nologo "$Env:WinDir\System32\slmgr.vbs" /xpr)" -replace '.*?(컴퓨터.*)','$1').Trim()
