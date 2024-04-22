@@ -31,15 +31,15 @@ try {
 		$wshell.SendKeys('{TAB}'); Start-Sleep -Milliseconds 100
 		$wshell.SendKeys('{HOME}'); Start-Sleep -Milliseconds 100
 		
-		Write-Host 'V 바탕화면의 아이콘 레이블에 그림자 사용'
+		Write-Host '   V 바탕화면의 아이콘 레이블에 그림자 사용'
 		1..6 | ForEach-Object {	$wshell.SendKeys('{DOWN}'); Start-Sleep -Milliseconds 100 }
 		$wshell.SendKeys(' '); Start-Sleep -Milliseconds 100
 		
-		Write-Host 'V 아이콘 대신 미리 보기로 표시'
+		Write-Host '   V 아이콘 대신 미리 보기로 표시'
 		$wshell.SendKeys('{DOWN}'); Start-Sleep -Milliseconds 100
 		$wshell.SendKeys(' '); Start-Sleep -Milliseconds 100
 		
-		Write-Host 'V 화면 글꼴의 가장자리 다듬기'
+		Write-Host '   V 화면 글꼴의 가장자리 다듬기'
 		$wshell.SendKeys('{END}'); Start-Sleep -Milliseconds 100
 		$wshell.SendKeys(' '); Start-Sleep -Milliseconds 100
 		
