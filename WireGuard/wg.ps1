@@ -117,7 +117,7 @@ function wg-on {
 		wg-smb
 	}
 	Write-Host
-	foreach ($i in 105..1) { Write-Host -NoNewline "`r${i}초 후 자동 닫힘"; Start-Sleep 1 }
+	foreach ($i in 5..1) { Write-Host -NoNewline "`r${i}초 후 자동 닫힘"; Start-Sleep 1 }
 }
 
 function wg-off {
