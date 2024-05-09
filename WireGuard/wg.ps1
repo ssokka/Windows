@@ -12,6 +12,8 @@ public class Window {
 	[DllImport("user32.dll")]
 	public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 	[DllImport("user32.dll")]
+	public static extern bool SetForegroundWindow(IntPtr hWnd);   
+	[DllImport("user32.dll")]
 	public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);    
 	[DllImport("user32.dll")]
 	public extern static bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
@@ -27,8 +29,9 @@ Add-Type -AssemblyName System.Windows.Forms
 
 function set-window {
 	param(
-		[int[]]$show = (1, 4, 9)
+		[int[]]$show = (1, 9)
 	)
+	$ErrorActionPreference = 'SilentlyContinue'
 	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$PID'").ParentProcessId
 	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
 	if (!$hwnd) { $hwnd = (Get-Process -Id $pid).MainWindowHandle }
@@ -40,6 +43,7 @@ function set-window {
 	$x = ($area.Width - $w) / 2
 	$y = ($area.Height - $h) / 2
 	$null = [Window]::MoveWindow($hwnd, $x, $y, $w, $h, $true)
+	$null = [Window]::SetForegroundWindow($hwnd)
 	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
 }
 
