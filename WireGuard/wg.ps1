@@ -93,7 +93,7 @@ function wg-smb {
 	($smb | Sort-Object -Property LocalPath | Out-String).Trim("`r","`n")
 }
 
-function wg-on {
+function on {
 	if (!(Test-Path $exec)) { exit }
 	wg-service
 	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
@@ -109,7 +109,7 @@ function wg-on {
 			} until ((Get-Service "$_").Status -eq 'Running')
 		}
 	}
-	$file = "$PSScriptRoot\wg-drive.cmd"
+	$file = "$PSScriptRoot\drive.cmd"
 	if (Test-Path $file) {
 		Write-Host -ForegroundColor Blue "`n# 네트워크 드라이브 연결"
 		Start-Process -Wait -NoNewWindow $file
@@ -120,7 +120,7 @@ function wg-on {
 	foreach ($i in 5..1) { Write-Host -NoNewline "`r${i}초 후 자동 닫힘"; Start-Sleep 1 }
 }
 
-function wg-off {
+function off {
 	if (!(Test-Path $exec)) { exit }
 	set-window
 	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
@@ -149,7 +149,7 @@ function wg-off {
 	foreach ($i in 5..1) { Write-Host -NoNewline "`r${i}초 후 자동 닫힘"; Start-Sleep 1 }
 }
 
-function wg-drive {
+function drive {
 	Param(
 		[String]$ndrv,
 		[String]$ipad,
