@@ -27,7 +27,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 function set-window {
 	param(
-		[int[]]$show = (1, 9)
+		[int[]]$show = (1, 4, 9)
 	)
 	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$PID'").ParentProcessId
 	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
@@ -90,7 +90,7 @@ function wg-smb {
 			Label = Get-ItemPropertyValue -Path $key -Name '_LabelFromReg' -ErrorAction SilentlyContinue
 		}
 	}
-	($smb | Sort-Object -Property LocalPath | Out-String).Trim("`r","`n")
+if ($smb) { ($smb | Sort-Object -Property LocalPath | Out-String).Trim("`r","`n") }
 }
 
 function on {
