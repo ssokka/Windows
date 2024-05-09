@@ -3,10 +3,7 @@ $path = "$Env:ProgramFiles\$name"
 $exec = "$path\$name.exe"
 $data = Get-ChildItem "$path\Data\Configurations\*.dpapi"
 
-$host.ui.RawUI.WindowTitle = $name
-Write-Host -ForegroundColor Green "`n### $name"
-
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'SilentlyContinue'
 
 Add-Type @'
 using System;
@@ -48,7 +45,10 @@ function set-window {
 
 function wg-service {
 	if (!(Test-Path $exec)) { exit }
+	set-window
 	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
+	$host.ui.RawUI.WindowTitle = "$name"
+	Write-Host -ForegroundColor Green "`n### $name"
 	Write-Host -ForegroundColor Blue "`n# 서비스 확인"
 	
 	$sname = 'WireGuardManager'
@@ -79,8 +79,23 @@ function wg-service {
 	}
 }
 
+function wg-smb {
+	$reg = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2'
+	$smb = foreach($row in Get-SmbMapping){
+		$key = Join-Path -Path $reg -ChildPath ($row.RemotePath -replace '\\', '#')
+		[pscustomobject]@{
+			RemotePath = $row.RemotePath
+			LocalPath = $row.LocalPath
+			Status = $row.Status
+			Label = Get-ItemPropertyValue -Path $key -Name '_LabelFromReg' -ErrorAction SilentlyContinue
+		}
+	}
+	($smb | Sort-Object -Property LocalPath | Out-String).Trim("`r","`n")
+}
+
 function wg-on {
 	if (!(Test-Path $exec)) { exit }
+	wg-service
 	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
 	$host.ui.RawUI.WindowTitle = "$name On"
 	Write-Host -ForegroundColor Green "`n### $name On"
@@ -97,21 +112,23 @@ function wg-on {
 	$file = "$PSScriptRoot\wg-drive.cmd"
 	if (Test-Path $file) {
 		Write-Host -ForegroundColor Blue "`n# 네트워크 드라이브 연결"
-		Start-Process -Wait -WindowStyle Hidden $file
-		((Get-SmbMapping | Sort-Object | Format-Table -Force | Out-String) -replace '(?im)^\r\n','').Trim()
+		Start-Process -Wait -NoNewWindow $file
+		#(Get-SmbMapping | Sort-Object | Format-Table -Force | Out-String).Trim("`r","`n")
+		wg-smb
 	}
 	Write-Host
-	foreach ($i in 5..1) { Write-Host -NoNewline "`r${i}초 후 자동 닫힘"; Start-Sleep 1 }
+	foreach ($i in 105..1) { Write-Host -NoNewline "`r${i}초 후 자동 닫힘"; Start-Sleep 1 }
 }
 
 function wg-off {
 	if (!(Test-Path $exec)) { exit }
+	set-window
 	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
 	$host.ui.RawUI.WindowTitle = "$name Off"
 	Write-Host -ForegroundColor Green "`n### $name Off"
 	Write-Host -ForegroundColor Blue "`n# 네트워크 드라이브 연결 끊기"
-	(Get-NetIPAddress -InterfaceAlias "wg*").IPAddress -replace '(.*\.).*', '$1' | ForEach-Object { (Get-SmbMapping -RemotePath "*$_*").LocalPath } | Sort-Object | ForEach-Object { $null = net use $_ /delete /y 2>$null }
-	Get-SmbMapping
+	(Get-NetIPAddress -InterfaceAlias "wg*").IPAddress -replace '(.*\.).*', '$1' | ForEach-Object { (Get-SmbMapping -RemotePath "*$_*").LocalPath } | Sort-Object | ForEach-Object { if ($_) { $null = net use $_ /delete /y 2>$null } }
+	wg-smb
 	Write-Host -ForegroundColor Blue "`n# 서비스 중지"
 	(Get-Service -Name "WireGuardTunnel`$*" -ErrorAction Ignore).Name | ForEach-Object {
 		if($_) {
@@ -142,6 +159,7 @@ function wg-drive {
 		[String]$name
 	)
 	if (!(Test-Path $exec)) { exit }
+	set-window
 	Write-Host -ForegroundColor Green "`n### $name 네트워크 드라이브 연결"
 	do {
 		Start-Sleep -Milliseconds 250
@@ -162,6 +180,3 @@ function wg-drive {
 		Write-Host -NoNewline "`n아무 키나 누르십시오..."; Read-Host
 	}
 }
-
-set-window
-wg-service
