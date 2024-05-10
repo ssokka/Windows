@@ -109,7 +109,6 @@ try {
 			pt start "WG-On" "$path\wg.cmd" on "$path\$name.exe"
 			pt start "WG-Off" "$path\wg.cmd" off "$path\$name.exe"
 		}
-		exit
 		Write-Host "`n# 실행" -ForegroundColor Blue
 		Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction Ignore
 		Register-ScheduledTask -TaskName $name -Action (New-ScheduledTaskAction -Execute "$path\wg.cmd" -Argument "on") -Force | Out-Null
