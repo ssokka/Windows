@@ -27,6 +27,7 @@ try {
 		Write-Host "`n# 설치" -ForegroundColor Blue
 		Start-Process -Wait -FilePath "$Env:TEMP\$sexe"
 		Remove-Item -Path "$Env:TEMP\$sexe" -Force -ErrorAction Ignore
+		set-window
 	}
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue

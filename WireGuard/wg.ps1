@@ -1,7 +1,6 @@
 ﻿$name = "WireGuard"
 $path = "$Env:ProgramFiles\$name"
 $exec = "$path\$name.exe"
-$data = Get-ChildItem "$path\Data\Configurations\*.dpapi"
 
 $ErrorActionPreference = "SilentlyContinue"
 
@@ -79,7 +78,7 @@ function service {
 		Start-Sleep -Milliseconds 250
 	} until ((Get-Service -Name $sname).Status -eq "Running")
 	
-	$data | ForEach-Object {
+	Get-ChildItem "$path\Data\Configurations\*.dpapi" | ForEach-Object {
 		if($_) {
 			$sname = "WireGuardTunnel`$$($_ -replace '.*\\(.*)\.conf.*', '$1')"
 			if (!(Get-Service -Name $sname -ErrorAction Ignore)) {
