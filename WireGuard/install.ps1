@@ -107,6 +107,7 @@ try {
 		if (Test-Path -Path "$path\wg.cmd") {
 			Write-Host "`n# 시작 화면에 고정" -ForegroundColor Blue
 			pt start "WG-On" "$path\wg.cmd" on "$path\$name.exe"
+			Start-Sleep -Seconds 5
 			pt start "WG-Off" "$path\wg.cmd" off "$path\$name.exe"
 		}
 		Write-Host "`n# 실행" -ForegroundColor Blue
@@ -115,7 +116,7 @@ try {
 		Start-ScheduledTask -TaskName $name | Out-Null
 		Unregister-ScheduledTask -TaskName $name -Confirm:$false
 		if (Test-Path("$path\drive.cmd")) {
-			Start-Sleep -Seconds 3
+			Start-Sleep -Seconds 5
 			do {
 				Start-Sleep -Milliseconds 250
 			} until (!(Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }))
