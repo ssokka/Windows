@@ -63,9 +63,6 @@ if ($smb) { ($smb | Sort-Object -Property LocalPath | Out-String).Trim("`r","`n"
 function service {
 	if (!(Test-Path -Path $exec)) { exit }
 	set-window
-	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
-	$host.ui.RawUI.WindowTitle = "$name"
-	Write-Host "`n### $name" -ForegroundColor Green
 	Write-Host "`n# 서비스 확인" -ForegroundColor Blue
 	
 	$sname = "WireGuardManager"
@@ -98,10 +95,10 @@ function service {
 
 function on {
 	if (!(Test-Path -Path $exec)) { exit }
-	service
 	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
 	$host.ui.RawUI.WindowTitle = "$name On"
 	Write-Host "`n### $name On" -ForegroundColor Green
+	service
 	Write-Host "`n# 서비스 시작" -ForegroundColor Blue
 	(Get-Service -Name "WireGuardTunnel`$*" -ErrorAction Ignore).Name | ForEach-Object {
 		if($_) {
@@ -126,7 +123,6 @@ function on {
 function off {
 	if (!(Test-Path -Path $exec)) { exit }
 	set-window
-	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
 	$host.ui.RawUI.WindowTitle = "$name Off"
 	Write-Host "`n### $name Off" -ForegroundColor Green
 	Write-Host "`n# 네트워크 드라이브 연결 끊기" -ForegroundColor Blue

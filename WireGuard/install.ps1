@@ -78,7 +78,7 @@ try {
 	switch($read) {
 		{ 1, 2 -eq $_ } {
 			Write-Host "`n# IP" -ForegroundColor Blue
-			Write-Host "[ 2~10] 서버`n[11~20] 사용자 #1`n[21~30] 사용자 #2`n[31~100] 임시"
+			Write-Host "[ 2~10] 서버`n[11~20] 사용자 #1`n[21~30] 사용자 #2"
 			Write-Host "선택: " -NoNewline
 			$Global:LastConsoleLine = 0
 			while ($true) {
@@ -107,7 +107,6 @@ try {
 		if (Test-Path -Path "$path\wg.cmd") {
 			Write-Host "`n# 시작 화면에 고정" -ForegroundColor Blue
 			pt start "WG-On" "$path\wg.cmd" on "$path\$name.exe"
-			Start-Sleep -Seconds 5
 			pt start "WG-Off" "$path\wg.cmd" off "$path\$name.exe"
 		}
 		Write-Host "`n# 실행" -ForegroundColor Blue
@@ -119,7 +118,11 @@ try {
 			Start-Sleep -Seconds 5
 			do {
 				Start-Sleep -Milliseconds 250
-			} until (!(Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }))
+				$dpid = (Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }).Id
+				$ppid = (Get-WmiObject Win32_Process -Filter "processid='$dpid'").ParentProcessId
+				$hwnd = (Get-Process -Id $ppid).MainWindowHandle
+				if (!$hwnd) { $hwnd = (Get-Process -Id $dpid).MainWindowHandle }
+			} until (!$dpid)
 			set-window
 		}
 	}
