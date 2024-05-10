@@ -1,11 +1,11 @@
-$global:temp = "$Env:Temp\Download"
-
 Add-Type @'
 using System;
 using System.Runtime.InteropServices;
 public class Window {
 	[DllImport("user32.dll")]
 	public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+	[DllImport("user32.dll")]
+	public static extern bool SetForegroundWindow(IntPtr hWnd);   
 	[DllImport("user32.dll")]
 	public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);    
 	[DllImport("user32.dll")]
@@ -19,7 +19,6 @@ public struct RECT {
 }
 '@
 Add-Type -AssemblyName System.Windows.Forms
-$area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
 
 $code = @'
 [DllImport("user32.dll")]
@@ -27,15 +26,16 @@ public static extern bool BlockInput(bool fBlockIt);
 '@
 $userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
 
+$global:temp = "$Env:Temp\Download"
+
 function current-cursor-position {
-	[Alias('ccp')]
+	[Alias("ccp")]
 	param(
 		[Int]$x,
 		[Int]$y
 	)
-	# if (!$lline) { $lline = 0 }
-	if ($Env:WT_SESSION -or $Env:OS -ne 'Windows_NT') {
-		if (!$lline -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $lline = 1; --$y }
+	if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") {
+		if (!$Global:LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $Global:LastConsoleLine = 1; --$y }
 	}
 	[Console]::SetCursorPosition($x, $y)
 	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f ' ')
@@ -43,7 +43,7 @@ function current-cursor-position {
 }
 
 function disable-defender-realtime {
-	[Alias('ddr')]
+	[Alias("ddr")]
 	param(
 		[bool]$status = $true
 	)
@@ -58,10 +58,10 @@ function disable-defender-realtime {
 				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -like "Windows *" -and $_.ProcessName -eq "ApplicationFrameHost"}).Id
 			} until ($wid)
 			Start-Sleep -Milliseconds 1500
-			$wshell = New-Object -ComObject WScript.Shell
+			$shell = New-Object -ComObject WScript.Shell
 			$null = $userInput::BlockInput($true)
-			$null = $wshell.AppActivate($wid)
-			$wshell.SendKeys(' ')
+			$null = $shell.AppActivate($wid)
+			$shell.SendKeys(' ')
 			$null = $userInput::BlockInput($false)
 			Start-Sleep -Milliseconds 1500
 		} until ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status)
@@ -70,10 +70,10 @@ function disable-defender-realtime {
 }
 
 function disable-uac {
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden reg 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath reg.exe -ArgumentList 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath reg.exe -ArgumentList 'add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath reg.exe -ArgumentList 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f'
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath reg.exe -ArgumentList 'add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f'
 }
 
 function install-7zip {
@@ -90,36 +90,38 @@ function pin-to {
 	[Alias('pt')]
 	param(
 		[string]$type,
+		[string]$name,
 		[string]$path,
-		[string]$icon,
+		[string]$argu = $null,
+		[string]$icon = $null,
 		[bool]$kill = $false
 	)
 	$ErrorActionPreference = 'Stop'
 	switch ($type) {
-		task { $type = '5386'; $pdir = "$Env:AppData\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" }
-		start { $type = '51201'; $pdir = "$Env:AppData\Microsoft\Windows\Start Menu\Programs" }
+		task { $type, $pdir = '5386', "$Env:AppData\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" }
+		start { $type, $pdir = '51201', "$Env:AppData\Microsoft\Windows\Start Menu\Programs" }
 	}
-	$name = (Get-Item $path).BaseName
 	if (!$icon) { $icon = $path }
-	Write-Host "- $name"
 	$exec = 'syspin.exe'
 	$guid = ([System.Guid]::NewGuid()).ToString()
 	$temp = "$Env:Temp\$guid.exe"
 	$glnk = "$pdir\$guid.lnk"
 	$nlnk = "$pdir\$name.lnk"
-	if (!(Test-Path "$Env:Temp\$exec")) { Start-BitsTransfer "https://github.com/ssokka/Windows/raw/master/Tool/$exec" "$Env:Temp\$exec" }
-	$null = New-Item "$temp" -ItemType File -Force
-	Start-Process -Wait -WindowStyle Hidden "$Env:Temp\$exec" "`"$temp`" $type"
-	do { Start-Sleep 1 } until (Test-Path $glnk)
-	Start-Sleep 5
-	$owsc = (New-Object -ComObject WScript.Shell).CreateShortcut($glnk)
-	$owsc.TargetPath = $path
-	$owsc.IconLocation = $icon
-	$owsc.Save()
-	Remove-Item $nlnk -Force -ErrorAction Ignore
-	Rename-Item $glnk $nlnk -Force
-	Remove-Item $temp -Force
-	if ($kill) { Start-Sleep 3; Stop-Process -Name explorer -Force }
+	Write-Host $name
+	if (!(Test-Path -Path "$Env:Temp\$exec")) { Start-BitsTransfer -Source "https://github.com/ssokka/Windows/raw/master/Tool/$exec" -Destination "$Env:Temp\$exec" }
+	$null = New-Item -Path $temp -ItemType File -Force
+	Start-Process -FilePath "$Env:Temp\$exec" -ArgumentList "`"$temp`" $type" -Wait -WindowStyle Hidden
+	do { Start-Sleep -Milliseconds 250 } until (Test-Path -Path $glnk)
+	Start-Sleep -Seconds 5
+	$shell = (New-Object -ComObject WScript.Shell).CreateShortcut($glnk)
+	$shell.TargetPath = $path
+	$shell.Arguments = $argu
+	$shell.IconLocation = $icon
+	$shell.Save()
+	Remove-Item -Path $nlnk -Force -ErrorAction Ignore
+	Remove-Item -Path $temp -Force
+	Rename-Item -Path $glnk -NewName $nlnk -Force
+	if ($kill) { Start-Sleep -Seconds 3; Stop-Process -Name explorer -Force }
 }
 
 function set-window {
@@ -134,9 +136,11 @@ function set-window {
 	$null = [Window]::GetWindowRect($hwnd, [ref]$rect)
 	$w = $rect.Right - $rect.Left
 	$h = $rect.Bottom - $rect.Top
-	$x = ($Global:area.Width - $w) / 2
-	$y = ($Global:area.Height - $h) / 2
+	$area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
+	$x = ($area.Width - $w) / 2
+	$y = ($area.Height - $h) / 2
 	$null = [Window]::MoveWindow($hwnd, $x, $y, $w, $h, $true)
+	$null = [Window]::SetForegroundWindow($hwnd)
 	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
 }
 
