@@ -45,6 +45,7 @@ function set-window {
 	$null = [Window]::SetForegroundWindow($hwnd)
 	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
 }
+
 function smb {
 	$reg = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2"
 	$smb = foreach($row in Get-SmbMapping){
