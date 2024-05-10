@@ -121,6 +121,7 @@ function pin-to {
 	Remove-Item -Path $nlnk -Force -ErrorAction Ignore
 	Remove-Item -Path $temp -Force
 	Rename-Item -Path $glnk -NewName $nlnk -Force
+	Start-Sleep -Seconds 3
 	if ($kill) { Start-Sleep -Seconds 3; Stop-Process -Name explorer -Force }
 }
 
