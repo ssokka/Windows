@@ -1,4 +1,4 @@
-﻿Invoke-Expression ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1")
+Invoke-Expression ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1")
 $ErrorActionPreference = "Stop"
 
 try {
@@ -119,6 +119,7 @@ try {
 			do {
 				Start-Sleep -Milliseconds 250
 			} until (!(Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }))
+			set-window
 		}
 	}
 	
