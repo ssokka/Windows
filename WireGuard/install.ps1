@@ -5,7 +5,6 @@ try {
 	$name = "WireGuard"
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\$name.exe"
-	$data = Get-ChildItem "$path\Data\Configurations\*.dpapi"
 	
 	$site = "https://download.wireguard.com/windows-client"
 	$sexe = "wireguard-installer.exe"
