@@ -119,10 +119,12 @@ try {
 			Start-Sleep -Seconds 5
 			do {
 				Start-Sleep -Milliseconds 250
-				$dpid = (Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }).Id -ErrorAction Ignore
-				$ppid = (Get-WmiObject Win32_Process -Filter "processid='$dpid'").ParentProcessId -ErrorAction Ignore
-				$hwnd = (Get-Process -Id $ppid).MainWindowHandle -ErrorAction Ignore
-				if (!$hwnd) { $hwnd = (Get-Process -Id $dpid).MainWindowHandle -ErrorAction Ignore }
+				$dpid = (Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }).Id
+				if ($dpid) {
+					$ppid = (Get-WmiObject Win32_Process -Filter "processid='$dpid'").ParentProcessId
+					$hwnd = (Get-Process -Id $ppid).MainWindowHandle
+					if (!$hwnd) { $hwnd = (Get-Process -Id $dpid).MainWindowHandle }
+				}
 			} until (!$dpid)
 			set-window
 		}
