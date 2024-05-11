@@ -60,11 +60,15 @@ function smb {
 if ($smb) { ($smb | Sort-Object -Property LocalPath | Out-String).Trim("`r","`n") }
 }
 
-function service {
+function on {
 	if (!(Test-Path -Path $exec)) { exit }
 	set-window
-	Write-Host "`n# 서비스 확인" -ForegroundColor Blue
 	
+	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
+	$host.ui.RawUI.WindowTitle = "$name On"
+	Write-Host "`n### $name On" -ForegroundColor Green
+	
+	Write-Host "`n# 서비스 확인" -ForegroundColor Blue
 	$sname = "WireGuardManager"
 	if (!(Get-Service -Name $sname -ErrorAction Ignore)) {
 		Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath $exec -ArgumentList "/installmanagerservice"
@@ -78,12 +82,11 @@ function service {
 	do {
 		Start-Sleep -Milliseconds 250
 	} until ((Get-Service -Name $sname).Status -eq "Running")
-	
 	Get-ChildItem "$path\Data\Configurations\*.dpapi" | ForEach-Object {
 		if($_) {
-			$sname = "WireGuardTunnel`$$($_ -replace '.*\\(.*)\.conf.*', '$1')"
+			$sname = "WireGuardTunnel`$$($_ -replace '.*\\(.*)\.conf.*','$1')"
 			if (!(Get-Service -Name $sname -ErrorAction Ignore)) {
-				Start-Process -FilePath $exec -ArgumentList "/installtunnelservice `"$_`"" -Verb RunAs -Wait -WindowStyle Hidden
+				Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath $exec -ArgumentList "/installtunnelservice `"$_`""
 				do {
 					Start-Sleep -Milliseconds 250
 				} until (Get-Service -Name $sname)
@@ -91,14 +94,7 @@ function service {
 			Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath sc.exe -ArgumentList "failure $sname reset= 0 actions= restart/0/restart/0/restart/0"
 		}
 	}
-}
-
-function on {
-	if (!(Test-Path -Path $exec)) { exit }
-	#$host.ui.RawUI.WindowTitle = $(Get-PSCallStack)[0].FunctionName.ToUpper()
-	$host.ui.RawUI.WindowTitle = "$name On"
-	Write-Host "`n### $name On" -ForegroundColor Green
-	service
+	
 	Write-Host "`n# 서비스 시작" -ForegroundColor Blue
 	(Get-Service -Name "WireGuardTunnel`$*" -ErrorAction Ignore).Name | ForEach-Object {
 		if($_) {
@@ -109,6 +105,7 @@ function on {
 			} until ((Get-Service -Name "$_").Status -eq "Running")
 		}
 	}
+	
 	$file = "$PSScriptRoot\drive.cmd"
 	if (Test-Path -Path $file) {
 		Write-Host "`n# 네트워크 드라이브 연결" -ForegroundColor Blue
@@ -116,6 +113,7 @@ function on {
 		#(Get-SmbMapping | Sort-Object | Format-Table -Force | Out-String).Trim("`r","`n")
 		smb
 	}
+	
 	Write-Host
 	foreach ($i in 5..1) { Write-Host "`r${i}초 후 자동 닫힘" -NoNewline; Start-Sleep 1 }
 }
