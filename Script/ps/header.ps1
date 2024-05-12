@@ -1,4 +1,4 @@
-$Global:Temp = "$Env:Temp\Download"
+﻿$Global:Temp = "$Env:Temp\Download"
 $null = New-Item -Path $Global:Temp -ItemType Directory -Force
 $userInput = Add-Type -MemberDefinition '[DllImport("user32.dll")] public static extern bool BlockInput(bool fBlockIt);' -Name UserInput -Namespace UserInput -PassThru
 
