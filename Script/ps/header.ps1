@@ -1,32 +1,6 @@
-Add-Type @'
-using System;
-using System.Runtime.InteropServices;
-public class Window {
-	[DllImport("user32.dll")]
-	public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-	[DllImport("user32.dll")]
-	public static extern bool SetForegroundWindow(IntPtr hWnd);   
-	[DllImport("user32.dll")]
-	public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);    
-	[DllImport("user32.dll")]
-	public extern static bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
-}
-public struct RECT {
-	public int Left;
-	public int Top;
-	public int Right;
-	public int Bottom;
-}
-'@
-Add-Type -AssemblyName System.Windows.Forms
-
-$code = @'
-[DllImport("user32.dll")]
-public static extern bool BlockInput(bool fBlockIt);
-'@
-$userInput = Add-Type -MemberDefinition $code -Name UserInput -Namespace UserInput -PassThru
-
-$global:temp = "$Env:Temp\Download"
+$Global:Temp = "$Env:Temp\Download"
+$null = New-Item -Path $Global:Temp -ItemType Directory -Force
+$userInput = Add-Type -MemberDefinition '[DllImport("user32.dll")] public static extern bool BlockInput(bool fBlockIt);' -Name UserInput -Namespace UserInput -PassThru
 
 function current-cursor-position {
 	[Alias("ccp")]
@@ -35,10 +9,10 @@ function current-cursor-position {
 		[Int]$y
 	)
 	if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") {
-		if (!$Global:LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $Global:LastConsoleLine = 1; --$y }
+		if (!$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
 	}
 	[Console]::SetCursorPosition($x, $y)
-	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f ' ')
+	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f " ")
 	[Console]::SetCursorPosition($x, $y)
 }
 
@@ -47,7 +21,7 @@ function disable-defender-realtime {
 	param(
 		[bool]$status = $true
 	)
-	Add-MpPreference -ExclusionPath "$global:temp" -Force
+	Add-MpPreference -ExclusionPath $Global:Temp -Force
 	Set-MpPreference -MAPSReporting Disable
 	Set-MpPreference -SubmitSamplesConsent NeverSend
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
@@ -96,13 +70,13 @@ function pin-to {
 		[string]$icon = $null,
 		[bool]$kill = $false
 	)
-	$ErrorActionPreference = 'Stop'
+	$ErrorActionPreference = "Stop"
 	switch ($type) {
-		task { $type, $pdir = '5386', "$Env:AppData\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" }
-		start { $type, $pdir = '51201', "$Env:AppData\Microsoft\Windows\Start Menu\Programs" }
+		task { $type, $pdir = "5386", "$Env:AppData\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" }
+		start { $type, $pdir = "51201", "$Env:AppData\Microsoft\Windows\Start Menu\Programs" }
 	}
 	if (!$icon) { $icon = $path }
-	$exec = 'syspin.exe'
+	$exec = "syspin.exe"
 	$guid = ([System.Guid]::NewGuid()).ToString()
 	$temp = "$Env:Temp\$guid.exe"
 	$glnk = "$pdir\$guid.lnk"
@@ -121,29 +95,23 @@ function pin-to {
 	Remove-Item -Path $nlnk -Force -ErrorAction Ignore
 	Remove-Item -Path $temp -Force
 	Rename-Item -Path $glnk -NewName $nlnk -Force
-	Start-Sleep -Seconds 3
+	Start-Sleep -Seconds 1
 	if ($kill) { Start-Sleep -Seconds 3; Stop-Process -Name explorer -Force }
 }
 
 function set-window {
 	param(
-		[int[]]$show = (1, 9)
+		[int]$cpid = $PID
 	)
-	$ErrorActionPreference = 'SilentlyContinue'
-	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$PID'").ParentProcessId
+	$ErrorActionPreference = "SilentlyContinue"
+	$ncmd = "nircmd.exe"
+	if (!(Test-Path -Path "$Env:Temp\$ncmd")) { Start-BitsTransfer -Source "https://github.com/ssokka/Windows/raw/master/Tool/$ncmd" -Destination "$Env:Temp\$ncmd" }
+	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$cpid'").ParentProcessId
 	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
-	if (!$hwnd) { $hwnd = (Get-Process -Id $pid).MainWindowHandle }
-	$rect = New-Object RECT
-	$null = [Window]::GetWindowRect($hwnd, [ref]$rect)
-	$w = $rect.Right - $rect.Left
-	$h = $rect.Bottom - $rect.Top
-	$area = ([Windows.Forms.Screen]::PrimaryScreen).WorkingArea
-	$x = ($area.Width - $w) / 2
-	$y = ($area.Height - $h) / 2
-	$null = [Window]::MoveWindow($hwnd, $x, $y, $w, $h, $true)
-	$null = [Window]::SetForegroundWindow($hwnd)
-	$show | % { $null = [Window]::ShowWindow($hwnd, $_) }
+	if (!$hwnd) { $hwnd = (Get-Process -Id $cpid).MainWindowHandle }
+	if (Test-Path -Path "$Env:Temp\$ncmd") { ("normal", "activate", "center") | ForEach-Object { & "$Env:Temp\$ncmd" win $_ handle $hwnd } }
 }
 
 disable-uac
 set-window
+$ErrorActionPreference = "Stop"
