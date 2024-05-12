@@ -1,4 +1,4 @@
-﻿Invoke-Expression ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
+﻿Invoke-Expression ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1")
 
 try {
 	$name = "WireGuard"
