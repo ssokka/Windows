@@ -82,7 +82,7 @@ try {
 	Start-BitsTransfer -Source "$gurl/$file" -Destination "$path\$file"
 	Expand-Archive -Path "$path\$file" -DestinationPath "$path" -Force
 	Remove-Item -Path "$path\$file" -Force
-	([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
+	([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
 	#$xml = [xml](Get-Content '$path\themes\$file')
 	#$node = $xml.NotepadPlus.GlobalStyles.WidgetStyle | where {$_.name -eq 'Global override'}
