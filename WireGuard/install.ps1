@@ -17,7 +17,7 @@ try {
 	Write-Host "`n# 버전" -ForegroundColor Blue
 	$cver = (Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0', '$1'
 	$wc = New-Object System.Net.WebClient
-	$wc.Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+	$wc.Headers["User-Agent"] = $UserAgent
 	$sver = $wc.DownloadString($site) -replace $spat, '$1'
 	Write-Host "현재: $cver"
 	Write-Host "최신: $sver"
