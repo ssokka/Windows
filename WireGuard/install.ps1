@@ -15,10 +15,10 @@ try {
 	Write-Host "`n### $name" -ForegroundColor Green
 	
 	Write-Host "`n# 버전" -ForegroundColor Blue
-	$cver = (Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0', '$1'
+	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0', '$1')".Trim()
 	$wc = New-Object System.Net.WebClient
 	$wc.Headers["User-Agent"] = $UserAgent
-	$sver = $wc.DownloadString($site) -replace $spat, '$1'
+	$sver = "$($wc.DownloadString($site) -replace $spat, '$1')".Trim()
 	Write-Host "현재: $cver"
 	Write-Host "최신: $sver"
 	
