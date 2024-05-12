@@ -48,4 +48,22 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
     > 설치
   > Customize Toolbar
     [v] Wrap Toolbar
+  > Explorer
+    [v] Explorer
+  > Hex-Editor
+    > Options... > Font
+      Font Name: Consolas
+      Font Size: 10
+  > NppExec
+    > Execute NppExec Script...
+      ::cmd
+      NPP_SAVE
+      "$(FULL_CURRENT_PATH)"
+      ::powershell
+      NPP_SAVE
+      powershell -NoProfile -ExecutionPolicy ByPass -File "$(FULL_CURRENT_PATH)"
+    > Change Console Font...
+      글꼴: Consolas
+    > Change Execute Script Font...
+      글꼴: Consolas
 ```
