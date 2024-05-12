@@ -1,5 +1,4 @@
-﻿Invoke-Expression ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1")
-$ErrorActionPreference = "Stop"
+﻿Invoke-Expression ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
 
 try {
 	$name = "WireGuard"
@@ -16,8 +15,10 @@ try {
 	Write-Host "`n### $name" -ForegroundColor Green
 	
 	Write-Host "`n# 버전" -ForegroundColor Blue
-	$cver = (Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0','$1'
-	$sver = (New-Object Net.WebClient).DownloadString($site) -replace $spat,'$1'
+	$cver = (Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0', '$1'
+	$wc = New-Object System.Net.WebClient
+	$wc.Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+	$sver = $wc.DownloadString($site) -replace $spat, '$1'
 	Write-Host "현재: $cver"
 	Write-Host "최신: $sver"
 	
@@ -27,10 +28,14 @@ try {
 		Write-Host "`n# 설치" -ForegroundColor Blue
 		Start-Process -Wait -FilePath "$Env:TEMP\$sexe"
 		Remove-Item -Path "$Env:TEMP\$sexe" -Force -ErrorAction Ignore
-		(Get-Process | Where-Object { $_.ProcessName -eq "wireguard" -and $_.MainWindowTitle -eq "WireGuard" }).Kill()
+		do {
+			Start-Sleep -Milliseconds 250
+		} until ($proc = Get-Process | Where-Object { $_.ProcessName -eq "wireguard" -and $_.MainWindowTitle -eq "WireGuard" })
+		$proc.Kill()
 		set-window
 	}
 	
+	set-window
 	Write-Host "`n# 설정" -ForegroundColor Blue
 	$menu = ("회사 클라이언트","개인 클라이언트","회사 서버","개인 서버","종료")
 	$menu | % { $i = 1 } {
@@ -41,7 +46,7 @@ try {
 	}
 	Write-Host "선택: " -NoNewline
 	$dread = 1
-	$Global:LastConsoleLine = 0
+	$LastConsoleLine = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 		$read = if ($nread = Read-Host) { $nread } else { $dread }
@@ -57,6 +62,7 @@ try {
 		5 { exit }
 	}
 	
+	set-window
 	Write-Host "`n# $($menu[$read-1])" -ForegroundColor Blue
 	$zip = "$Env:TEMP\$file"
 	install-7zip
@@ -64,7 +70,7 @@ try {
 	$ext = (Get-Item -Path $zip).Basename
 	$null = New-Item -Path "$Env:TEMP\$name\$ext" -ItemType "directory" -ErrorAction Ignore
 	Write-Host "암호: " -NoNewline
-	$Global:LastConsoleLine = 0
+	$LastConsoleLine = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 		Expand-7Zip -ArchiveFileName $zip -TargetPath "$Env:TEMP\$name\$ext" -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
@@ -76,12 +82,13 @@ try {
 	}
 	Remove-Item -Path $zip -Force -ErrorAction Ignore
 	
+	set-window
 	switch($read) {
 		{ 1, 2 -eq $_ } {
 			Write-Host "`n# IP" -ForegroundColor Blue
 			Write-Host "[ 2~10] 서버`n[11~20] 사용자 #1`n[21~30] 사용자 #2"
 			Write-Host "선택: " -NoNewline
-			$Global:LastConsoleLine = 0
+			$LastConsoleLine = 0
 			while ($true) {
 				$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 				$ip = Read-Host
@@ -102,39 +109,36 @@ try {
 	Copy-Item -Path "$Env:TEMP\$name\$ext\$conf" "$path\Data\Configurations\" -Force
 	Copy-Item -Path "$Env:TEMP\$name\$ext\*.cmd" "$path\" -Force -ErrorAction Ignore
 	Remove-Item -Path "$Env:TEMP\$name" -Recurse -Force
+	Remove-Item -Path "$path\drive.cmd" -Recurse -Force -ErrorAction Ignore
 	
 	("wg.ps1", "wg.cmd") | ForEach-Object { Start-BitsTransfer -Source "$gurl/$_" -Destination "$path\$_" }
 	if (Test-Path -Path "$path\wg.cmd") {
-		if (Test-Path -Path "$path\wg.cmd") {
-			Write-Host "`n# 시작 화면에 고정" -ForegroundColor Blue
-			pt start "WG-On" "$path\wg.cmd" on "$path\$name.exe"
-			pt start "WG-Off" "$path\wg.cmd" off "$path\$name.exe"
-		}
 		Write-Host "`n# 실행" -ForegroundColor Blue
 		Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction Ignore
 		Register-ScheduledTask -TaskName $name -Action (New-ScheduledTaskAction -Execute "$path\wg.cmd" -Argument "on") -Force | Out-Null
 		Start-ScheduledTask -TaskName $name | Out-Null
 		Unregister-ScheduledTask -TaskName $name -Confirm:$false
-		if (Test-Path("$path\drive.cmd")) {
-			Start-Sleep -Seconds 5
-			do {
-				Start-Sleep -Milliseconds 250
-				$dpid = (Get-Process | Where-Object { $_.mainWindowTitle -eq "WireGuard On" }).Id
-				if ($dpid) {
-					$ppid = (Get-WmiObject Win32_Process -Filter "processid='$dpid'").ParentProcessId
-					$hwnd = (Get-Process -Id $ppid).MainWindowHandle
-					if (!$hwnd) { $hwnd = (Get-Process -Id $dpid).MainWindowHandle }
-				}
-			} until (!$dpid)
-			set-window
-		}
+		do {
+			Start-Sleep -Milliseconds 250
+			$proc = Get-Process -ErrorAction Ignore | Where-Object { $_.mainWindowTitle -eq "$name On" }
+		} until ($proc)
+		set-window ($proc).Id
+		do {
+			Start-Sleep -Milliseconds 250
+		} until (!(Get-Process | Where-Object { $_.mainWindowTitle -eq "$name On" }))
+		set-window
+		Write-Host "`n# 시작 화면에 고정" -ForegroundColor Blue
+		pt start "WG-On" "$path\wg.cmd" on "$path\$name.exe"
+		pt start "WG-Off" "$path\wg.cmd" off "$path\$name.exe"
 	}
 	
+	set-window
 	Write-Host "`n### 완료" -ForegroundColor Green
 }
 catch {
-	Write-Error ($_.Exception | Format-List -Force | Out-String)
-	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String)
+	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
+	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
+	throw
 }
 
 Write-Host "`n아무 키나 누르십시오..." -NoNewline
