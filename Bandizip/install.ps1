@@ -36,6 +36,8 @@ try {
 	Start-BitsTransfer -Source "$gurl/$name.reg" -Destination "$Env:Temp\$name.reg"
     Start-Process -NoNewWindow -Wait -FilePath regedit.exe -ArgumentList "/s `"$Env:Temp\$name.reg`""
     Remove-Item -Path "$Env:Temp\$name.reg" -Force -ErrorAction Ignore
+    $edit = "$Env:ProgramFiles\Notepad++\notepad++.exe"
+    if (Test-Path -Path $edit) { reg.exe add 'HKCU\SOFTWARE\Bandizip' /v 'editorPathName' /t REG_SZ /d "$edit" /f }
     ([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
     set-window
