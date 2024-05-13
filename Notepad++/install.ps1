@@ -1,14 +1,13 @@
-﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
+﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1")
 
 try {
 	$name = "Notepad++"
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\$name.exe"
+	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
 	
 	$site = "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
 	$surl = (Invoke-RestMethod -Uri $site | ForEach-Object assets | Where-Object name -like '*.x64.exe').browser_download_url
-	
-	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
 	
 	$host.ui.RawUI.WindowTitle = $name
 	Write-Host "`n### $name" -ForegroundColor Green

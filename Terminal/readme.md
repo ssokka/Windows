@@ -23,4 +23,6 @@ wt powershell iex ([Net.WebClient]::new()).DownloadString('%_url%')
   > 고급
     텍스트 앤티앨리어싱 : ClearType
     기록 크기 : 2147483647
+> 고급 프로필 설정에서 종료 동작을 구성할 수 있습니다.
+    다시 표시 안 함
 ```

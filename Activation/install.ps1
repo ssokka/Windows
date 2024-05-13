@@ -1,14 +1,15 @@
-﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString('https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1')
+Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/Script/ps/header.ps1")
 
 try {
-	$name = 'Windows 정품 인증'
+	$name = "Windows"
 	
 	$host.ui.RawUI.WindowTitle = $name
 	Write-Host "`n### $name" -ForegroundColor Green
 	
+	Write-Host "`n# 정품 인증" -ForegroundColor Blue
 	$slmgr = "$Env:WinDir\System32\slmgr.vbs"
-	$str = ("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim()
-	if (!($str -match "인증되었습니다")) {
+	
+	if (!(("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim() -match "인증되었습니다")) {
 		$site = "https://github.com/ssokka/Windows/raw/master/Activation"
 		$file = "restore.7z"
 		$exec = "restore.exe"
@@ -30,6 +31,7 @@ try {
 		("$Global:Temp\$file", "$Global:Temp\$exec") | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
+
 	("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim()
 	
 	set-window

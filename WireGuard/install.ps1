@@ -4,12 +4,11 @@ try {
 	$name = "WireGuard"
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\$name.exe"
+	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
 	
 	$site = "https://download.wireguard.com/windows-client"
 	$sexe = "wireguard-installer.exe"
 	$spat = '(?is).*wireguard-amd64-(.*?)(?:\.msi).*'
-	
-	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
 	
 	$host.ui.RawUI.WindowTitle = $name
 	Write-Host "`n### $name" -ForegroundColor Green
