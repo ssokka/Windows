@@ -31,9 +31,6 @@ function disable-defender-realtime {
 	param(
 		[bool]$status = $true
 	)
-	#Add-MpPreference -ExclusionPath $Global:Temp -Force
-	#Set-MpPreference -MAPSReporting Disable
-	#Set-MpPreference -SubmitSamplesConsent NeverSend
 	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
 		do {
 			explorer windowsdefender://ThreatSettings
