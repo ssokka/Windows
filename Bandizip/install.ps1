@@ -34,6 +34,7 @@ try {
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue
 	Start-BitsTransfer -Source "$gurl/$name.reg" -Destination "$Env:Temp\$name.reg"
+    Stop-Process -Name $name -Force -ErrorAction Ignore
     Start-Process -NoNewWindow -Wait -FilePath regedit.exe -ArgumentList "/s `"$Env:Temp\$name.reg`""
     Remove-Item -Path "$Env:Temp\$name.reg" -Force -ErrorAction Ignore
     $edit = "$Env:ProgramFiles\Notepad++\notepad++.exe"
