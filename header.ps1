@@ -11,6 +11,7 @@ Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -Ar
 
 $Temp = "$Env:Temp\Download"
 New-Item -Path $Temp -ItemType Directory -Force | Out-Null
+
 Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "
 Add-MpPreference -ExclusionPath `"$Temp`" -Force
 Set-MpPreference -MAPSReporting 0 -Force
@@ -107,10 +108,10 @@ function pin-to {
 function set-window {
 	param([int]$cpid = $PID)
 	$ErrorActionPreference = "SilentlyContinue"
-	$file = "nircmd.zip"
 	$exec = "nircmd.exe"
-	$down = "https://www.nirsoft.net/utils/$file"
-	if (!(Test-Path -Path "$Env:Temp\$exec")) {
+	$down = "https://www.nirsoft.net/utils/nircmd.zip"
+	$file = "nircmd.zip"
+	if (!(Test-Path -Path "$Temp\$exec")) {
 		Start-BitsTransfer -Source "$down" -Destination "$Temp\$file"
 		Expand-Archive -Path "$Temp\$file" -DestinationPath "$Temp" -Force
 	}
