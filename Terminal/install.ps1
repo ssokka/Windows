@@ -28,7 +28,6 @@ try {
 	$json = "$path\settings.json"
 	$obj = Get-Content $json -Raw | ConvertFrom-Json
 	edit $obj "defaultProfile" "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}"
-	edit $obj "firstWindowPreference" "persistedWindowLayout"
 	edit $obj "windowingBehavior" "useExisting"
 	edit $obj "copyOnSelect" $true
 	edit $obj "disableAnimations" $true
