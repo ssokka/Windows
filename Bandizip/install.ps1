@@ -1,6 +1,6 @@
 ﻿param([bool]$wait = $true)
 
-if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://github.com/ssokka/Windows/raw/master/header.ps1") }
+if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
 $title = "반디집"
 $name = "Bandizip"

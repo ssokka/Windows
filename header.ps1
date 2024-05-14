@@ -4,7 +4,7 @@ $x, $y = [Console]::CursorLeft, [Console]::CursorTop
 Write-Host "`n### 준비중" -ForegroundColor Green -NoNewline
 
 $UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-$Git = "https://github.com/ssokka/Windows/raw/master"
+$Git = "https://raw.githubusercontent.com/ssokka/Windows/master"
 
 $sb = { 'ConsentPromptBehaviorAdmin', 'PromptOnSecureDesktop' | ForEach-Object { reg.exe add 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' /v $_ /t REG_DWORD /d '0' /f } }
 Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "(Invoke-Command -ScriptBlock {$sb})"
