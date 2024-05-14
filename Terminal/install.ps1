@@ -20,6 +20,7 @@ try {
 	
 	$host.ui.RawUI.WindowTitle = $name
     Write-Host "`n### $name" -ForegroundColor Green
+	
 	Write-Host "`n# 설정" -ForegroundColor Blue
 	
 	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f
@@ -44,17 +45,16 @@ try {
 		$obj.dismissedMessages += $v
 		$obj | ConvertTo-Json -Depth 4 | Set-Content -Path $json -Encoding utf8
 	}
-		
+	
 	([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
 	set-window
 	Write-Host "`n### 완료" -ForegroundColor Green
+	
+	if ($wait) { Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host }
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
 	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
 	throw
 }
-
-Write-Host "`n아무 키나 누르십시오..." -NoNewline
-Read-Host
