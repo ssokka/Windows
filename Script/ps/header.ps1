@@ -1,13 +1,16 @@
-﻿param([bool]$wait = $true)
-
-$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-
+﻿$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 Write-Host "`n### 준비중" -ForegroundColor Green -NoNewline
 
 $UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+$Git = "https://github.com/ssokka/Windows/raw/master/Tool"
+
+$cmd = { "ConsentPromptBehaviorAdmin", "PromptOnSecureDesktop" | ForEach-Object {
+	reg.exe add 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' /v $_ /t REG_DWORD /d '0' /f }
+}
+Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "(Invoke-Command -ScriptBlock {$cmd})"
 
 $Global:Temp = "$Env:Temp\Download"
-$null = New-Item -Path $Global:Temp -ItemType Directory -Force
+New-Item -Path $Global:Temp -ItemType Directory -Force | Out-Null
 Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "
 Add-MpPreference -ExclusionPath `"$Global:Temp`" -Force
 Set-MpPreference -MAPSReporting 0 -Force
@@ -54,22 +57,13 @@ function disable-defender-realtime {
 	}
 }
 
-function disable-uac {
-	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "
-	reg.exe add 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' /v 'ConsentPromptBehaviorAdmin' /t REG_DWORD /d '0' /f
-	reg.exe add 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' /v 'PromptOnSecureDesktop' /t REG_DWORD /d '0' /f
-	reg.exe add 'HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System' /v 'ConsentPromptBehaviorAdmin' /t REG_DWORD /d '0' /f
-	reg.exe add 'HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System' /v 'PromptOnSecureDesktop' /t REG_DWORD /d '0' /f
-	"
-}
-
 function install-7zip {
 	if (!(Get-Module 7Zip4Powershell -ListAvailable)) {
-		Set-ExecutionPolicy Bypass -Force
-		$null = Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force
+		try { Set-ExecutionPolicy -ExecutionPolicy Bypass -Force } catch { }
+		Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
 		Register-PSRepository -Default -ErrorAction Ignore
 		Set-PSRepository PSGallery -InstallationPolicy Trusted
-		$null = Install-Module 7Zip4PowerShell -Force
+		Install-Module 7Zip4PowerShell -Force | Out-Null
 	}
 }
 
@@ -95,9 +89,9 @@ function pin-to {
 	$glnk = "$pdir\$guid.lnk"
 	$nlnk = "$pdir\$name.lnk"
 	Write-Host $name
-	if (!(Test-Path -Path "$Env:Temp\$exec")) { Start-BitsTransfer -Source "https://github.com/ssokka/Windows/raw/master/Tool/$exec" -Destination "$Env:Temp\$exec" }
+	if (!(Test-Path -Path "$Env:Temp\$exec")) { Start-BitsTransfer -Source "$Git/Tool/$exec" -Destination "$Env:Temp\$exec" }
 	$null = New-Item -Path $temp -ItemType File -Force
-	Start-Process -FilePath "$Env:Temp\$exec" -ArgumentList "`"$temp`" $type" -Wait -WindowStyle Hidden
+	Start-Process -Wait -WindowStyle Hidden -FilePath "$Env:Temp\$exec" -ArgumentList "`"$temp`" $type"
 	do { Start-Sleep -Milliseconds 250 } until (Test-Path -Path $glnk)
 	Start-Sleep -Seconds 5
 	$shell = (New-Object -ComObject WScript.Shell).CreateShortcut($glnk)
@@ -113,19 +107,19 @@ function pin-to {
 }
 
 function set-window {
-	param(
-		[int]$cpid = $PID
-	)
+	param([int]$cpid = $PID)
 	$ErrorActionPreference = "SilentlyContinue"
-	$ncmd = "nircmd.exe"
-	if (!(Test-Path -Path "$Env:Temp\$ncmd")) { Start-BitsTransfer -Source "https://github.com/ssokka/Windows/raw/master/Tool/$ncmd" -Destination "$Env:Temp\$ncmd" }
+	$exec = "nircmd.exe"
+	if (!(Test-Path -Path "$Env:Temp\$exec")) { Start-BitsTransfer -Source "$Git/Tool/$exec" -Destination "$Env:Temp\$exec" }
 	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$cpid'").ParentProcessId
 	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
 	if (!$hwnd) { $hwnd = (Get-Process -Id $cpid).MainWindowHandle }
-	if (Test-Path -Path "$Env:Temp\$ncmd") { ("normal", "activate", "center") | ForEach-Object { & "$Env:Temp\$ncmd" win $_ handle $hwnd } }
+	if (Test-Path -Path "$Env:Temp\$exec") {
+		$sb = { param($exec, $hwnd); 'normal', 'activate', 'center' | ForEach-Object { & $exec win $_ handle $hwnd | Out-Host } }
+		Start-Process -Verb RunAs -Wait -FilePath powershell.exe -ArgumentList "-command (Invoke-Command -ScriptBlock {$sb} -ArgumentList `"$Env:Temp\$exec`", $hwnd)"
+	}
 }
 
 set-window
-disable-uac
 ccp $x $y
 $ErrorActionPreference = "Stop"
