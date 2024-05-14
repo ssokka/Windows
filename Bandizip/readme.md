@@ -14,6 +14,7 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
 > 탐색기 메뉴
   [v] 여기에 풀고 삭제하기
   [v] 알아서 풀고 삭제하기
+  [ ] "파일명.7z"로 압축하기
   [v] 관리자 권한으로 압축하기
   [v] 명령 창(cmd) 열기 (Shift 키를 누르면 관리자 권한으로 실행 가능)
   [v] 탐색기 메뉴를 계단식으로 보여주기
