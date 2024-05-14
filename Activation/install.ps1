@@ -1,5 +1,5 @@
-﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1")
-param([bool]$wait = $true)
+﻿param([bool]$wait = $true)
+Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://github.com/ssokka/Windows/raw/master/header.ps1")
 
 try {
 	$name = "Windows"
@@ -11,7 +11,7 @@ try {
 	$slmgr = "$Env:WinDir\System32\slmgr.vbs"
 	
 	if (!(("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim() -match "인증되었습니다")) {
-		$site = "https://github.com/ssokka/Windows/raw/master/Activation"
+		$site = "$Git/Activation"
 		$file = "restore.7z"
 		$exec = "restore.exe"
 		install-7zip
