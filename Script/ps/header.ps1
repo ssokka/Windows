@@ -1,4 +1,8 @@
-﻿Write-Host "`n### 준비중" -ForegroundColor Green -NoNewline
+﻿param([bool]$wait = $true)
+
+$x, $y = [Console]::CursorLeft, [Console]::CursorTop
+
+Write-Host "`n### 준비중" -ForegroundColor Green -NoNewline
 
 $UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
@@ -123,5 +127,5 @@ function set-window {
 
 set-window
 disable-uac
-ccp 0 0
+ccp $x $y
 $ErrorActionPreference = "Stop"
