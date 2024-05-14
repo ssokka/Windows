@@ -1,18 +1,20 @@
-﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1")
+﻿param([bool]$wait = $true)
+
+if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://github.com/ssokka/Windows/raw/master/header.ps1") }
+
+$title = "반디집"
+$name = "Bandizip"
+$path = "$Env:ProgramFiles\$name"
+$exec = "$path\$name.exe"
+
+$site = "https://kr.bandisoft.com/bandizip"
+$down = "$site/dl.php?web"
+$file = "BANDIZIP-SETUP-STD-X64.EXE"
+$spat = '(?is).*?<h2><.*?>v*(.*?)<.*'
 
 try {
-	$name = "Bandizip"
-	$path = "$Env:ProgramFiles\$name"
-	$exec = "$path\$name.exe"
-	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
-	
-	$site = "https://kr.bandisoft.com/bandizip"
-	$surl = "$site/dl.php?web"
-    $sexe = "BANDIZIP-SETUP-STD-X64.EXE"
-    $spat = '(?is).*?<h2><.*?>v*(.*?)<.*'
-	
-	$host.ui.RawUI.WindowTitle = $name
-	Write-Host "`n### $name" -ForegroundColor Green
+	$host.ui.RawUI.WindowTitle = $title
+	Write-Host "`n### $title" -ForegroundColor Green
 	
 	Write-Host "`n# 버전" -ForegroundColor Blue
 	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0.*', '$1')".Trim()
@@ -24,31 +26,30 @@ try {
 	
 	if ($cver -ne $sver) {
 		Write-Host "`n# 다운로드" -ForegroundColor Blue
-		$file = "$Env:Temp\$sexe"
-		Start-BitsTransfer -Source $surl -Destination $file
+		Start-BitsTransfer -Source $down -Destination "$Temp\$file"
 		Write-Host "`n# 설치" -ForegroundColor Blue
 		Stop-Process -Name $name -Force -ErrorAction Ignore
-		Start-Process -NoNewWindow -Wait -FilePath $file -ArgumentList "/S"
-		Remove-Item -Path $file -Force -ErrorAction Ignore
+		& "$Temp\$file" /S | Out-Host
+		Remove-Item -Path "$Temp\$file" -Force -ErrorAction Ignore
 	}
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue
-	Start-BitsTransfer -Source "$gurl/$name.reg" -Destination "$Env:Temp\$name.reg"
+	Start-BitsTransfer -Source "$Git/$name/$name.reg" -Destination "$Temp\$name.reg"
     Stop-Process -Name $name -Force -ErrorAction Ignore
-    Start-Process -NoNewWindow -Wait -FilePath regedit.exe -ArgumentList "/s `"$Env:Temp\$name.reg`""
-    Remove-Item -Path "$Env:Temp\$name.reg" -Force -ErrorAction Ignore
+    & regedit.exe /s "$Temp\$name.reg" | Out-Null | Out-Host
+    Remove-Item -Path "$Temp\$name.reg" -Force -ErrorAction Ignore
     $edit = "$Env:ProgramFiles\Notepad++\notepad++.exe"
-    if (Test-Path -Path $edit) { reg.exe add 'HKCU\SOFTWARE\Bandizip' /v 'editorPathName' /t REG_SZ /d "$edit" /f }
-    ([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
+    if (Test-Path -Path $edit) { & reg.exe add "HKCU\SOFTWARE\$name" /v "editorPathName" /t REG_SZ /d "$edit" /f | Out-Null | Out-Host }
+    ([Net.WebClient]::new()).DownloadString("$Git/$name/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
-    set-window
-	Write-Host "`n### 완료" -ForegroundColor Green
+	if ($wait) {
+		set-window
+		Write-Host "`n### 완료" -ForegroundColor Green
+		Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host
+	}
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
 	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
 	throw
 }
-
-Write-Host "`n아무 키나 누르십시오..." -NoNewline
-Read-Host
