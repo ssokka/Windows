@@ -49,11 +49,7 @@ try {
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 		$read = if ($nread = Read-Host) { $nread } else { $dread }
-		if ($read -match "^[1-$($menu.count)]$") {
-			break
-		} else {
-			ccp $x $y
-		}
+		if ($read -match "^[1-$($menu.count)]$") { break } else { ccp $x $y }
 	}
 	switch ($read) {
 		{ 1, 3 -eq $_ } { $file = "company.7z" }
@@ -73,11 +69,7 @@ try {
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 		Expand-7Zip -ArchiveFileName $zip -TargetPath "$Env:TEMP\$name\$ext" -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
-		if ($?) {
-			break
-		} else {
-			ccp $x $y
-		}
+		if ($?) { break } else { ccp $x $y }
 	}
 	Remove-Item -Path $zip -Force -ErrorAction Ignore
 	
@@ -91,11 +83,7 @@ try {
 			while ($true) {
 				$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 				$ip = Read-Host
-				if ($ip -In 2 .. 100) {
-					break
-				} else {
-					ccp $x $y
-				}
+				if ($ip -In 2 .. 100) { break } else { ccp $x $y }
 			}
 			$like = "wg-*-client-$ip.conf"
 		}

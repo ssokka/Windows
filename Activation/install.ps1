@@ -1,4 +1,5 @@
 Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1")
+param([bool]$wait = $true)
 
 try {
 	$name = "Windows"
@@ -21,14 +22,10 @@ try {
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 			Expand-7Zip -ArchiveFileName "$Global:Temp\$file" -TargetPath $Global:Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
-			if ($?) {
-				break
-			} else {
-				ccp $x $y
-			}
+			if ($?) { break } else { ccp $x $y }
 		}
 		Start-Process -NoNewWindow -Wait "$Global:Temp\$exec" '/activate'
-		("$Global:Temp\$file", "$Global:Temp\$exec") | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
+		"$Global:Temp\$file", "$Global:Temp\$exec" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
 
@@ -36,12 +33,11 @@ try {
 	
 	set-window
 	Write-Host "`n### 완료" -ForegroundColor Green
+	
+	if ($wait) { Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host }
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
 	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
 	throw
 }
-
-Write-Host "`n아무 키나 누르십시오..." -NoNewline
-Read-Host
