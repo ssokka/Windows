@@ -1,5 +1,6 @@
 ﻿param([bool]$wait = $true)
-Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://github.com/ssokka/Windows/raw/master/header.ps1")
+
+if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
 try {
 	$name = "Windows"
@@ -16,25 +17,26 @@ try {
 		$exec = "restore.exe"
 		install-7zip
  		ddr $false
-		Start-BitsTransfer -Source "$site/$file" -Destination "$Global:Temp\$file"
+		Start-BitsTransfer -Source "$site/$file" -Destination "$Temp\$file"
 		Write-Host "암호: " -NoNewline
 		$LastConsoleLine = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-			Expand-7Zip -ArchiveFileName "$Global:Temp\$file" -TargetPath $Global:Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
+			Expand-7Zip -ArchiveFileName "$Temp\$file" -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
 			if ($?) { break } else { ccp $x $y }
 		}
-		Start-Process -NoNewWindow -Wait "$Global:Temp\$exec" '/activate'
-		"$Global:Temp\$file", "$Global:Temp\$exec" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
+		Start-Process -NoNewWindow -Wait "$Temp\$exec" '/activate'
+		"$Temp\$file", "$Temp\$exec" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
 
 	("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim()
 	
-	set-window
-	Write-Host "`n### 완료" -ForegroundColor Green
-	
-	if ($wait) { Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host }
+	if ($wait) {
+		set-window
+		Write-Host "`n### 완료" -ForegroundColor Green
+		Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host
+	}
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
