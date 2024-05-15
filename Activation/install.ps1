@@ -15,16 +15,16 @@ try {
 		$file = "restore.exe"
 		install-7zip
  		ddr $false
-		$dst = dw "$site/restore.7z"
+		$down = dw "$site/restore.7z"
 		Write-Host "암호: " -NoNewline
 		$LastConsoleLine = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-			Expand-7Zip -ArchiveFileName $dst -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
+			Expand-7Zip -ArchiveFileName $down -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
 			if ($?) { break } else { ccp $x $y }
 		}
 		Start-Process -NoNewWindow -Wait "$Temp\$file" '/activate'
-		$dst, "$Temp\$file" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
+		$down, "$Temp\$file" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
 
