@@ -2,11 +2,11 @@
 
 if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
+$title = "Windows"
+
 try {
-	$name = "Windows"
-	
-	$host.ui.RawUI.WindowTitle = $name
-	Write-Host "`n### $name" -ForegroundColor Green
+	$host.ui.RawUI.WindowTitle = $title
+	Write-Host "`n### $title" -ForegroundColor Green
 	
 	Write-Host "`n# 정품 인증" -ForegroundColor Blue
 	$slmgr = "$Env:WinDir\System32\slmgr.vbs"
