@@ -15,6 +15,7 @@ try {
 		$file = "restore.exe"
 		install-7zip
  		ddr $false
+		Write-Host "`n# 다운로드" -ForegroundColor Blue
 		$down = dw "$site/restore.7z"
 		Write-Host "암호: " -NoNewline
 		$LastConsoleLine = 0
