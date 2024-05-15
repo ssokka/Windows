@@ -1,5 +1,5 @@
 ﻿### Windows 인증
-`1.5.5.2` `개인 키 복원`
+`1.5.5.2` `개인 키 복원`  
 `CMD`
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Activation/install.ps1
