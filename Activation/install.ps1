@@ -2,9 +2,8 @@
 
 if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
-$title = "Windows"
-
 try {
+	$title = "Windows"
 	$host.ui.RawUI.WindowTitle = $title
 	Write-Host "`n### $title" -ForegroundColor Green
 	
@@ -13,20 +12,20 @@ try {
 	
 	if (!(("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim() -match "인증되었습니다")) {
 		$site = "$Git/Activation"
-		$file = "restore.7z"
-		$exec = "restore.exe"
+		$file = "restore.exe"
 		install-7zip
  		ddr $false
-		Start-BitsTransfer -Source "$site/$file" -Destination "$Temp\$file"
+		# Start-BitsTransfer -Source "$site/$file" -Destination "$Temp\$file"
+		$dst = dw "$site/restore.7z"
 		Write-Host "암호: " -NoNewline
 		$LastConsoleLine = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-			Expand-7Zip -ArchiveFileName "$Temp\$file" -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
+			Expand-7Zip -ArchiveFileName $dst -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
 			if ($?) { break } else { ccp $x $y }
 		}
-		Start-Process -NoNewWindow -Wait "$Temp\$exec" '/activate'
-		"$Temp\$file", "$Temp\$exec" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
+		Start-Process -NoNewWindow -Wait "$Temp\$file" '/activate'
+		$dst, "$Temp\$file" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
 
