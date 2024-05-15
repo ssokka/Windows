@@ -31,6 +31,34 @@ function current-cursor-position {
 	[Console]::SetCursorPosition($x, $y)
 }
 
+function download {
+	[Alias("dw")]
+	param(
+		[string]$url,
+		[string]$dst = $Temp,
+		[string]$pat = '*x64.zip'
+	)
+	if ($url -match '^https://api.github.com/repos/.*/releases/latest$') {
+		$src = (Invoke-RestMethod -Uri $url | ForEach-Object assets | Where-Object name -like $pat).browser_download_url
+		$file = $src -replace '.*/(.*)', '$1'
+	} else {
+		$wr = [Net.WebRequest]::Create($url)
+		$wr.AllowAutoRedirect = $true
+		$wr.Method = "HEAD"
+		$re = $wr.GetResponse()
+		$src = $re.ResponseUri
+		$file = [IO.Path]::GetFileName($src.AbsolutePath)
+		$re.Close()
+	}
+	if ($dst.EndsWith('\')) {
+		$dst += $file
+	} else {
+		$dst += '\' + $file
+	}
+	Start-BitsTransfer -Source $src -Destination $dst
+	if (Test-Path -Path $dst) { return $dst }
+}
+
 function disable-defender-realtime {
 	[Alias("ddr")]
 	param([bool]$status = $true)
@@ -53,15 +81,33 @@ function disable-defender-realtime {
 	}
 }
 
+function get-online-version {
+	[Alias("gov")]
+	param(
+		[string]$url,
+		[string]$pat = '',
+		[string]$ret = ''
+	)
+	if ($url -match '^https://api.github.com/repos/.*/releases/latest$') {
+		$ver = (Invoke-RestMethod -Uri $url).tag_name
+	} else {
+		$wc = New-Object System.Net.WebClient
+		$wc.Headers["User-Agent"] = $UserAgent
+		$ver = $wc.DownloadString($url)
+	}
+	if ($pat) { $ver = $ver -replace $pat, $ret }
+	if ($ver) { return $ver.Trim() }
+}
+
 function install-7zip {
-	$name = "7Zip4Powershell"
-	if (!(Get-Module -Name $name -ListAvailable)) {
+	$mod = "7Zip4Powershell"
+	if (!(Get-Module -Name $mod -ListAvailable)) {
 		Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "
 		Set-ExecutionPolicy -ExecutionPolicy Bypass -Force
 		Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force
 		Register-PSRepository -Default -ErrorAction Ignore
 		Set-PSRepository PSGallery -InstallationPolicy Trusted
-		Install-Module $name -Force
+		Install-Module $mod -Force
 		"
 	}
 }

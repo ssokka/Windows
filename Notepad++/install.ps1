@@ -1,17 +1,20 @@
-﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1")
+﻿param([bool]$wait = $true)
+
+if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
 try {
-	$name = "Notepad++"
+	$title = "Notepad++"
+	$host.ui.RawUI.WindowTitle = $title
+	Write-Host "`n### $title" -ForegroundColor Green
+	
+	$name = $title
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\$name.exe"
-	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
-	
+
 	$site = "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
-	$surl = (Invoke-RestMethod -Uri $site | ForEach-Object assets | Where-Object name -like '*.x64.exe').browser_download_url
-	
-	$host.ui.RawUI.WindowTitle = $name
-	Write-Host "`n### $name" -ForegroundColor Green
-	
+	$down = (Invoke-RestMethod -Uri $site | ForEach-Object assets | Where-Object name -like '*.x64.exe').browser_download_url
+	$file = $down -replace '.*/(.*)', '$1'
+
 	Write-Host "`n# 버전" -ForegroundColor Blue
 	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion)".Trim()
 	$sver = "$(((Invoke-RestMethod -Uri $site).tag_name) -replace '(?i)v','')".Trim()
@@ -20,12 +23,11 @@ try {
 	
 	if ($cver -ne $sver) {
 		Write-Host "`n# 다운로드" -ForegroundColor Blue
-		$file = "$Env:Temp\$($surl -replace '.*/(.*)', '$1')"
-		Start-BitsTransfer -Source $surl -Destination $file
+		Start-BitsTransfer -Source $down -Destination "$Temp\$file"
 		Write-Host "`n# 설치" -ForegroundColor Blue
 		Stop-Process -Name $name -Force -ErrorAction Ignore
-		Start-Process -NoNewWindow -Wait -FilePath $file -ArgumentList "/S"
-		Remove-Item -Path $file -Force -ErrorAction Ignore
+		& "$Temp\$file" /S | Out-Host
+		Remove-Item -Path "$Temp\$file" -Force -ErrorAction Ignore
 	}
 	
 	# https://github.com/notepad-plus-plus/nppPluginList/blob/master/doc/plugin_list_x64.md
@@ -42,20 +44,19 @@ try {
 		$ErrorActionPreference = "Ignore"
 		if(!(Test-Path -Path "$path\plugins\$p\*.dll")){
 			Write-Host "$t"
-			$null = New-Item -Path "$path\plugins\$p" -ItemType Directory
+			New-Item -Path "$path\plugins\$p" -ItemType Directory | Out-Null
 			if ($r -match '^http') {
+				$src = $r
 				$req = [Net.WebRequest]::Create($r)
 				$req.AllowAutoRedirect = $true
-				$gfn = [IO.Path]::GetFileName($req.GetResponse().ResponseUri.AbsolutePath)
-				$rurl = $r
-				$file = "$path\plugins\$p\$gfn"
+				$dst = "$path\plugins\$p\$([IO.Path]::GetFileName($req.GetResponse().ResponseUri.AbsolutePath))"
 			} else {
-				$rurl = (Invoke-RestMethod -Uri https://api.github.com/repos/$r/releases/latest | ForEach-Object assets | Where-Object name -like '*x64.zip').browser_download_url
-				$file = "$path\plugins\$p\$($rurl -replace '.*/(.*)', '$1')"
+				$src = (Invoke-RestMethod -Uri https://api.github.com/repos/$r/releases/latest | ForEach-Object assets | Where-Object name -like '*x64.zip').browser_download_url
+				$dst = "$path\plugins\$p\$($src -replace '.*/(.*)', '$1')"
 			}
-			Start-BitsTransfer -Source $rurl -Destination $file
-			Expand-Archive -Path $file -DestinationPath "$path\plugins\$p" -Force
-			Remove-Item -Path $file -Force
+			Start-BitsTransfer -Source $src -Destination $dst
+			Expand-Archive -Path $dst -DestinationPath "$path\plugins\$p" -Force
+			Remove-Item -Path $dst -Force
 		}
 	}
 	ip "ComparePlus" "pnedev/ComparePlus" "ComparePlus"

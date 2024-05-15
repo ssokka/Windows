@@ -2,20 +2,20 @@
 
 if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
-$title = "반디집"
-$name = "Bandizip"
-$path = "$Env:ProgramFiles\$name"
-$exec = "$path\$name.exe"
-
-$site = "https://kr.bandisoft.com/bandizip"
-$down = "$site/dl.php?web"
-$file = "BANDIZIP-SETUP-STD-X64.EXE"
-$spat = '(?is).*?<h2><.*?>v*(.*?)<.*'
-
 try {
+	$title = "반디집"
 	$host.ui.RawUI.WindowTitle = $title
 	Write-Host "`n### $title" -ForegroundColor Green
 	
+	$name = "Bandizip"
+	$path = "$Env:ProgramFiles\$name"
+	$exec = "$path\$name.exe"
+
+	$site = "https://kr.bandisoft.com/bandizip"
+	$down = "$site/dl.php?web"
+	$file = "BANDIZIP-SETUP-STD-X64.EXE"
+	$spat = '(?is).*?<h2><.*?>v*(.*?)<.*'
+
 	Write-Host "`n# 버전" -ForegroundColor Blue
 	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0.*', '$1')".Trim()
 	$wc = New-Object System.Net.WebClient
