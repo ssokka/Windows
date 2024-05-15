@@ -23,7 +23,7 @@ try {
 			Expand-7Zip -ArchiveFileName $down -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
 			if ($?) { break } else { ccp $x $y }
 		}
-		Start-Process -NoNewWindow -Wait "$Temp\$file" '/activate'
+		& "$Temp\$file" /activate | Out-Host
 		$down, "$Temp\$file" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
