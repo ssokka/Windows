@@ -15,7 +15,6 @@ try {
 		$file = "restore.exe"
 		install-7zip
  		ddr $false
-		# Start-BitsTransfer -Source "$site/$file" -Destination "$Temp\$file"
 		$dst = dw "$site/restore.7z"
 		Write-Host "암호: " -NoNewline
 		$LastConsoleLine = 0
