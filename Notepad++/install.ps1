@@ -12,22 +12,19 @@ try {
 	$exec = "$path\$name.exe"
 
 	$site = "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
-	$down = (Invoke-RestMethod -Uri $site | ForEach-Object assets | Where-Object name -like '*.x64.exe').browser_download_url
-	$file = $down -replace '.*/(.*)', '$1'
 
 	Write-Host "`n# 버전" -ForegroundColor Blue
-	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion)".Trim()
-	$sver = "$(((Invoke-RestMethod -Uri $site).tag_name) -replace '(?i)v','')".Trim()
+	$cver = get-version $exec
+	$sver = get-version $site '(?i)v' ''
 	Write-Host "현재: $cver"
 	Write-Host "최신: $sver"
 	
 	if ($cver -ne $sver) {
-		Write-Host "`n# 다운로드" -ForegroundColor Blue
-		Start-BitsTransfer -Source $down -Destination "$Temp\$file"
+		$down = dw $site -pat '*x64.exe'
 		Write-Host "`n# 설치" -ForegroundColor Blue
 		Stop-Process -Name $name -Force -ErrorAction Ignore
-		& "$Temp\$file" /S | Out-Host
-		Remove-Item -Path "$Temp\$file" -Force -ErrorAction Ignore
+		& $down /S | Out-Host
+		Remove-Item -Path $down -Force -ErrorAction Ignore
 	}
 	
 	# https://github.com/notepad-plus-plus/nppPluginList/blob/master/doc/plugin_list_x64.md
