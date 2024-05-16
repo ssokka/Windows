@@ -111,7 +111,7 @@ function download {
 			if ($?) { break } else { ccp $x $y }
 		}
 	}
-	return $dst
+	Remove-Item -Path $dst -Force -ErrorAction Ignore
 }
 
 function get-version {
