@@ -38,7 +38,6 @@ function current-cursor-position {
 	[Alias("ccp")]
 	param([Int]$x, [Int]$y)
 	if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT" -and !$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
-	}
 	# if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") {
 	# 	if (!$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
 	# }
