@@ -22,24 +22,26 @@ Set-MpPreference -SubmitSamplesConsent 2 -Force
 "
 
 function install-7zip {
-	$mod = "7Zip4Powershell"
-	if (Get-Module -Name $mod -ListAvailable) { return }
+	$name = "7Zip4Powershell"
+	if (Get-Module -Name $name -ListAvailable) { return }
 	Write-Host "`n# Powershell 7Zip 모듈 설치" -ForegroundColor Blue
 	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "
 	Set-ExecutionPolicy -ExecutionPolicy Bypass -Force
 	Install-PackageProvider NuGet -MinimumVersion 2.8.5.201 -Force
 	Register-PSRepository -Default -ErrorAction Ignore
 	Set-PSRepository PSGallery -InstallationPolicy Trusted
-	Install-Module $mod -Force
+	Install-Module $name -Force
 	"
 }
 
 function current-cursor-position {
 	[Alias("ccp")]
 	param([Int]$x, [Int]$y)
-	if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") {
-		if (!$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
+	if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT" -and !$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
 	}
+	# if ($Env:WT_SESSION -or $Env:OS -ne "Windows_NT") {
+	# 	if (!$LastConsoleLine -and [Console]::CursorTop -eq [Console]::WindowHeight - 1) { $LastConsoleLine = 1; --$y }
+	# }
 	[Console]::SetCursorPosition($x, $y)
 	[Console]::Write("{0,-$([Console]::WindowWidth)}" -f " ")
 	[Console]::SetCursorPosition($x, $y)
@@ -48,23 +50,22 @@ function current-cursor-position {
 function disable-defender-realtime {
 	[Alias("ddr")]
 	param([bool]$status = $true)
-	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -ne $status) {
+	if ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status) { return }
+	do {
+		explorer windowsdefender://ThreatSettings
 		do {
-			explorer windowsdefender://ThreatSettings
-			do {
-				Start-Sleep -Milliseconds 1500
-				$wid = (Get-Process | Where-Object {$_.MainWindowTitle -like "Windows 보안" -and $_.ProcessName -eq "ApplicationFrameHost"}).Id
-			} until ($wid)
 			Start-Sleep -Milliseconds 1500
-			$shell = New-Object -ComObject WScript.Shell
-			$UserInput::BlockInput($true) | Out-Null
-			$shell.AppActivate($wid) | Out-Null
-			$shell.SendKeys(' ')
-			$UserInput::BlockInput($false) | Out-Null
-			Start-Sleep -Milliseconds 1500
-		} until ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status)
-		Stop-Process -Id $wid -ErrorAction Ignore
-	}
+			$wid = (Get-Process | Where-Object {$_.MainWindowTitle -like "Windows 보안" -and $_.ProcessName -eq "ApplicationFrameHost"}).Id
+		} until ($wid)
+		Start-Sleep -Milliseconds 1500
+		$shell = New-Object -ComObject WScript.Shell
+		$UserInput::BlockInput($true) | Out-Null
+		$shell.AppActivate($wid) | Out-Null
+		$shell.SendKeys(' ')
+		$UserInput::BlockInput($false) | Out-Null
+		Start-Sleep -Milliseconds 1500
+	} until ((Get-MpComputerStatus).RealTimeProtectionEnabled -eq $status)
+	Stop-Process -Id $wid -ErrorAction Ignore
 }
 
 function download {
@@ -110,6 +111,7 @@ function download {
 			if ($?) { break } else { ccp $x $y }
 		}
 	}
+	return $dst
 }
 
 function get-online-version {
@@ -152,7 +154,7 @@ function pin-to {
 	$glnk = "$pdir\$guid.lnk"
 	$nlnk = "$pdir\$name.lnk"
 	Write-Host $name
-	if (!(Test-Path -Path $exec)) { $exec = dw "https://www.technosys.net/download.aspx?file=syspin.exe" -ren "syspin.exe" }
+	if (!(Test-Path -Path $exec)) { dw "https://www.technosys.net/download.aspx?file=syspin.exe" -ren "syspin.exe" | Out-Null }
 	New-Item -Path $gexe -ItemType File -Force | Out-Null
 	& $exec "$gexe" $type | Out-Null | Out-Host
 	do { Start-Sleep -Milliseconds 250 } until (Test-Path -Path $glnk)
@@ -172,14 +174,13 @@ function set-window {
 	param([int]$cpid = $PID)
 	$ErrorActionPreference = "SilentlyContinue"
 	$exec = "$Temp\nircmd.exe"
-	if (!(Test-Path -Path $exec)) { dw "https://www.nirsoft.net/utils/nircmd.zip" }
+	if (!(Test-Path -Path $exec)) { dw "https://www.nirsoft.net/utils/nircmd.zip" | Out-Null }
 	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$cpid'").ParentProcessId
 	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
 	if (!$hwnd) { $hwnd = (Get-Process -Id $cpid).MainWindowHandle }
-	if (Test-Path -Path $exec) {
-		$sb = { param($exec, $hwnd); 'normal', 'activate', 'center' | ForEach-Object { & $exec win $_ handle $hwnd } }
-		Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command (Invoke-Command -ScriptBlock {$sb} -ArgumentList `"$exec`", $hwnd)"
-	}
+	if (!(Test-Path -Path $exec)) { return }
+	$sb = { param($exec, $hwnd); 'normal', 'activate', 'center' | ForEach-Object { & $exec win $_ handle $hwnd } }
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command (Invoke-Command -ScriptBlock {$sb} -ArgumentList `"$exec`", $hwnd)"
 }
 
 set-window

@@ -11,21 +11,11 @@ try {
 	$slmgr = "$Env:WinDir\System32\slmgr.vbs"
 	
 	if (!(("$(cscript /Nologo "$slmgr" /xpr)" -replace '.*?(컴퓨터.*)', '$1').Trim() -match "인증되었습니다")) {
-		$site = "$Git/Activation"
-		$file = "restore.exe"
-		install-7zip
+		$exec = "$Temp\restore.exe"
  		ddr $false
-		Write-Host "`n# 다운로드" -ForegroundColor Blue
-		$down = dw "$site/restore.7z"
-		Write-Host "암호: " -NoNewline
-		$LastConsoleLine = 0
-		while ($true) {
-			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-			Expand-7Zip -ArchiveFileName $down -TargetPath $Temp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
-			if ($?) { break } else { ccp $x $y }
-		}
-		& "$Temp\$file" /activate | Out-Host
-		$down, "$Temp\$file" | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
+		$down = dw "$Git/Activation/restore.7z"
+		& $exec /activate | Out-Host
+		$down, $exec | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
 
