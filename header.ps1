@@ -163,7 +163,7 @@ function pin-to {
 	$glnk = "$pdir\$guid.lnk"
 	$nlnk = "$pdir\$name.lnk"
 	Write-Host $name
-	if (!(Test-Path -Path $exec)) { dw "https://www.technosys.net/download.aspx?file=syspin.exe" -ren "syspin.exe" | Out-Null }
+	if (!(Test-Path -Path $exec)) { dw "https://www.technosys.net/download.aspx?file=syspin.exe" -ren "syspin.exe" -wri $false | Out-Null }
 	New-Item -Path $gexe -ItemType File -Force | Out-Null
 	& $exec "$gexe" $type | Out-Null | Out-Host
 	do { Start-Sleep -Milliseconds 250 } until (Test-Path -Path $glnk)
@@ -183,7 +183,7 @@ function set-window {
 	param([int]$cpid = $PID)
 	$ErrorActionPreference = "SilentlyContinue"
 	$exec = "$Temp\nircmd.exe"
-	if (!(Test-Path -Path $exec)) { dw "https://www.nirsoft.net/utils/nircmd.zip" | Out-Null }
+	if (!(Test-Path -Path $exec)) { dw "https://www.nirsoft.net/utils/nircmd.zip" -wri $false | Out-Null }
 	$ppid = (Get-WmiObject Win32_Process -Filter "processid='$cpid'").ParentProcessId
 	$hwnd = (Get-Process -Id $ppid).MainWindowHandle
 	if (!$hwnd) { $hwnd = (Get-Process -Id $cpid).MainWindowHandle }
