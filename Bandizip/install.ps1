@@ -29,12 +29,12 @@ try {
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue
 	$down = dw "$Git/$name/$name.reg" -wri $false
-    Stop-Process -Name $name -Force -ErrorAction Ignore
-    & regedit.exe /s $down | Out-Null | Out-Host
-    Remove-Item -Path $down -Force -ErrorAction Ignore
-    $edit = "$Env:ProgramFiles\Notepad++\notepad++.exe"
-    if (Test-Path -Path $edit) { & reg.exe add "HKCU\SOFTWARE\$name" /v "editorPathName" /t REG_SZ /d $edit /f | Out-Null | Out-Host }
-    ([Net.WebClient]::new()).DownloadString("$Git/$name/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
+	Stop-Process -Name $name -Force -ErrorAction Ignore
+	& regedit.exe /s $down | Out-Null | Out-Host
+	Remove-Item -Path $down -Force -ErrorAction Ignore
+	$edit = "$Env:ProgramFiles\Notepad++\notepad++.exe"
+	if (Test-Path -Path $edit) { & reg.exe add "HKCU\SOFTWARE\$name" /v "editorPathName" /t REG_SZ /d $edit /f | Out-Null | Out-Host }
+	([Net.WebClient]::new()).DownloadString("$Git/$name/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
 	if ($wait) {
 		set-window
