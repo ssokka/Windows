@@ -15,7 +15,7 @@ try {
  		ddr $false
 		$down = dw "$Git/Activation/restore.7z"
 		& $exec /activate | Out-Host
-		$down, $exec | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
+		$exec, $down | ForEach-Object { Remove-Item -Path $_ -Force -ErrorAction Ignore }
 		ddr $true
 	}
 
