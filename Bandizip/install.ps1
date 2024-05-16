@@ -12,34 +12,28 @@ try {
 	$exec = "$path\$name.exe"
 
 	$site = "https://kr.bandisoft.com/bandizip"
-	$down = "$site/dl.php?web"
-	$file = "BANDIZIP-SETUP-STD-X64.EXE"
-	$spat = '(?is).*?<h2><.*?>v*(.*?)<.*'
 
 	Write-Host "`n# 버전" -ForegroundColor Blue
-	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0.*', '$1')".Trim()
-	$wc = New-Object System.Net.WebClient
-	$wc.Headers["User-Agent"] = $UserAgent
-	$sver = "$($wc.DownloadString("$site/history") -replace $spat, '$1')".Trim()
+	$cver = get-version $exec '(.*)\.0.*'
+	$sver = get-version "$site/history" '(?is).*?<h2><.*?>v*(.*?)<.*'
 	Write-Host "현재: $cver"
 	Write-Host "최신: $sver"
 	
 	if ($cver -ne $sver) {
-		Write-Host "`n# 다운로드" -ForegroundColor Blue
-		Start-BitsTransfer -Source $down -Destination "$Temp\$file"
+		$down = dw "$site/dl.php?web"
 		Write-Host "`n# 설치" -ForegroundColor Blue
 		Stop-Process -Name $name -Force -ErrorAction Ignore
-		& "$Temp\$file" /S | Out-Host
-		Remove-Item -Path "$Temp\$file" -Force -ErrorAction Ignore
+		& $down /S | Out-Host
+		Remove-Item -Path $down -Force -ErrorAction Ignore
 	}
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue
-	Start-BitsTransfer -Source "$Git/$name/$name.reg" -Destination "$Temp\$name.reg"
+	$down = dw "$Git/$name/$name.reg" -wri $false
     Stop-Process -Name $name -Force -ErrorAction Ignore
-    & regedit.exe /s "$Temp\$name.reg" | Out-Null | Out-Host
-    Remove-Item -Path "$Temp\$name.reg" -Force -ErrorAction Ignore
+    & regedit.exe /s $down | Out-Null | Out-Host
+    Remove-Item -Path $down -Force -ErrorAction Ignore
     $edit = "$Env:ProgramFiles\Notepad++\notepad++.exe"
-    if (Test-Path -Path $edit) { & reg.exe add "HKCU\SOFTWARE\$name" /v "editorPathName" /t REG_SZ /d "$edit" /f | Out-Null | Out-Host }
+    if (Test-Path -Path $edit) { & reg.exe add "HKCU\SOFTWARE\$name" /v "editorPathName" /t REG_SZ /d $edit /f | Out-Null | Out-Host }
     ([Net.WebClient]::new()).DownloadString("$Git/$name/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
 	if ($wait) {

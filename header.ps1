@@ -73,9 +73,10 @@ function download {
 		[string]$dst = $Temp,
 		[string]$tmp = $Temp,
 		[string]$ren = '',
-		[string]$pat = '*x64.zip'
+		[string]$pat = '*x64.zip',
+		[bool]$wri = $true
 	)
-	Write-Host "`n# 다운로드" -ForegroundColor Blue
+	if ($wri) { Write-Host "`n# 다운로드" -ForegroundColor Blue }
 	if ($url -match '^https://api.github.com/repos/.*/releases/latest$') {
 		$src = (Invoke-RestMethod -Uri $url | ForEach-Object assets | Where-Object name -like $pat).browser_download_url
 		$file = $src -replace '.*/(.*)', '$1'
@@ -83,6 +84,7 @@ function download {
 		$wr = [Net.WebRequest]::Create($url)
 		$wr.AllowAutoRedirect = $true
 		$wr.Method = "HEAD"
+		$wr.UserAgent = $UserAgent
 		$re = $wr.GetResponse()
 		$src = $re.ResponseUri
 		$file = [IO.Path]::GetFileName($src.AbsolutePath)
@@ -112,19 +114,28 @@ function download {
 	return $dst
 }
 
-function get-online-version {
+function get-version {
 	[Alias("gov")]
 	param(
-		[string]$url,
+		[string]$src,
 		[string]$pat = '',
-		[string]$ret = ''
+		[string]$ret = '$1'
 	)
-	if ($url -match '^https://api.github.com/repos/.*/releases/latest$') {
-		$ver = (Invoke-RestMethod -Uri $url).tag_name
-	} else {
-		$wc = New-Object System.Net.WebClient
-		$wc.Headers["User-Agent"] = $UserAgent
-		$ver = $wc.DownloadString($url)
+	switch -Regex ($src) {
+		'^https://api.github.com/repos/.*/releases/latest$' {
+			$ver = (Invoke-RestMethod -Uri $_).tag_name
+			Break
+		}
+		'^(http[s]?)\://.*$' {
+			$wc = New-Object System.Net.WebClient
+			$wc.Headers["User-Agent"] = $UserAgent
+			$ver = $wc.DownloadString($_)
+			Break
+		}
+		'^.*$' {
+			$ver = (Get-Item -Path $_ -ErrorAction Ignore).VersionInfo.FileVersion
+			Break
+		}
 	}
 	if ($pat) { $ver = $ver -replace $pat, $ret }
 	if ($ver) { return $ver.Trim() }
