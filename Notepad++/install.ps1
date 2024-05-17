@@ -39,22 +39,10 @@ try {
 			[string]$t	# title
 		)
 		$ErrorActionPreference = "Ignore"
-		if(!(Test-Path -Path "$path\plugins\$p\*.dll")){
-			Write-Host "$t"
-			New-Item -Path "$path\plugins\$p" -ItemType Directory | Out-Null
-			if ($r -match '^http') {
-				$src = $r
-				$req = [Net.WebRequest]::Create($r)
-				$req.AllowAutoRedirect = $true
-				$dst = "$path\plugins\$p\$([IO.Path]::GetFileName($req.GetResponse().ResponseUri.AbsolutePath))"
-			} else {
-				$src = (Invoke-RestMethod -Uri https://api.github.com/repos/$r/releases/latest | ForEach-Object assets | Where-Object name -like '*x64.zip').browser_download_url
-				$dst = "$path\plugins\$p\$($src -replace '.*/(.*)', '$1')"
-			}
-			Start-BitsTransfer -Source $src -Destination $dst
-			Expand-Archive -Path $dst -DestinationPath "$path\plugins\$p" -Force
-			Remove-Item -Path $dst -Force
-		}
+		if(Test-Path -Path "$path\plugins\$p\*.dll") { return }
+		Write-Host "$t"
+		New-Item -Path "$path\plugins\$p" -ItemType Directory | Out-Null
+		dw "https://api.github.com/repos/$r/releases/latest" -ext "$path\plugins\$p" | Out-Null
 	}
 	ip "ComparePlus" "pnedev/ComparePlus" "ComparePlus"
 	ip "_CustomizeToolbar" "https://sourceforge.net/projects/npp-customize/files/latest/download" "Customize Toolbar"
@@ -65,44 +53,37 @@ try {
 	ip "XMLTools" "morbac/xmltools" "XML Tools"
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue
+	
 	$file = "config.xml"
 	$path = "$Env:AppData\$name"
-	$null = New-Item -Path $path -ItemType Directory -ErrorAction Ignore
-	Start-BitsTransfer -Source "$gurl/$file" -Destination "$path\$file"
+	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
+	dw "$Git/$name/$file" "$path\$file" | Out-Null
+	
 	$file = "Dracula.xml"
 	$path = "$Env:AppData\$name\themes"
-	$null = New-Item -Path $path -ItemType Directory -ErrorAction Ignore
-	Start-BitsTransfer -Source "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" -Destination "$path\$file"
+	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
+	dw "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" "$path\$file" | Out-Null
+	
 	$file = "plugins-config.zip"
 	$path = "$Env:AppData\$name\plugins\config"
-	$null = New-Item -Path $path -ItemType Directory -ErrorAction Ignore
-	Start-BitsTransfer -Source "$gurl/$file" -Destination "$path\$file"
-	Expand-Archive -Path "$path\$file" -DestinationPath "$path" -Force
-	Remove-Item -Path "$path\$file" -Force
+	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
+	dw "$Git/$name/$file" -ext $path | Out-Null
+	
 	([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
 	#$xml = [xml](Get-Content '$path\themes\$file')
 	#$node = $xml.NotepadPlus.GlobalStyles.WidgetStyle | where {$_.name -eq 'Global override'}
 	#$node.fontSize = '10'
 	#$xml.Save('$path\themes\$file')
-
-	#Write-Host -f Green "`n### $name 파일 연결 (.log, .txt)"
-	#reg add 'HKLM\SOFTWARE\Classes\Notepad++_file' /ve /t REG_SZ /d 'Notepad++ Document' /f
-	#reg add 'HKLM\SOFTWARE\Classes\Notepad++_file\DefaultIcon' /ve /t REG_SZ /d '"%ProgramFiles%\Notepad++\notepad++.exe",0' /f
-	#reg add 'HKLM\SOFTWARE\Classes\Notepad++_file\shell\open\command' /ve /t REG_SZ /d '"%ProgramFiles%\Notepad++\notepad++.exe" "%%1"' /f
-	#reg add 'HKCU\Software\Classes\.log' /ve /t REG_SZ /d 'Notepad++_file' /f
-	#reg add 'HKCU\Software\Classes\.log' /v 'Notepad++_backup' /t REG_SZ /d 'txtfile' /f
-	#reg add 'HKCU\Software\Classes\.txt' /ve /t REG_SZ /d 'Notepad++_file' /f
-	#reg add 'HKCU\Software\Classes\.txt' /v 'Notepad++_backup' /t REG_SZ /d 'txtfile' /f
-
-	set-window
-	Write-Host "`n### 완료" -ForegroundColor Green
+	
+	if ($wait) {
+		set-window
+		Write-Host "`n### 완료" -ForegroundColor Green
+		Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host
+	}
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
 	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
 	throw
 }
-
-Write-Host "`n아무 키나 누르십시오..." -NoNewline
-Read-Host

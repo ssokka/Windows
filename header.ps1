@@ -71,7 +71,7 @@ function download {
 	param(
 		[string]$url,
 		[string]$dst = $Temp,
-		[string]$tmp = $Temp,
+		[string]$ext = $Temp,
 		[string]$ren = '',
 		[string]$pat = '*x64.zip',
 		[bool]$wri = $true
@@ -101,13 +101,13 @@ function download {
 	install-7zip
 	try { $test = Get-7Zip -ArchiveFileName $dst } catch {}
 	if ($test) {
-		Expand-7Zip -ArchiveFileName $dst -TargetPath $tmp -ErrorAction Ignore
+		Expand-7Zip -ArchiveFileName $dst -TargetPath $ext -ErrorAction Ignore
 	} else {
 		Write-Host "암호: " -NoNewline
 		$Global:LastConsoleLine = 0
 		while ($true) {
 			$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-			Expand-7Zip -ArchiveFileName $dst -TargetPath $tmp -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
+			Expand-7Zip -ArchiveFileName $dst -TargetPath $ext -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
 			if ($?) { break } else { ccp $x $y }
 		}
 	}
