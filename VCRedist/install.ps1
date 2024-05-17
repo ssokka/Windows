@@ -11,7 +11,7 @@ try {
 	$down = dw $site -pat '*x64.exe'
 
 	Write-Host "`n# 설치" -ForegroundColor Blue
-	("/aiR /y", "/y") | ForEach-Object { & $down $_ }
+	("/aiR /y", "/y") | ForEach-Object { Start-Process -NoNewWindow -Wait -FilePath $down -ArgumentList $_ }
 	Remove-Item -Path $down -Force -ErrorAction Ignore
 
 	if ($wait) {
