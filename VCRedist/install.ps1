@@ -6,14 +6,14 @@ try {
 	$title = "Visual C++ 재배포 가능 패키지"
 	$host.ui.RawUI.WindowTitle = $title
 	Write-Host "`n### $title" -ForegroundColor Green
-	
+
 	$site = "https://api.github.com/repos/abbodi1406/vcredist/releases/latest"
 	$down = dw $site -pat '*x64.exe'
-	
-    Write-Host "`n# 설치" -ForegroundColor Blue
-    ("/aiR /y", "/y") | ForEach-Object { & $down $_ }
-    Remove-Item -Path $down -Force -ErrorAction Ignore
-	
+
+	Write-Host "`n# 설치" -ForegroundColor Blue
+	("/aiR /y", "/y") | ForEach-Object { & $down $_ }
+	Remove-Item -Path $down -Force -ErrorAction Ignore
+
 	if ($wait) {
 		set-window
 		Write-Host "`n### 완료" -ForegroundColor Green
