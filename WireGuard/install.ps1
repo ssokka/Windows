@@ -58,8 +58,8 @@ try {
 	set-window
 	Write-Host "`n# $($menu[$read-1])" -ForegroundColor Blue
 	$ext = "$Temp\$name\" + $file -replace '(.*)\..*', '$1'
-	dw "$Git/$name/$file" -ext $ext -wri $false | Out-Null
-	Remove-Item -Path $zip -Force -ErrorAction Ignore
+	$down = dw "$Git/$name/$file" -ext $ext -wri $false
+	Remove-Item -Path $down -Force -ErrorAction Ignore
 	
 	set-window
 	switch($read) {
