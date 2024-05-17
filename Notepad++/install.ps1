@@ -42,7 +42,8 @@ try {
 		if(Test-Path -Path "$path\plugins\$p\*.dll") { return }
 		Write-Host "$t"
 		New-Item -Path "$path\plugins\$p" -ItemType Directory | Out-Null
-		dw "https://api.github.com/repos/$r/releases/latest" -ext "$path\plugins\$p" | Out-Null
+		if (!($r -match '^http')) { $r = "https://api.github.com/repos/$r/releases/latest" }
+		dw $r -ext "$path\plugins\$p" -wri $false | Out-Null
 	}
 	ip "ComparePlus" "pnedev/ComparePlus" "ComparePlus"
 	ip "_CustomizeToolbar" "https://sourceforge.net/projects/npp-customize/files/latest/download" "Customize Toolbar"
