@@ -100,6 +100,7 @@ function download {
 	Start-BitsTransfer -Source $src -Destination $dst
 	if (!(".zip", ".7z", ".rar" -contains (Get-ChildItem $dst).Extension )) { return $dst }
 	install-7zip
+	New-Item -Path $ext -ItemType directory -ErrorAction Ignore | Out-Null
 	try { $test = Get-7Zip -ArchiveFileName $dst } catch {}
 	if ($test) {
 		Expand-7Zip -ArchiveFileName $dst -TargetPath $ext -ErrorAction Ignore

@@ -1,35 +1,33 @@
-﻿Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1")
+﻿param([bool]$wait = $true)
+
+if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
 try {
-	$name = "WireGuard"
+	$title = "WireGuard"
+	$host.ui.RawUI.WindowTitle = $title
+	Write-Host "`n### $title" -ForegroundColor Green
+	
+	$name = $title
 	$path = "$Env:ProgramFiles\$name"
 	$exec = "$path\$name.exe"
-	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/$name"
 	
 	$site = "https://download.wireguard.com/windows-client"
 	$sexe = "wireguard-installer.exe"
-	$spat = '(?is).*wireguard-amd64-(.*?)(?:\.msi).*'
-	
-	$host.ui.RawUI.WindowTitle = $name
-	Write-Host "`n### $name" -ForegroundColor Green
 	
 	Write-Host "`n# 버전" -ForegroundColor Blue
-	$cver = "$((Get-Item -Path $exec -ErrorAction Ignore).VersionInfo.FileVersion -replace '(.*)\.0', '$1')".Trim()
-	$wc = New-Object System.Net.WebClient
-	$wc.Headers["User-Agent"] = $UserAgent
-	$sver = "$($wc.DownloadString($site) -replace $spat, '$1')".Trim()
+	$cver = get-version $exec '(.*)\.0'
+	$sver = get-version $site '(?is).*wireguard-amd64-(.*?)(?:\.msi).*'
 	Write-Host "현재: $cver"
 	Write-Host "최신: $sver"
 	
 	if ($cver -ne $sver) {
-		Write-Host "`n# 다운로드" -ForegroundColor Blue
-		Start-BitsTransfer -Source "$site/$sexe" -Destination "$Env:TEMP\$sexe"
+		$down = dw "$site/$sexe"
 		Write-Host "`n# 설치" -ForegroundColor Blue
-		Start-Process -Wait -FilePath "$Env:TEMP\$sexe"
-		Remove-Item -Path "$Env:TEMP\$sexe" -Force -ErrorAction Ignore
+		& $down | Out-Host
+		Remove-Item -Path $down -Force -ErrorAction Ignore
 		do {
 			Start-Sleep -Milliseconds 250
-		} until ($proc = Get-Process | Where-Object { $_.ProcessName -eq "wireguard" -and $_.MainWindowTitle -eq "WireGuard" })
+		} until ($proc = Get-Process | Where-Object { $_.ProcessName -eq $name -and $_.MainWindowTitle -eq $name })
 		$proc.Kill()
 		set-window
 	}
@@ -45,7 +43,7 @@ try {
 	}
 	Write-Host "선택: " -NoNewline
 	$dread = 1
-	$LastConsoleLine = 0
+	$Global:LastConsoleLine = 0
 	while ($true) {
 		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 		$read = if ($nread = Read-Host) { $nread } else { $dread }
@@ -59,27 +57,17 @@ try {
 	
 	set-window
 	Write-Host "`n# $($menu[$read-1])" -ForegroundColor Blue
-	$zip = "$Env:TEMP\$file"
-	install-7zip
-	Start-BitsTransfer -Source "$gurl/$file" -Destination $zip
-	$ext = (Get-Item -Path $zip).Basename
-	$null = New-Item -Path "$Env:TEMP\$name\$ext" -ItemType "directory" -ErrorAction Ignore
-	Write-Host "암호: " -NoNewline
-	$LastConsoleLine = 0
-	while ($true) {
-		$x, $y = [Console]::CursorLeft, [Console]::CursorTop
-		Expand-7Zip -ArchiveFileName $zip -TargetPath "$Env:TEMP\$name\$ext" -SecurePassword (Read-Host -AsSecureString) -ErrorAction Ignore
-		if ($?) { break } else { ccp $x $y }
-	}
+	$ext = "$Temp\$name\" + $file -replace '(.*)\..*', '$1'
+	dw "$Git/$name/$file" -ext $ext -wri $false | Out-Null
 	Remove-Item -Path $zip -Force -ErrorAction Ignore
 	
 	set-window
 	switch($read) {
 		{ 1, 2 -eq $_ } {
 			Write-Host "`n# IP" -ForegroundColor Blue
-			Write-Host "[ 2~10] 서버`n[11~20] 사용자 #1`n[21~30] 사용자 #2"
+			Write-Host "[11~20] 사용자 #1`n[21~30] 사용자 #2"
 			Write-Host "선택: " -NoNewline
-			$LastConsoleLine = 0
+			$Global:LastConsoleLine = 0
 			while ($true) {
 				$x, $y = [Console]::CursorLeft, [Console]::CursorTop
 				$ip = Read-Host
@@ -91,14 +79,13 @@ try {
 			$like = "wg-server.conf"
 		}
 	}
-	$conf = Get-ChildItem -Path "$Env:TEMP\$name\$ext" | Where-Object { $_.Name -like $like }
+	$conf = Get-ChildItem -Path $ext | Where-Object { $_.Name -like $like }
 	Start-Process -Wait -WindowStyle Hidden -FilePath "$Env:ComSpec" -ArgumentList "/c del /q `"$path\Data\Configurations\$conf*`""
-	Copy-Item -Path "$Env:TEMP\$name\$ext\$conf" "$path\Data\Configurations\" -Force
-	Copy-Item -Path "$Env:TEMP\$name\$ext\*.cmd" "$path\" -Force -ErrorAction Ignore
-	Remove-Item -Path "$Env:TEMP\$name" -Recurse -Force
-	Remove-Item -Path "$path\drive.cmd" -Recurse -Force -ErrorAction Ignore
+	Copy-Item -Path "$ext\$conf" "$path\Data\Configurations\" -Force -ErrorAction Ignore
+	Copy-Item -Path "$ext\*.cmd" "$path\" -Force -ErrorAction Ignore
+	Remove-Item -Path "$Temp\$name" -Recurse -Force -ErrorAction Ignore
 	
-	("wg.ps1", "wg.cmd") | ForEach-Object { Start-BitsTransfer -Source "$gurl/$_" -Destination "$path\$_" }
+	("wg.ps1", "wg.cmd") | ForEach-Object { Start-BitsTransfer -Source "$Git/$name/$_" -Destination "$path\$_" }
 	if (Test-Path -Path "$path\wg.cmd") {
 		Write-Host "`n# 실행" -ForegroundColor Blue
 		Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction Ignore
@@ -119,14 +106,14 @@ try {
 		pt start "WG-Off" "$path\wg.cmd" off "$path\$name.exe"
 	}
 	
-	set-window
-	Write-Host "`n### 완료" -ForegroundColor Green
+	if ($wait) {
+		set-window
+		Write-Host "`n### 완료" -ForegroundColor Green
+		Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host
+	}
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue
 	Write-Error ($_.InvocationInfo | Format-List -Force | Out-String) -ErrorAction Continue
 	throw
 }
-
-Write-Host "`n아무 키나 누르십시오..." -NoNewline
-Read-Host
