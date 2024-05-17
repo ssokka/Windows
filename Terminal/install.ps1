@@ -1,11 +1,16 @@
-﻿# param([bool]$wait = $true)
-Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1")
+﻿param([bool]$wait = $true)
+
+if (!(Get-Command -Name set-window -CommandType Function 2>$null)) { Invoke-Expression -Command ([Net.WebClient]::new()).DownloadString("https://raw.githubusercontent.com/ssokka/Windows/master/header.ps1") }
 
 try {
 	if (!(Test-Path -Path "$Env:LocalAppData\Microsoft\WindowsApps\wt.exe")) { exit }
-	$name = "터미널"
+	
+	$title = "터미널"
+	$host.ui.RawUI.WindowTitle = $title
+    Write-Host "`n### $title" -ForegroundColor Green
+	
+	$name = $title
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
-	$gurl = "https://raw.githubusercontent.com/ssokka/Windows/master/Terminal"
 	
 	function edit {
 		param([object]$j, [string]$n, $v)
@@ -19,13 +24,11 @@ try {
 		$j | Add-Member -MemberType NoteProperty -Name $p[0] -Value $o -Force
 	}
 	
-	$host.ui.RawUI.WindowTitle = $name
-    Write-Host "`n### $name" -ForegroundColor Green
-	
 	Write-Host "`n# 설정" -ForegroundColor Blue
 	
-	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f
-	$null = reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationTerminal' /t REG_SZ /d '{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}' /f
+	# 기본 터미널 응용 프로그램 : Windows 터미널
+	& reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationConsole' /t REG_SZ /d '{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}' /f | Out-Null | Out-Host
+	& reg.exe add 'HKCU\Console\%%Startup' /v 'DelegationTerminal' /t REG_SZ /d '{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}' /f | Out-Null | Out-Host
 	
 	$json = "$path\settings.json"
 	$obj = Get-Content $json -Raw | ConvertFrom-Json
@@ -47,12 +50,13 @@ try {
 		$obj | ConvertTo-Json -Depth 4 | Set-Content -Path $json -Encoding utf8
 	}
 	
-	([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
+	([Net.WebClient]::new()).DownloadString("$Git/$name/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
-	set-window
-	Write-Host "`n### 완료" -ForegroundColor Green
-	
-	if ($wait) { Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host }
+	if ($wait) {
+		set-window
+		Write-Host "`n### 완료" -ForegroundColor Green
+		Write-Host "`n아무 키나 누르십시오..." -NoNewline; Read-Host
+	}
 }
 catch {
 	Write-Error ($_.Exception | Format-List -Force | Out-String) -ErrorAction Continue

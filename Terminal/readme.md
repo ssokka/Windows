@@ -1,4 +1,5 @@
-﻿### [CMD] 터미널
+﻿### 터미널
+`CMD`
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Terminal/install.ps1
 wt powershell iex ([Net.WebClient]::new()).DownloadString('%_url%')
