@@ -28,25 +28,25 @@ try {
 	}
 	
 	# https://github.com/notepad-plus-plus/nppPluginList/blob/master/doc/plugin_list_x64.md
-	Write-Host "`n# 플러그인 설치" -ForegroundColor Blue
+	Write-Host "`n# 플러그인" -ForegroundColor Blue
 	Stop-Process -Name $name -Force -ErrorAction Ignore
-	function InstallPlugin {
+	function install-plugin {
 		[Alias("ip")]
 		param(
-			[Parameter(Mandatory=$true)]
 			[string]$p,	# path
 			[string]$r,	# repos
-			[string]$t	# title
+			[string]$t,	# title
+			[bool]$ua = $true
 		)
 		$ErrorActionPreference = "Ignore"
 		if(Test-Path -Path "$path\plugins\$p\*.dll") { return }
 		Write-Host "$t"
 		New-Item -Path "$path\plugins\$p" -ItemType Directory | Out-Null
 		if (!($r -match '^http')) { $r = "https://api.github.com/repos/$r/releases/latest" }
-		dw $r -ext "$path\plugins\$p" -wri $false | Out-Null
+		dw $r -ext "$path\plugins\$p" -ua $ua -wri $false | Out-Null
 	}
 	ip "ComparePlus" "pnedev/ComparePlus" "ComparePlus"
-	ip "_CustomizeToolbar" "https://sourceforge.net/projects/npp-customize/files/latest/download" "Customize Toolbar"
+	ip "_CustomizeToolbar" "https://sourceforge.net/projects/npp-customize/files/latest/download" "Customize Toolbar" $false
 	ip "Explorer" "oviradoi/npp-explorer-plugin" "Explorer"
 	ip "HexEditor" "chcg/NPP_HexEdit" "HexEditor"
 	ip "NppExec" "d0vgan/nppexec" "NppExec"
@@ -58,17 +58,17 @@ try {
 	$file = "config.xml"
 	$path = "$Env:AppData\$name"
 	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
-	dw "$Git/$name/$file" "$path\$file" | Out-Null
+	dw "$Git/$name/$file" $path -wri $false | Out-Null
 	
 	$file = "Dracula.xml"
 	$path = "$Env:AppData\$name\themes"
 	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
-	dw "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" "$path\$file" | Out-Null
+	dw "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/$file" $path -wri $false | Out-Null
 	
 	$file = "plugins-config.zip"
 	$path = "$Env:AppData\$name\plugins\config"
 	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
-	dw "$Git/$name/$file" -ext $path | Out-Null
+	dw "$Git/$name/$file" -ext $path -wri $false | Out-Null
 	
 	([Net.WebClient]::new()).DownloadString("$gurl/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	

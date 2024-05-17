@@ -74,6 +74,7 @@ function download {
 		[string]$ext = $Temp,
 		[string]$ren = '',
 		[string]$pat = '*x64.zip',
+		[bool]$ua = $true,
 		[bool]$wri = $true
 	)
 	if ($wri) { Write-Host "`n# 다운로드" -ForegroundColor Blue }
@@ -84,7 +85,7 @@ function download {
 		$wr = [Net.WebRequest]::Create($url)
 		$wr.AllowAutoRedirect = $true
 		$wr.Method = "HEAD"
-		$wr.UserAgent = $UserAgent
+		if ($ua) { $wr.UserAgent = $UserAgent }
 		$re = $wr.GetResponse()
 		$src = $re.ResponseUri
 		$file = [IO.Path]::GetFileName($src.AbsolutePath)
