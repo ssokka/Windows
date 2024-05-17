@@ -70,6 +70,9 @@ try {
 	New-Item -Path $path -ItemType Directory -ErrorAction Ignore | Out-Null
 	dw "$Git/$name/$file" -ext $path -wri $false | Out-Null
 	
+	$ini = "$path\Explorer.ini"
+	(Get-Content $ini) -replace '\\Root\\', "\$Env:UserName\" | Out-File $ini
+	
 	([Net.WebClient]::new()).DownloadString("$Git/$name/readme.md") -replace '(?is).*?### 설정.*?```(?:\r\n|\n)(.*?)(?:\r\n|\n)```.*', '$1'
 	
 	#$xml = [xml](Get-Content '$path\themes\$file')
