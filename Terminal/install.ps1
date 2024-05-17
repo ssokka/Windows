@@ -9,7 +9,7 @@ try {
 	$host.ui.RawUI.WindowTitle = $title
     Write-Host "`n### $title" -ForegroundColor Green
 	
-	$name = $title
+	$name = "Terminal"
 	$path = "$Env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 	
 	function edit {
