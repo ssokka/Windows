@@ -36,6 +36,12 @@ function install-7zip {
 	"
 }
 
+function install-psini {
+	$name = "PsIni"
+	if (Get-Module -Name $name -ListAvailable) { return }
+	Start-Process -Verb RunAs -Wait -WindowStyle Hidden -FilePath powershell.exe -ArgumentList "-command", "Install-Module $name -Force"
+}
+
 function current-cursor-position {
 	[Alias("ccp")]
 	param([Int]$x, [Int]$y)
