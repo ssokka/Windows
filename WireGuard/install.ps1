@@ -81,7 +81,7 @@ try {
 	$conf = Get-ChildItem -Path $ext | Where-Object { $_.Name -like $like }
 	Start-Process -Wait -WindowStyle Hidden -FilePath "$Env:ComSpec" -ArgumentList "/c del /q `"$path\Data\Configurations\$conf*`""
 	Copy-Item -Path "$ext\$conf" "$path\Data\Configurations\" -Force -ErrorAction Ignore
-	Copy-Item -Path "$ext\*.cmd" "$path\" -Force -ErrorAction Ignore
+	if (!(Test-Path -Path "$ext\*.cmd")) { Copy-Item -Path "$ext\*.cmd" "$path\" -Force -ErrorAction Ignore }
 	Remove-Item -Path "$Temp\$name" -Recurse -Force -ErrorAction Ignore
 	
 	("wg.ps1", "wg.cmd") | ForEach-Object { Start-BitsTransfer -Source "$Git/$name/$_" -Destination "$path\$_" }
