@@ -28,7 +28,7 @@ try {
 	}
 	
 	Write-Host "`n# 설정" -ForegroundColor Blue
-	$down = dw "$Git/$name/$name.reg" -wri $false
+	$down = dw "$Git/$name/setting.reg" -wri $false
 	Stop-Process -Name $name -Force -ErrorAction Ignore
 	& regedit.exe /s $down | Out-Null | Out-Host
 	Remove-Item -Path $down -Force -ErrorAction Ignore
