@@ -1,9 +1,5 @@
 ﻿Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NetSarang\Xshell\7]
-"MagicCode"=hex:f0,fd,7f,4d,6a,b3,30,0c,b5,71,71,51,ef,d3,56,18,e4,07,0b,00,11,\
-  00
-
 [HKEY_CURRENT_USER\Software\NetSarang\Xshell\7\Layout\current]
 ; 메뉴 > 보기 > 도구 모음 > [ ] 주소 표시줄
 "AddressBar"=dword:00000000
