@@ -1,4 +1,6 @@
-﻿### Xshell 설치 `CMD`
+﻿## Xshell
+
+### 설치 `CMD`
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Xshell/install.ps1
 powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadString(''%_url%'')'
@@ -36,11 +38,11 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
     글꼴 품질: Natural ClearType
 ```
 
-### 참고
+#### 참고
 
-#### 최신 평가 버전 다운로드
+##### 최신 평가 버전 다운로드
 - https://www.filehorse.com/download-xshell-free/  
 - 30일 날짜 제한
 
-#### 업데이트 내역
+##### 업데이트 내역
 - https://www.netsarang.com/json/product/update.html?productcode=2&languagestatus=1
