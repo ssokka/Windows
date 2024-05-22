@@ -20,6 +20,11 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
   > 옵션
     > 고급
       [ ] Xshel 시작 시 세션 대화 상자 열기
+	  > 텍스트 편집기
+	    > 설정
+		  [ ] 메모장을 텍스트 편집기로 사용
+		  편집기 경로: C:\Program Files\Notepad++\notepad++.exe
+		  편집기 이름: Notepad++
 > 파일 > 세션 등록 정보
   > 연결
     > SSH
