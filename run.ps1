@@ -13,7 +13,7 @@ try {
 	Write-Host "`n### $tname" -ForegroundColor Green
 	Write-Host "`n# $sname" -ForegroundColor Blue
 	$down = dw "$Git/$pname/$fname.7z" -wri $false
-	. "$Temp\fname.ps1"
+	. "$Temp\$fname.ps1"
 	
 	if ($wait) {
 		set-window
