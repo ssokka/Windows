@@ -43,6 +43,13 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
     글꼴 품질: Natural ClearType
 ```
 
+### 복원 `CMD`
+```
+set _url=https://raw.githubusercontent.com/ssokka/Windows/master/Xshell/restore.ps1
+powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadString(''%_url%'')'
+
+```
+
 #### 참고
 
 ##### 최신 평가 버전 다운로드
