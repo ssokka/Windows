@@ -48,7 +48,7 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
 ### 복원 `CMD`
 ```
 set _url=https://raw.githubusercontent.com/ssokka/Windows/master/run.ps1
-powershell start -v runas wt 'powershell icm -ScriptBlock ([scriptblock]::Create(([Net.WebClient]::new()).DownloadString(''%_url%''))) -ArgumentList @(''Xshell'', ''Xshell'', ''복원'', ''restore'')'
+powershell start -v runas wt 'powershell icm -ScriptBlock ([scriptblock]::Create(([Net.WebClient]::new()).DownloadString(''%_url%''))) -ArgumentList (''Xshell'', ''Xshell'', ''복원'', ''restore'')'
 
 ```
 
