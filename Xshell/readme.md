@@ -13,6 +13,8 @@ powershell start -v runas wt 'powershell iex ([Net.WebClient]::new()).DownloadSt
   > 도구 모음
     [ ] 주소 표시줄
     [ ] 연결 표시
+  > 작성
+    [V] 작성 창
 > 도구
   > 웹에서 검색
     > 검색 엔진 관리

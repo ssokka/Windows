@@ -41,8 +41,10 @@ try {
 	Write-Host "`n# 설정" -ForegroundColor Blue
 	Stop-Process -Name $name -Force -ErrorAction Ignore
 	
-	& reg.exe add "HKCU\Software\NetSarang\Xshell\$mver\Layout\current" /v "AddressBar" /t REG_DWORD /d "0" /f | Out-Null | Out-Host
-	& reg.exe add "HKCU\Software\NetSarang\Xshell\$mver\Layout\current" /v "LinksBar" /t REG_DWORD /d "0" /f | Out-Null | Out-Host
+	$rkey = "HKCU\Software\NetSarang\Xshell\$mver\Layout\current"
+	& reg.exe add $rkey /v "AddressBar" /t REG_DWORD /d "0" /f | Out-Null | Out-Host
+	& reg.exe add $rkey /v "LinksBar" /t REG_DWORD /d "0" /f | Out-Null | Out-Host
+	& reg.exe add $rkey /v "ComposePane" /t REG_DWORD /d "1" /f | Out-Null | Out-Host
 	
 	$pudf = (Get-ItemPropertyValue -Path "HKCU:\Software\NetSarang\Common\$mver\UserData" -Name "UserDataPath" -ErrorAction Ignore) + "\$name"
 	$file = "$pudf\$name.ini"
